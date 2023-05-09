@@ -4,10 +4,9 @@
 #include <md5.h>
 #include <sha3.h>
 #include <libscrypt.h>
+#include <argon2.h>
 
 #include <iomanip>
-/*#include "argon2.h"
-#include "libscrypt.h"*/
 
 //================================= Namespace ==================================
 namespace rain_text::hash {

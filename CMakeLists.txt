@@ -68,6 +68,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
             md5_lib
             sha3lib::sha3
             scryptlib::scrypt
+            argon2lib::argon2
             )
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows
@@ -92,6 +93,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
             md5_lib
             sha3lib::sha3
             scryptlib::scrypt
+            argon2lib::argon2
             -static-libgcc -static-libstdc++)
     # Získání cesty k potřebným knihovnám
     list(GET GTK4_LIBRARY_DIRS 0 GTK4_LIB_DIR)
