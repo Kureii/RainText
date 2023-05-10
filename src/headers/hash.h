@@ -2,14 +2,15 @@
 #define RAINTEXT_HASH_H
 
 #include <iostream>
+#include <vector>
 
 namespace rain_text::hash {
 
 std::string GetDbName(std::string username);
 
-std::string GetPswdHash(std::string password);
+std::string GetPswdHash(std::string password, std::string username);
 
-std::string GetKey(std::string password);
+std::vector<uint8_t> GetKey(std::string password, std::string username);
 
 }
 

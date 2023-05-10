@@ -46,11 +46,6 @@ UserDatabase::UserDatabase(const std::string &path) {
       ");");
 
   database_utils::ExecuteSql(connection_ ,sql);
-  /*if (sqlite3_exec(connection_, sql, nullptr, nullptr, &err_msg) != SQLITE_OK) {
-    fprintf(stderr, "SQL error: %s\n", err_msg);
-    sqlite3_free(err_msg);
-    sqlite3_close(connection_);
-  }*/
 #ifdef ENABLE_TESTS
   db_path_ = db_dir;
 #endif
@@ -71,15 +66,9 @@ UserDatabase::~UserDatabase() {
 std::vector<Record> UserDatabase::GetData() {
   const char *sql = "SELECT username_id, content_id, data FROM content;";
 
-  database_utils::ExecuteSql(connection_ ,sql, PrepareData, &plain_data_);
+  database_utils::ExecuteSql(connection_ ,sql, PrepareData, &encrypted_data_);
 
-  if (!plain_data_.empty()) {
-    std::thread thread([&]() { CreateIdManager(); });
-    std::thread thread2([&]() { CreateMap(); });
-    thread.join();
-    thread2.join();
-  }
-  return plain_data_;
+  return encrypted_data_;
 }
 
 void UserDatabase::SetData(const Record &record) {
@@ -201,6 +190,12 @@ void UserDatabase::CreateIdManager() {
     }
   }
 }
+std::vector<Record> UserDatabase::DecryptData(std::vector<uint8_t> key) {
+  key_ = key;
+  plain_data_ = encrypted_data_;
+  return plain_data_;
+}
+
 
 void UserDatabase::CreateMap() {
   for (auto &i : plain_data_) {
@@ -217,6 +212,9 @@ void UserDatabase::CreateMap() {
   }
   PrintMap("CreateMap", map_data_);
 }
+const std::vector<Record> &UserDatabase::GetPlainData() const {
+  return plain_data_;
+}
 
 //============== UserDatabase tests functions implementation ===================
 #ifdef ENABLE_TESTS
@@ -232,9 +230,6 @@ void UserDatabase::SetPlainData(std::vector<Record> plain_data){
     plain_data_ = std::move(plain_data);
 }
 
-std::vector<Record> UserDatabase::GetPlainData() {
-  return plain_data_;
-}
 Record UserDatabase::PrepareDataTest(char** text_data) {
   std::vector<Record> tmp;
   PrepareData(&tmp, 0, text_data, nullptr);

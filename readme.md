@@ -18,5 +18,9 @@ run:
   sudo apt install libgtk-4-1 libgtk-4-dev sqlite3 libsqlite3-dev
   ```
 
+## Time
+ - batabase hash: ~0.16s
+ - key: ~5.7s
+
 ## Known issues
 1. if you try delete item after close and open app, the app crash with stack overflow

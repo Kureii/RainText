@@ -15,7 +15,8 @@ public:
 
  MainDatabase(std::string path);
  ~MainDatabase();
- std::string CreateUser(std::list<std::string> list);
+std::string CreateUser(std::list<std::string> list);
+std::string LoginUser(std::list<std::string> list);
 };
 }
 #endif  // RAINTEXT_MAIN_DATABASE_H

@@ -1,5 +1,6 @@
 //================================= Includes ===================================
 #include "headers/database_utils.h"
+
 #include <exception>
 #include <mutex>
 //================================= Namespace ==================================
@@ -11,31 +12,34 @@ std::mutex mutex;
 //======================= Define helpful functions =============================
 
 //===================== database_utils implementation ==========================
-void CreateDir (std::filesystem::path &dir) {
+void CreateDir(std::filesystem::path& dir) {
   if (!std::filesystem::exists(dir)) {
     if (!std::filesystem::create_directory(dir)) {
-      throw std::runtime_error(std::string("Cannot create directory: "+ dir.string()));
+      throw std::runtime_error(
+          std::string("Cannot create directory: " + dir.string()));
     }
   }
-
 }
 
-void OpenDb (const char * path, sqlite3 *& connection) {
+void OpenDb(const char* path, sqlite3*& connection) {
   std::unique_lock<std::mutex> lock(mutex);
   if (sqlite3_open(path, &connection) != SQLITE_OK) {
     sqlite3_close(connection);
-    throw std::runtime_error(std::string("Cannot open database: " + std::string(sqlite3_errmsg(connection))));
+    throw std::runtime_error(std::string(
+        "Cannot open database: " + std::string(sqlite3_errmsg(connection))));
   }
   lock.unlock();
 }
 
-void ExecuteSql(sqlite3 * connection, const std::string& sql, int (*callback)(void*, int, char**, char**), void* data) {
+void ExecuteSql(sqlite3* connection, const std::string& sql,
+                int (*callback)(void*, int, char**, char**), void* data) {
   std::unique_lock<std::mutex> lock(mutex);
   char* err_msg = nullptr;
-  if (sqlite3_exec(connection, sql.c_str(), callback, data, &err_msg) != SQLITE_OK) {
+  if (sqlite3_exec(connection, sql.c_str(), callback, data, &err_msg) !=
+      SQLITE_OK) {
     sqlite3_free(err_msg);
     sqlite3_close(connection);
-    throw std::runtime_error(std::string("SQL error: "+ std::string(err_msg)));
+    throw std::runtime_error(std::string("SQL error: " + std::string(err_msg)));
   }
   lock.unlock();
 }
@@ -46,4 +50,4 @@ void ExecuteSql(sqlite3 * connection, const std::string& sql, int (*callback)(vo
 
 //===================== Implement helpful functions ============================
 
-}  // namespace rain_text
+}  // namespace rain_text::database_utils

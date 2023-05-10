@@ -5,12 +5,16 @@
 #include <map>
 #include <thread>
 
+#include "headers/hash.h"
 #include "headers/pass_gen.h"
 
 //================================= Namespace ==================================
 namespace rain_text {
 
 //======================== Define helpful variables ============================
+Gui* gui_instance;
+std::string static_username;
+bool get_started_load = false;
 
 //======================= Define helpful structures ============================
 
@@ -18,10 +22,13 @@ namespace rain_text {
 
 //============================= Gui implementation =============================
 GtkApplication* Gui::app_ = nullptr;
-GtkWidget* Gui::login_window_ = nullptr;
+// GtkWidget* Gui::main_window_ = nullptr;
 GtkWidget* Gui::main_window_ = nullptr;
 UserDatabase* Gui::u_db_ = nullptr;
 MainDatabase* Gui::m_db_ = nullptr;
+std::vector<uint8_t> Gui::key_ = std::vector<uint8_t>();
+std::vector<Record> Gui::cyphered_data_ = std::vector<Record>();
+std::vector<Record> Gui::plain_data_ = std::vector<Record>();
 
 Gui::Gui(const char* app_id) {
 #ifdef _WIN32
@@ -29,26 +36,30 @@ Gui::Gui(const char* app_id) {
 #else
   app_ = gtk_application_new(app_id, G_APPLICATION_FLAGS_NONE);
 #endif
-    g_signal_connect(app_, "activate", G_CALLBACK(OnActivate), this);
+  g_signal_connect(app_, "activate", G_CALLBACK(OnActivate), this);
+  gui_instance = this;
 }
 
 Gui::~Gui() {
-  delete u_db_;
+  if (u_db_ != nullptr) {
+    delete u_db_;
+    u_db_ = nullptr;
+  }
   g_object_unref(app_);
 }
 
 int Gui::Run() { return g_application_run(G_APPLICATION(app_), 0, nullptr); }
 
 void Gui::OnActivate(GtkApplication* app, gpointer user_data) {
-  Gui* self = static_cast<Gui*>(user_data);
-  self->LoginWindow(app);
+  // Gui* self = static_cast<Gui*>(user_data);
+  gui_instance->LoginWindow(app_);
 }
 
 //------------------------------- App windows ----------------------------------
 void Gui::LoginWindow(GtkApplication* app) {
-  login_window_ = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(login_window_), "RainText Login");
-  gtk_window_set_default_size(GTK_WINDOW(login_window_), 800, 600);
+  main_window_ = gtk_application_window_new(app);
+  gtk_window_set_title(GTK_WINDOW(main_window_), "RainText Login");
+  gtk_window_set_default_size(GTK_WINDOW(main_window_), 800, 600);
 
   auto stack = gtk_stack_new();
 
@@ -62,11 +73,17 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_margin_end(login_box, 8);
   gtk_widget_set_size_request(login_box, 250, 200);
 
+  auto login_fields_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+  gtk_widget_set_halign(login_fields_box, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(login_fields_box, GTK_ALIGN_FILL);
+  g_object_set_data(G_OBJECT(main_window_), "login_fields_box",
+                    login_fields_box);
+
   auto login_headline = gtk_label_new("Přihlášení");
 
   auto login_separator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 
-  auto login_username_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  auto login_username_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_set_halign(login_username_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(login_username_box, GTK_ALIGN_CENTER);
   gtk_widget_set_size_request(login_username_box, 250, 30);
@@ -87,18 +104,20 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_halign(login_password_label, GTK_ALIGN_START);
   auto login_password_entry = gtk_password_entry_new();
   gtk_widget_set_halign(login_password_entry, GTK_ALIGN_END);
-  gtk_password_entry_set_show_peek_icon(GTK_PASSWORD_ENTRY(login_password_entry),
-                                        TRUE);
+  gtk_password_entry_set_show_peek_icon(
+      GTK_PASSWORD_ENTRY(login_password_entry), TRUE);
 
   gtk_box_append(GTK_BOX(login_password_box), login_password_label);
   gtk_box_append(GTK_BOX(login_password_box), login_password_entry);
 
-  g_object_set_data(G_OBJECT(login_window_), "login_username_entry", login_username_entry);
-  g_object_set_data(G_OBJECT(login_window_), "login_password_entry", login_password_entry);
-  g_signal_connect(login_username_entry, "changed", G_CALLBACK(AreLoginEntriesFilled),
-                   nullptr);
-  g_signal_connect(login_password_entry, "changed", G_CALLBACK(AreLoginEntriesFilled),
-                   nullptr);
+  g_object_set_data(G_OBJECT(main_window_), "login_username_entry",
+                    login_username_entry);
+  g_object_set_data(G_OBJECT(main_window_), "login_password_entry",
+                    login_password_entry);
+  g_signal_connect(login_username_entry, "changed",
+                   G_CALLBACK(AreLoginEntriesFilled), nullptr);
+  g_signal_connect(login_password_entry, "changed",
+                   G_CALLBACK(AreLoginEntriesFilled), nullptr);
 
   auto login_login_btn = gtk_button_new_with_label("Přihlásit se");
   gtk_widget_set_sensitive(login_login_btn, FALSE);
@@ -109,18 +128,19 @@ void Gui::LoginWindow(GtkApplication* app) {
   auto login_register_btn = gtk_button_new_with_label("Registrovat se");
   gtk_widget_set_size_request(login_login_btn, 250, 30);
 
-  g_object_set_data(G_OBJECT(login_window_), "login_login_btn", login_login_btn);
-  // TODO: metod for login
-  // g_signal_connect(login_btn, "clicked", G_CALLBACK(AddItem),
-  // &add_item_window);
-  g_object_set_data(G_OBJECT(login_window_), "login_register_btn", login_register_btn);
-  g_signal_connect(login_register_btn, "clicked", G_CALLBACK(SwitchLoginRegister),
-                   stack);
+  g_object_set_data(G_OBJECT(main_window_), "login_login_btn", login_login_btn);
+  g_signal_connect(login_login_btn, "clicked", G_CALLBACK(LoginUser), nullptr);
+  g_object_set_data(G_OBJECT(main_window_), "login_register_btn",
+                    login_register_btn);
+  g_signal_connect(login_register_btn, "clicked",
+                   G_CALLBACK(SwitchLoginRegister), stack);
 
-  gtk_box_append(GTK_BOX(login_box), login_headline);
-  gtk_box_append(GTK_BOX(login_box), login_separator);
-  gtk_box_append(GTK_BOX(login_box), login_username_box);
-  gtk_box_append(GTK_BOX(login_box), login_password_box);
+  gtk_box_append(GTK_BOX(login_fields_box), login_headline);
+  gtk_box_append(GTK_BOX(login_fields_box), login_separator);
+  gtk_box_append(GTK_BOX(login_fields_box), login_username_box);
+  gtk_box_append(GTK_BOX(login_fields_box), login_password_box);
+
+  gtk_box_append(GTK_BOX(login_box), login_fields_box);
   gtk_box_append(GTK_BOX(login_box), login_separator2);
   gtk_box_append(GTK_BOX(login_box), login_login_btn);
   gtk_box_append(GTK_BOX(login_box), login_register_btn);
@@ -133,7 +153,13 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_margin_bottom(register_box, 12);
   gtk_widget_set_margin_start(register_box, 8);
   gtk_widget_set_margin_end(register_box, 8);
-  gtk_widget_set_size_request(register_box, 250, 200);
+  gtk_widget_set_size_request(register_box, 250, 300);
+
+  auto register_fields_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+  gtk_widget_set_halign(register_fields_box, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(register_fields_box, GTK_ALIGN_FILL);
+  g_object_set_data(G_OBJECT(main_window_), "register_fields_box",
+                    register_fields_box);
 
   auto register_headline = gtk_label_new("Registrace");
 
@@ -160,8 +186,8 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_halign(register_password_label, GTK_ALIGN_START);
   auto register_password_entry = gtk_password_entry_new();
   gtk_widget_set_halign(register_password_entry, GTK_ALIGN_END);
-  gtk_password_entry_set_show_peek_icon(GTK_PASSWORD_ENTRY(register_password_entry),
-                                        TRUE);
+  gtk_password_entry_set_show_peek_icon(
+      GTK_PASSWORD_ENTRY(register_password_entry), TRUE);
   gtk_box_append(GTK_BOX(register_password_box), register_password_label);
   gtk_box_append(GTK_BOX(register_password_box), register_password_entry);
 
@@ -174,21 +200,26 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_halign(register_password_again_label, GTK_ALIGN_START);
   auto register_password_again_entry = gtk_password_entry_new();
   gtk_widget_set_halign(register_password_again_entry, GTK_ALIGN_END);
-  gtk_password_entry_set_show_peek_icon(GTK_PASSWORD_ENTRY(register_password_again_entry),
-                                        TRUE);
+  gtk_password_entry_set_show_peek_icon(
+      GTK_PASSWORD_ENTRY(register_password_again_entry), TRUE);
 
-  gtk_box_append(GTK_BOX(register_password_again_box), register_password_again_label);
-  gtk_box_append(GTK_BOX(register_password_again_box), register_password_again_entry);
+  gtk_box_append(GTK_BOX(register_password_again_box),
+                 register_password_again_label);
+  gtk_box_append(GTK_BOX(register_password_again_box),
+                 register_password_again_entry);
 
-  g_object_set_data(G_OBJECT(login_window_), "register_username_entry", register_username_entry);
-  g_object_set_data(G_OBJECT(login_window_), "register_password_entry", register_password_entry);
-  g_object_set_data(G_OBJECT(login_window_), "register_password_again_entry", register_password_again_entry);
-  g_signal_connect(register_username_entry, "changed", G_CALLBACK(AreRegisterEntriesFilled),
-                   nullptr);
-  g_signal_connect(register_password_entry, "changed", G_CALLBACK(AreRegisterEntriesFilled),
-                   nullptr);
-  g_signal_connect(register_password_again_entry, "changed", G_CALLBACK(AreRegisterEntriesFilled),
-                   nullptr);
+  g_object_set_data(G_OBJECT(main_window_), "register_username_entry",
+                    register_username_entry);
+  g_object_set_data(G_OBJECT(main_window_), "register_password_entry",
+                    register_password_entry);
+  g_object_set_data(G_OBJECT(main_window_), "register_password_again_entry",
+                    register_password_again_entry);
+  g_signal_connect(register_username_entry, "changed",
+                   G_CALLBACK(AreRegisterEntriesFilled), nullptr);
+  g_signal_connect(register_password_entry, "changed",
+                   G_CALLBACK(AreRegisterEntriesFilled), nullptr);
+  g_signal_connect(register_password_again_entry, "changed",
+                   G_CALLBACK(AreRegisterEntriesFilled), nullptr);
 
   auto register_login_btn = gtk_button_new_with_label("Přihlásit se");
   gtk_widget_set_size_request(register_login_btn, 250, 30);
@@ -199,18 +230,21 @@ void Gui::LoginWindow(GtkApplication* app) {
   gtk_widget_set_sensitive(register_register_btn, FALSE);
   gtk_widget_set_size_request(register_register_btn, 250, 30);
 
-  g_object_set_data(G_OBJECT(login_window_), "register_register_btn", register_register_btn);
+  g_object_set_data(G_OBJECT(main_window_), "register_register_btn",
+                    register_register_btn);
   g_signal_connect(register_register_btn, "clicked", G_CALLBACK(RegisterUser),
                    nullptr);
-  g_object_set_data(G_OBJECT(login_window_), "register_login_btn", register_login_btn);
-  g_signal_connect(register_login_btn, "clicked", G_CALLBACK(SwitchLoginRegister),
-  stack);
+  g_object_set_data(G_OBJECT(main_window_), "register_login_btn",
+                    register_login_btn);
+  g_signal_connect(register_login_btn, "clicked",
+                   G_CALLBACK(SwitchLoginRegister), stack);
 
-  gtk_box_append(GTK_BOX(register_box), register_headline);
-  gtk_box_append(GTK_BOX(register_box), register_separator);
-  gtk_box_append(GTK_BOX(register_box), register_username_box);
-  gtk_box_append(GTK_BOX(register_box), register_password_box);
-  gtk_box_append(GTK_BOX(register_box), register_password_again_box);
+  gtk_box_append(GTK_BOX(register_fields_box), register_headline);
+  gtk_box_append(GTK_BOX(register_fields_box), register_separator);
+  gtk_box_append(GTK_BOX(register_fields_box), register_username_box);
+  gtk_box_append(GTK_BOX(register_fields_box), register_password_box);
+  gtk_box_append(GTK_BOX(register_fields_box), register_password_again_box);
+  gtk_box_append(GTK_BOX(register_box), register_fields_box);
   gtk_box_append(GTK_BOX(register_box), register_separator2);
   gtk_box_append(GTK_BOX(register_box), register_register_btn);
   gtk_box_append(GTK_BOX(register_box), register_login_btn);
@@ -220,16 +254,16 @@ void Gui::LoginWindow(GtkApplication* app) {
 
   gtk_stack_set_visible_child_name(GTK_STACK(stack), "Login");
 
-  gtk_window_set_child(GTK_WINDOW(login_window_), stack);
+  gtk_window_set_child(GTK_WINDOW(main_window_), stack);
 
-  gtk_window_present(GTK_WINDOW(login_window_));
+  gtk_window_present(GTK_WINDOW(main_window_));
 }
 
-
-void Gui::MainWindow(GtkApplication* app) {
+void Gui::MainWindow() {
   // Create and configure the main window
-  main_window_ = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(main_window_), "RainText");
+  main_window_ = gtk_application_window_new(app_);
+  std::string window_name = "RainText\t|\t" + static_username;
+  gtk_window_set_title(GTK_WINDOW(main_window_), window_name.c_str());
   gtk_window_set_default_size(GTK_WINDOW(main_window_), 800, 600);
 
   //--------------------------- GUI widgets ------------------------------------
@@ -256,7 +290,7 @@ void Gui::MainWindow(GtkApplication* app) {
   gtk_widget_set_margin_end(box, 8);
   gtk_widget_set_size_request(box, 718, -1);
 
-  auto content = u_db_->GetData();
+  auto content = u_db_->GetPlainData();
 
   // Load the user data and create the list of password items
   if (content.empty()) {
@@ -444,12 +478,12 @@ void Gui::AreAddEntriesFilled(GtkEditable* object, gpointer user_data) {
 }
 
 void Gui::AreLoginEntriesFilled(GtkEditable* object, gpointer user_data) {
-  GtkWidget* username_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "login_username_entry"));
-  GtkWidget* password_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "login_password_entry"));
+  GtkWidget* username_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "login_username_entry"));
+  GtkWidget* password_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "login_password_entry"));
   GtkWidget* save_btn =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "login_login_btn"));
+      GTK_WIDGET(g_object_get_data(G_OBJECT(main_window_), "login_login_btn"));
 
   auto username =
       std::string(gtk_editable_get_text(GTK_EDITABLE(username_entry)));
@@ -463,15 +497,15 @@ void Gui::AreLoginEntriesFilled(GtkEditable* object, gpointer user_data) {
   }
 }
 
-void Gui::AreRegisterEntriesFilled(GtkEditable *object, gpointer data) {
-  GtkWidget* username_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_username_entry"));
-  GtkWidget* password_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_password_entry"));
-  GtkWidget* password_again_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_password_again_entry"));
-  GtkWidget* save_btn =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_register_btn"));
+void Gui::AreRegisterEntriesFilled(GtkEditable* object, gpointer data) {
+  GtkWidget* username_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "register_username_entry"));
+  GtkWidget* password_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "register_password_entry"));
+  GtkWidget* password_again_entry = GTK_WIDGET(g_object_get_data(
+      G_OBJECT(main_window_), "register_password_again_entry"));
+  GtkWidget* save_btn = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "register_register_btn"));
 
   auto username =
       std::string(gtk_editable_get_text(GTK_EDITABLE(username_entry)));
@@ -488,7 +522,8 @@ void Gui::AreRegisterEntriesFilled(GtkEditable *object, gpointer data) {
    * }
    */
 
-  if (username.empty() || password.size() < 7 || password_again.size() < 7 || password_again != password) {
+  if (username.empty() || password.size() < 7 || password_again.size() < 7 ||
+      password_again != password) {
     gtk_widget_set_sensitive(save_btn, FALSE);
   } else {
     gtk_widget_set_sensitive(save_btn, TRUE);
@@ -541,7 +576,7 @@ void Gui::AddItem(GtkWidget* object, gpointer user_data) {
 }
 
 void Gui::OnGenerateBtnClicked(GtkButton* button, gpointer user_data) {
-  //TODO: Password options
+  // TODO: Password options
   auto password_entry = GTK_PASSWORD_ENTRY(user_data);
   std::string password = pass_gen::GeneratePassword(16);
 
@@ -628,8 +663,8 @@ void Gui::ShowHidePasswd(GtkButton* button, gpointer user_data) {
 }
 
 void Gui::SwitchLoginRegister(GtkButton* button, gpointer user_data) {
-  GtkStack *stack = GTK_STACK(user_data);
-  const gchar *current_child = gtk_stack_get_visible_child_name(stack);
+  GtkStack* stack = GTK_STACK(user_data);
+  const gchar* current_child = gtk_stack_get_visible_child_name(stack);
 
   if (g_strcmp0(current_child, "Login") == 0) {
     gtk_stack_set_visible_child_name(stack, "Register");
@@ -639,16 +674,83 @@ void Gui::SwitchLoginRegister(GtkButton* button, gpointer user_data) {
 }
 
 void Gui::RegisterUser(GtkButton* button, gpointer user_data) {
-  GtkWidget* username_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_username_entry"));
-  GtkWidget* password_entry =
-      GTK_WIDGET(g_object_get_data(G_OBJECT(login_window_), "register_password_entry"));
+  auto username_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "register_username_entry"));
+  auto password_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "register_password_entry"));
   std::list<std::string> list;
-  list.push_back(std::string(gtk_editable_get_text(GTK_EDITABLE(username_entry))));
-  list.push_back(std::string(gtk_editable_get_text(GTK_EDITABLE(password_entry))));
+  auto username =
+      std::string(gtk_editable_get_text(GTK_EDITABLE(username_entry)));
+  static_username = username;
+  auto password =
+      std::string(gtk_editable_get_text(GTK_EDITABLE(password_entry)));
+  list.push_back(username);
+  list.push_back(password);
+  gtk_widget_set_sensitive(main_window_, FALSE);
   auto m_db = new MainDatabase("./database/central.db");
-  m_db->CreateUser(list);
+  auto path = m_db->CreateUser(list);
   delete m_db;
+  if (path.empty()) {
+    GtkWidget* error_box = GTK_WIDGET(
+        g_object_get_data(G_OBJECT(main_window_), "register_fields_box"));
+    auto child = gtk_widget_get_last_child(error_box);
+    if (!GTK_IS_LABEL(child)) {
+      gtk_box_append(GTK_BOX(error_box),
+                     gtk_label_new("uživatel již existuje"));
+    }
+    gtk_widget_set_sensitive(main_window_, TRUE);
+  } else {
+    key_ = hash::GetKey(password, username);
+    u_db_ = new UserDatabase(path);
+    cyphered_data_ = u_db_->GetData();
+    plain_data_ = u_db_->DecryptData(key_);
+    std::thread thread([&]() { u_db_->CreateIdManager(); });
+    std::thread thread2([&]() { u_db_->CreateMap(); });
+    thread.join();
+    thread2.join();
+    gtk_window_destroy(GTK_WINDOW(main_window_));
+    MainWindow();
+  }
+}
+
+void Gui::LoginUser(GtkButton* button, gpointer user_data) {
+  auto username_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "login_username_entry"));
+  auto password_entry = GTK_WIDGET(
+      g_object_get_data(G_OBJECT(main_window_), "login_password_entry"));
+  std::list<std::string> list;
+  auto username =
+      std::string(gtk_editable_get_text(GTK_EDITABLE(username_entry)));
+  static_username = username;
+  auto password =
+      std::string(gtk_editable_get_text(GTK_EDITABLE(password_entry)));
+  list.push_back(username);
+  list.push_back(password);
+  gtk_widget_set_sensitive(main_window_, FALSE);
+  auto m_db = new MainDatabase("./database/central.db");
+  auto path = m_db->LoginUser(list);
+  delete m_db;
+  if (path.empty()) {
+    GtkWidget* error_box = GTK_WIDGET(
+        g_object_get_data(G_OBJECT(main_window_), "login_fields_box"));
+    auto child = gtk_widget_get_last_child(error_box);
+    if (!GTK_IS_LABEL(child)) {
+      gtk_box_append(GTK_BOX(error_box),
+                     gtk_label_new("špatné jméno nebo heslo"));
+    }
+    gtk_widget_set_sensitive(main_window_, TRUE);
+  } else {
+    key_ = hash::GetKey(password, username);
+    u_db_ = new UserDatabase(path);
+    cyphered_data_ = u_db_->GetData();
+    plain_data_ = u_db_->DecryptData(key_);
+    std::thread thread([&]() { u_db_->CreateIdManager(); });
+    std::thread thread2([&]() { u_db_->CreateMap(); });
+    thread.join();
+    thread2.join();
+    gtk_window_destroy(GTK_WINDOW(main_window_));
+    MainWindow();
+  }
 }
 //---------------------------- Create widgets ----------------------------------
 GtkWidget* Gui::CreateListItem(Record& data) {
@@ -728,7 +830,7 @@ GtkWidget* Gui::CreateListItem(Record& data) {
 #endif
   return item;
 }
-//===================== Implement helpful functions ============================
 
+//===================== Implement helpful functions ============================
 
 }  // namespace rain_text

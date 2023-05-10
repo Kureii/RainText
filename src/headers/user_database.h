@@ -29,11 +29,14 @@ struct Record{
 class UserDatabase {
   std::vector<uint8_t> id_manager_;
   std::mutex db_mutex_;
-  std::vector<uint8_t> encoded_data_;
   std::map<std::string, std::vector<std::string>> map_data_;
+  std::vector<Record> encrypted_data_;
   std::vector<Record> plain_data_;
-  void CreateIdManager();
-  void CreateMap();
+
+ public:
+
+ private:
+  std::vector<uint8_t> key_;
 #ifdef ENABLE_TESTS
   std::filesystem::path db_path_;
 #endif
@@ -46,11 +49,14 @@ class UserDatabase {
   std::vector<Record> GetData();
   void SetData(const Record& record);
   void DeleteData(const int& id);
+  void CreateIdManager();
+  void CreateMap();
+  std::vector<Record> DecryptData(std::vector<uint8_t> key);
+  const std::vector<Record> &GetPlainData() const;
 #ifdef ENABLE_TESTS
   void SetIdManager(std::vector<uint8_t> id_manager);
   std::vector<uint8_t> GetIdManager();
   void SetPlainData(std::vector<Record> plain_data);
-  std::vector<Record> GetPlainData();
   Record PrepareDataTest(char** text_data);
 #endif
 
