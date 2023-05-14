@@ -1,0 +1,3 @@
+[submodule "lib/RainTextCore"]
+	path = lib/RainTextCore
+	url = https://github.com/Kureii/RainTextCore.git

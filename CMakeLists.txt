@@ -55,7 +55,7 @@ add_executable(${PROJECT_NAME}
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # Linux
-    target_include_directories(${PROJECT_NAME} PRIVATE
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/rain_text_core/include
             #[[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF/
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/phc-winner-argon2/include
@@ -69,11 +69,12 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
             sha3lib::sha3
             scryptlib::scrypt
             argon2lib::argon2
+            RainTextCore
             )
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows
     target_include_directories(${PROJECT_NAME} PRIVATE
-            ${GTK4_INCLUDE_DIRS}
+            ${GTK4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/lib/rain_text_core/include
             #[[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/phc-winner-argon2/include
@@ -94,6 +95,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
             sha3lib::sha3
             scryptlib::scrypt
             argon2lib::argon2
+            RainTextCore
             -static-libgcc -static-libstdc++)
     # Získání cesty k potřebným knihovnám
     list(GET GTK4_LIBRARY_DIRS 0 GTK4_LIB_DIR)

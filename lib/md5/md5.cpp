@@ -2,6 +2,7 @@
  * origin: https://github.com/pod32g/MD5
  */
 #include "md5.h"
+#include <cstring>
 
 namespace rain_text {
 

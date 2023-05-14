@@ -20,7 +20,7 @@ class Gui {
 
  private:
   static std::vector<uint8_t> key_;
-  static std::vector<Record> cyphered_data_;
+  static std::vector<EncryptRecord> cyphered_data_;
   static std::vector<Record> plain_data_;
   /**
    * @brief Determines if the add item entries are filled and adjusts the save

@@ -4,8 +4,10 @@ set(TEST_LIBRARY_NAME "${PROJECT_NAME}_lib")
 # Zdrojové soubory pro testovací knihovnu
 set(TEST_LIBRARY_SOURCE_FILES
         ../src/headers/user_database.h
+        ../src/headers/database_utils.h
         ../src/headers/pass_gen.h
         ../src/user_database.cpp
+        ../src/database_utils.cpp
         ../src/pass_gen.cpp
         )
 

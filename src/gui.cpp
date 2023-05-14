@@ -27,7 +27,7 @@ GtkWidget* Gui::main_window_ = nullptr;
 UserDatabase* Gui::u_db_ = nullptr;
 MainDatabase* Gui::m_db_ = nullptr;
 std::vector<uint8_t> Gui::key_ = std::vector<uint8_t>();
-std::vector<Record> Gui::cyphered_data_ = std::vector<Record>();
+std::vector<EncryptRecord> Gui::cyphered_data_ = std::vector<EncryptRecord>();
 std::vector<Record> Gui::plain_data_ = std::vector<Record>();
 
 Gui::Gui(const char* app_id) {
@@ -42,7 +42,8 @@ Gui::Gui(const char* app_id) {
 
 Gui::~Gui() {
   if (u_db_ != nullptr) {
-    delete u_db_;
+    u_db_->SetGuiStopped(true);
+    u_db_ = nullptr;
     u_db_ = nullptr;
   }
   g_object_unref(app_);
@@ -553,6 +554,7 @@ void Gui::AddItem(GtkWidget* object, gpointer user_data) {
   Record record = {id, headline, username, password};
   Record non_move_record = record;
   std::thread thread(&UserDatabase::SetData, u_db_, std::move(record));
+  thread.detach();
 
   auto children = gtk_widget_observe_children(password_list);
   uint32_t num_children = g_list_model_get_n_items(children);
@@ -572,7 +574,6 @@ void Gui::AddItem(GtkWidget* object, gpointer user_data) {
 
   gtk_box_append(GTK_BOX(password_list), CreateListItem(non_move_record));
   gtk_window_destroy(GTK_WINDOW(add_item_modal));
-  thread.join();
 }
 
 void Gui::OnGenerateBtnClicked(GtkButton* button, gpointer user_data) {
@@ -654,12 +655,18 @@ void Gui::ShowHidePasswd(GtkButton* button, gpointer user_data) {
 
   gtk_widget_set_name(btn_img, icon_paths.c_str());
 
-  auto new_passwd = gtk_widget_get_name(passwd);
-  auto old_passwd = gtk_label_get_label(GTK_LABEL(passwd));
+  auto new_passwd = g_strdup(gtk_widget_get_name(passwd));
+  auto old_passwd = g_strdup(gtk_label_get_text(GTK_LABEL(passwd)));
+
+
   gtk_label_set_selectable(GTK_LABEL(passwd),
                            !gtk_label_get_selectable(GTK_LABEL(passwd)));
   gtk_widget_set_name(passwd, old_passwd);
-  gtk_label_set_label(GTK_LABEL(passwd), new_passwd);
+  gtk_label_set_text(GTK_LABEL(passwd), new_passwd);
+
+  g_free(new_passwd);
+  g_free(old_passwd);
+
 }
 
 void Gui::SwitchLoginRegister(GtkButton* button, gpointer user_data) {
@@ -702,12 +709,12 @@ void Gui::RegisterUser(GtkButton* button, gpointer user_data) {
   } else {
     key_ = hash::GetKey(password, username);
     u_db_ = new UserDatabase(path);
-    cyphered_data_ = u_db_->GetData();
-    plain_data_ = u_db_->DecryptData(key_);
-    std::thread thread([&]() { u_db_->CreateIdManager(); });
-    std::thread thread2([&]() { u_db_->CreateMap(); });
-    thread.join();
-    thread2.join();
+    //std::thread thread([&]() { u_db_->CreateIdManager(); });
+    //std::thread thread2([&]() { u_db_->CreateMap(); });
+    //thread.detach();
+    //thread2.join();
+    u_db_->GetData();
+    u_db_->DecryptData(key_);
     gtk_window_destroy(GTK_WINDOW(main_window_));
     MainWindow();
   }
@@ -745,9 +752,9 @@ void Gui::LoginUser(GtkButton* button, gpointer user_data) {
     cyphered_data_ = u_db_->GetData();
     plain_data_ = u_db_->DecryptData(key_);
     std::thread thread([&]() { u_db_->CreateIdManager(); });
-    std::thread thread2([&]() { u_db_->CreateMap(); });
-    thread.join();
-    thread2.join();
+    //std::thread thread2([&]() { u_db_->CreateMap(); });
+    thread.detach();
+    //thread2.join();
     gtk_window_destroy(GTK_WINDOW(main_window_));
     MainWindow();
   }
@@ -774,7 +781,7 @@ GtkWidget* Gui::CreateListItem(Record& data) {
 
   auto password_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
   auto password_lable = gtk_label_new("Heslo: ");
-  auto password_lable2 = gtk_label_new("•••••••••••••");
+  auto password_lable2 = gtk_label_new("**********");
   gtk_widget_set_name(password_lable2, data.password.c_str());
 
   auto password_btn = gtk_button_new();

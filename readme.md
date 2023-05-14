@@ -13,7 +13,8 @@
 ### Ubuntu
 run:
   ``` bash
-  sudo apt update
+  # debian based
+  sudo apt update 
   sudo apt upgrade
   sudo apt install libgtk-4-1 libgtk-4-dev sqlite3 libsqlite3-dev
   ```

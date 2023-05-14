@@ -37,9 +37,15 @@ void ExecuteSql(sqlite3* connection, const std::string& sql,
   char* err_msg = nullptr;
   if (sqlite3_exec(connection, sql.c_str(), callback, data, &err_msg) !=
       SQLITE_OK) {
-    sqlite3_free(err_msg);
+    std::string error_message = "SQL error: ";
+    if (err_msg) {
+      error_message += err_msg;
+      sqlite3_free(err_msg);
+    } else {
+      error_message += "Unknown error";
+    }
     sqlite3_close(connection);
-    throw std::runtime_error(std::string("SQL error: " + std::string(err_msg)));
+    throw std::runtime_error(error_message);
   }
   lock.unlock();
 }
