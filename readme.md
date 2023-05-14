@@ -22,6 +22,3 @@ run:
 ## Time
  - batabase hash: ~0.16s
  - key: ~5.7s
-
-## Known issues
-1. if you try delete item after close and open app, the app crash with stack overflow
