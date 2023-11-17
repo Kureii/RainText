@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ModernTextField.qml</file>
+        <file>LoginRegisterScreen.qml</file>
+    </qresource>
+    <qresource prefix="/assets">
+        <file>eye.svg</file>
+        <file>eye-slash.svg</file>
+    </qresource>
+</RCC>

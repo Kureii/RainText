@@ -1,12 +1,45 @@
-cmake_minimum_required(VERSION 3.22)
-set(PROJECT_NAME RainText)
+cmake_minimum_required(VERSION 3.26)
 
-project(${PROJECT_NAME} VERSION 0.0.1)
+project(RainText VERSION 0.2.0)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+find_package(Qt6 COMPONENTS
+        Core
+        Quick
+        Qml
+        Gui
+        Widgets
+        Svg
+        REQUIRED
+)
+
+include(./src/source.cmake)
+
+qt_add_executable(${PROJECT_NAME}
+        qml/qml.qrc
+        ${executable_sources}
+        include/gui/rain_effect.h
+)
+
+#target_compile_definitions(${PROJECT_NAME}
+#        PRIVATE QT_QML_DEBUG)
+
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE Qt::Core
+        PRIVATE Qt::Quick
+        PRIVATE Qt::Qml
+        PRIVATE Qt::Gui
+        PRIVATE Qt::Widgets
+        PRIVATE Qt::Svg
+)
+
+
+#[[set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 if (CMAKE_SYSTEM_NAME  STREQUAL "Linux")
     # Linux
@@ -56,10 +89,10 @@ add_executable(${PROJECT_NAME}
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # Linux
     target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/rain_text_core/include
-            #[[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
+            #[=[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF/
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/phc-winner-argon2/include
-            ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt]]
+            ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt]=]
     )
     target_link_libraries(${PROJECT_NAME}
             PkgConfig::GTK4
@@ -75,10 +108,10 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows
     target_include_directories(${PROJECT_NAME} PRIVATE
             ${GTK4_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/lib/rain_text_core/include
-            #[[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
+            #[=[${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/phc-winner-argon2/include
-            ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt]]
+            ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt]=]
             )
     target_link_directories(RainText PRIVATE
             ${GTK4_LIBRARY_DIRS}
@@ -119,4 +152,4 @@ target_compile_options(RainText PRIVATE ${GTK4_CFLAGS_OTHER})
 
 enable_testing()
 
-add_subdirectory(tests)
+add_subdirectory(tests)]]
