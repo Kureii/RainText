@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Timeline 1.0
+import Qt5Compat.GraphicalEffects
+
 
 Rectangle {
     id: backgroundLoginRegister
@@ -9,9 +11,39 @@ Rectangle {
     width: 780
     height: 380
     radius: cornerRadius
+    color: "#021F3C"
+    state: "loginState"
 
+    property bool canConfirmForm
     property int cornerRadius: 5
     property int sideMargin: 30
+    property real passwordProgress: 0.001
+
+    DropShadow {
+        anchors.fill: backgroundFormLoginRegister
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: backgroundLoginRegister.cornerRadius * 2
+        color: "#aa000000"
+        source: backgroundFormLoginRegister
+    }
+
+    MouseArea {
+        id: dragArea
+        anchors.fill: parent
+        property point dragPosition
+
+        onPressed: {
+            dragPosition = Qt.point(mouseX, mouseY)
+        }
+
+        onPositionChanged: {
+            if (dragArea.pressed) {
+                window.x += (mouseX - dragPosition.x)
+                window.y += (mouseY - dragPosition.y)
+            }
+        }
+    }
 
     Row {
         id: rowContainer
@@ -24,37 +56,40 @@ Rectangle {
             height: backgroundLoginRegister.height
             width: backgroundLoginRegister.width / 2 - 30
             color: "transparent"
-            Button {
+
+            BorderedButton {
                 id: backgroundRegisterButton
-                anchors.centerIn: parent
                 text: "Register"
+                width: backgroundLoginRegister.width / 5
+                height: 35
+                anchors.centerIn: parent
+
+                normalColor: "#ECDFD4"
+                normalBackgroundColor: "#00ECDFD4"
+                hoveredColor: "#D1C7BE"
+                hoveredBackgroundColor: "#11D1C7BE"
+                pressedColor: "#ECDED3"
+                pressedBackgroundColor: "#33ECDED3"
+
                 onClicked: backgroundFormLoginRegister.state = "registerState"
 
                 Connections {
                     target: backgroundRegisterButton
-                    onClicked: backgroundLoginRegister.state = "registerState"
-                }
 
-                background: Rectangle {
-                    color: "transparent"
-                    radius: 5
-                    border.color: backgroundRegisterButton.hovered ? "#777" : "1d1d1d"
-                    border.width: 1
+                    function onClicked() {
+                        backgroundLoginRegister.state = "registerState"
+                        formConfirmButton.text = formHeadline.text = "Register"
+                        login_register_manager.StateChange(backgroundLoginRegister.state)
+                        backgroundLoginRegister.canConfirmForm =
+                            login_register_manager.CheckFields(formUsernameField.text,
+                                formPasswordField.text,
+                                formPasswordAgain.text)
 
-                    Rectangle {
-                        visible: backgroundRegisterButton.pressed
-                        color: "#111"
-                        anchors.fill: parent
-                        radius: 5 // Zaoblení rohů
+                        backgroundLoginRegister.passwordProgress =
+                            login_register_manager.PasswordStrength(formPasswordField.text)
                     }
                 }
 
-                contentItem: Text {
-                    text: backgroundRegisterButton.text
-                    font: backgroundRegisterButton.font
-                    color: backgroundRegisterButton.enabled ? "#222" : "#888"
-                    anchors.centerIn: parent
-                }
             }
         }
         Rectangle {
@@ -62,31 +97,130 @@ Rectangle {
             height: backgroundLoginRegister.height
             width: backgroundLoginRegister.width / 2 - 30
             color: "transparent"
-            z:5
+            z: 5
 
-            Button {
+            BorderedButton {
                 id: backgroundLoginButton
-                anchors.centerIn: parent
                 text: "Login"
+                width: backgroundLoginRegister.width / 5
+                height: 35
+                anchors.centerIn: parent
+
+                normalColor: "#ECDFD4"
+                normalBackgroundColor: "#00ECDFD4"
+                hoveredColor: "#D1C7BE"
+                hoveredBackgroundColor: "#11D1C7BE"
+                pressedColor: "#ECDED3"
+                pressedBackgroundColor: "#33ECDED3"
+
                 onClicked: backgroundFormLoginRegister.state = "loginState"
-                z:6
 
                 Connections {
                     target: backgroundLoginButton
-                    onClicked: backgroundLoginRegister.state = "loginState"
-                }
-            }
 
+                    function onClicked() {
+                        backgroundLoginRegister.state = "loginState"
+                        formConfirmButton.text = formHeadline.text = "Login"
+                        login_register_manager.StateChange(backgroundLoginRegister.state)
+                        backgroundLoginRegister.canConfirmForm =
+                            login_register_manager.CheckFields(formUsernameField.text,
+                                formPasswordField.text,
+                                formPasswordAgain.text)
+                    }
+                }
+
+            }
         }
     }
     Rectangle {
         id: backgroundFormLoginRegister
         anchors.centerIn: parent
         width: (backgroundLoginRegister.width - parent.sideMargin * 2) / 2
-        height: backgroundLoginRegister.height *1.2
-        color: "#e1a478"
+        height: backgroundLoginRegister.height * 1.2
+        color: "#ECDFD4"
         anchors.horizontalCenterOffset: width / 2
         radius: backgroundLoginRegister.cornerRadius
+        clip: true
+
+        MouseArea {
+            id: dragArea2
+            anchors.fill: parent
+            property point dragPosition
+
+            onPressed: {
+                dragPosition = Qt.point(mouseX, mouseY)
+            }
+
+            onPositionChanged: {
+                if (dragArea2.pressed) {
+                    window.x += (mouseX - dragPosition.x)
+                    window.y += (mouseY - dragPosition.y)
+                }
+            }
+        }
+
+        Rectangle {
+            id: closeButton
+            anchors.top: parent.top
+            anchors.right: parent.right
+            height: 32
+            width: 32
+            radius: backgroundLoginRegister.cornerRadius - 1
+            color: "transparent"
+
+            Rectangle {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                color: parent.color
+                height: parent.radius
+                width: parent.radius
+            }
+
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                color: parent.color
+                height: parent.radius
+                width: parent.radius
+            }
+
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                color: parent.color
+                height: parent.radius
+                width: parent.radius
+            }
+
+            MouseArea {
+                id: closeButtonMouseArea
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: Qt.quit()
+                onContainsMouseChanged: {
+                    if (closeButtonMouseArea.containsMouse) {
+                        closeButton.color= "#c98c8c"
+                    } else {
+                        closeButton.color= "transparent"
+
+                    }
+                }
+            }
+
+            Image {
+                id: close
+                anchors.centerIn: parent
+                width:14
+                height:14
+                source: "qrc:/images/close.svg"
+                fillMode: Image.PreserveAspectFit
+                ColorOverlay {
+                     anchors.fill: close
+                     source: close
+                     color: "#0C011C"
+                }
+            }
+        }
 
         Rectangle {
             id: backgroundForm
@@ -118,6 +252,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     bottomPadding: 8
+                    color: "#0C011C"
                     font.pointSize: 14
                 }
 
@@ -125,9 +260,15 @@ Rectangle {
                     id: formUsernameField
                     width: formColumn.formWidth
                     placeholderText: "Username"
-                    placeholderTextColor: "#ff0000"
-                    fillUnderlineColor: "#ff0000"
+                    placeholderTextColor: "#0C011C"
+                    fillUnderlineColor: "#0C011C"
                     color: "transparent"
+                    onTextChanged: {
+                        backgroundLoginRegister.canConfirmForm =
+                            login_register_manager.CheckFields(formUsernameField.text,
+                                formPasswordField.text,
+                                formPasswordAgain.text)
+                    }
                 }
 
                 Rectangle {
@@ -142,9 +283,61 @@ Rectangle {
                     width: formColumn.formWidth
                     placeholderText: "Password"
                     passwordMode: true
-                    placeholderTextColor: "#ff0000"
-                    fillUnderlineColor: "#ff0000"
+                    placeholderTextColor: "#0C011C"
+                    fillUnderlineColor: "#0C011C"
                     color: "transparent"
+                    Connections {
+                        target:formPasswordField
+                        function onTextChanged() {
+                            backgroundLoginRegister.canConfirmForm = login_register_manager.CheckFields(formUsernameField.text,
+                                formPasswordField.text,
+                                formPasswordAgain.text)
+                            backgroundLoginRegister.passwordProgress = login_register_manager.PasswordStrength(formPasswordField.text)
+                        }
+                        function onIsFocusedChanged() {
+                            if (backgroundLoginRegister.state !== "loginState") {
+                                if (formPasswordField.isFocused) {
+                                    backgroundLoginRegister.state = "registerStateProgress"
+                                } else {
+                                    console.log("hide")
+                                    backgroundLoginRegister.state = "registerState"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: formBeforePasswordProgressBarSpace
+                    height: 0
+                    width: formColumn.formWidth
+                    color: "transparent"
+                }
+
+                ProgressBar {
+                    id: passwordProgressBar
+                    height: 0
+                    width: formColumn.formWidth
+                    value: backgroundLoginRegister.passwordProgress
+
+                    background: Rectangle {
+                        id: passwordProgressBarBackground
+                        //y:-1
+                        radius: height / 2
+                        color: "transparent"
+                        width: parent.width
+                        height: parent.height //=== 0 ? 0: parent.height + 2
+                        //border.width: 1
+                        //border.color: backgroundLoginRegister.color
+                    }
+
+                    contentItem: Rectangle {
+                        id: contentItemPasswordProgressBar
+                        width: passwordProgressBar.value * formColumn.formWidth
+                        height: parent.height
+                        radius: height / 2
+                        color: Qt.hsla(passwordProgressBar.value * 0.4, .8, 0.45, passwordProgressBar.value === 0? 0 : 1)
+                    }
                 }
 
                 Rectangle {
@@ -160,10 +353,15 @@ Rectangle {
                     height: 0
                     placeholderText: "Password again"
                     passwordMode: true
-                    placeholderTextColor: "#ff0000"
-                    fillUnderlineColor: "#ff0000"
+                    placeholderTextColor: "#0C011C"
+                    fillUnderlineColor: "#0C011C"
                     color: "transparent"
-
+                    onTextChanged: {
+                        backgroundLoginRegister.canConfirmForm =
+                            login_register_manager.CheckFields(formUsernameField.text,
+                                formPasswordField.text,
+                                formPasswordAgain.text)
+                    }
                 }
 
                 Rectangle {
@@ -176,99 +374,30 @@ Rectangle {
                 Button {
                     id: formConfirmButton
                     width: formColumn.formWidth
-                    text: "login"
-                   /* background: Rectangle {
+                    text: "Login"
+                    height: 40
+                    background: Rectangle {
                         id: buttonBackground
-                        color: formConfirmButton.hovered ? "lightblue" : "blue"
-                        radius: 5
-                        border.color: "black"
-                        border.width: 1
-
-                        Rectangle {
-                            visible: formConfirmButton.pressed
-                            color: "darkblue"
-                            anchors.fill: parent
-                            radius: 5 // Zaoblení rohů
-                        }
+                        color: formConfirmButton.enabled ? (formConfirmButton.hovered ? (formConfirmButton.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
+                        radius: backgroundLoginRegister.cornerRadius * 2
+                        border.width: formConfirmButton.pressed ? 2 : 0
+                        border.color: formConfirmButton.pressed ? "#734500" : "transparent"
                     }
 
                     contentItem: Text {
                         text: formConfirmButton.text
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         font: formConfirmButton.font
-                        color: formConfirmButton.enabled ? "white" : "lightgray"
+                        color: formConfirmButton.enabled ? "#0C011C" : "#021F3C"
                         anchors.centerIn: parent
-                    }*/
+                    }
+                    enabled: backgroundLoginRegister.canConfirmForm
+                    onClicked: login_register_manager.ConfirmFormUser(formUsernameField.text, formPasswordField.text)
                 }
-
             }
         }
     }
-
-    Timeline {
-        id: loginTimeline
-        animations: [
-            TimelineAnimation {
-                id: loginAnimation
-                running: false
-                loops: 1
-                duration: 250
-                to: 250
-                from: 0
-            }
-        ]
-        startFrame: 0
-        endFrame: 250
-        enabled: false
-
-        KeyframeGroup {
-            target: backgroundFormLoginRegister
-            property: "anchors.horizontalCenterOffset"
-            Keyframe {
-                value: -1 * (backgroundFormLoginRegister.width / 2)
-                frame: 0
-            }
-
-            Keyframe {
-                value: backgroundFormLoginRegister.width / 2
-                frame: 250
-            }
-        }
-
-
-    }
-    
-    Timeline {
-        id: registrationTimeline
-        animations: [
-            TimelineAnimation {
-                id: registrationAnimation
-                running: false
-                loops: 1
-                duration: 250
-                to: 250
-                from: 0
-            }
-        ]
-        startFrame: 0
-        endFrame: 250
-        enabled: false
-
-        KeyframeGroup {
-            target: backgroundFormLoginRegister
-            property: "anchors.horizontalCenterOffset"
-            Keyframe {
-                value: backgroundFormLoginRegister.width / 2
-                frame: 0
-            }
-
-            Keyframe {
-                value: -1 * (backgroundFormLoginRegister.width / 2)
-                frame: 250
-            }
-        }
-    }
-
-
 
     states: [
         State {
@@ -285,21 +414,18 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: registrationTimeline
-                enabled: false
+                target: backgroundFormLoginRegister
+                anchors.horizontalCenterOffset: backgroundFormLoginRegister.width / 2
             }
-            
             PropertyChanges {
-                target: loginTimeline
-                enabled: true
+                target: passwordProgressBarBackground
+                height: 0
             }
-            
+
             PropertyChanges {
-                target: loginAnimation
-                running: true
+                target: passwordProgressBarBackground
+                width: 0
             }
-            
-            
         },
         State {
             name: "registerState"
@@ -310,64 +436,246 @@ Rectangle {
 
             PropertyChanges {
                 target: formPasswordAgain
-                height: formPasswordAgain.text.length === 0 ? 22 : 40
-            }
-            PropertyChanges {
-                target: loginTimeline
-                enabled: false
-            }
-            
-            PropertyChanges {
-                target: registrationTimeline
-                enabled: true
-            }
-            
-            PropertyChanges {
-                target: registrationAnimation
-                running: true
+                height: formPasswordAgain.text.length === 0 ? 22 : 46
             }
 
+            PropertyChanges {
+                target: passwordProgressBar
+                height: 0
+            }
+
+            PropertyChanges {
+                target: backgroundFormLoginRegister
+                anchors.horizontalCenterOffset: -1 * (backgroundFormLoginRegister.width / 2)
+            }
+
+            PropertyChanges {
+                target: passwordProgressBarBackground
+                height: 0
+            }
+
+            PropertyChanges {
+                target: passwordProgressBarBackground
+                width: 0
+            }
+        },
+        State {
+            name: "registerStateProgress"
+            PropertyChanges {
+                target: formAfterPasswordAgainSpace
+                height: 12
+            }
+
+            PropertyChanges {
+                target: formPasswordAgain
+                height: formPasswordAgain.text.length === 0 ? 22 : 46
+            }
+
+            PropertyChanges {
+                target: passwordProgressBar
+                height: 2
+            }
+
+            PropertyChanges {
+                target: passwordProgressBarBackground
+                height: passwordProgressBar.height + 2
+            }
+
+            PropertyChanges {
+                target: passwordProgressBarBackground
+                width: formColumn.formWidth
+            }
+
+            PropertyChanges {
+                target: formBeforePasswordProgressBarSpace
+                height: 2
+            }
+
+            PropertyChanges {
+                target: backgroundFormLoginRegister
+                anchors.horizontalCenterOffset: -1 * (backgroundFormLoginRegister.width / 2)
+            }
         }
     ]
     transitions: [
         Transition {
-            id: transition
+            id: loginToRegisterTransition
+            from: "loginState,registerState"
+            to: "loginState,registerState"
             ParallelAnimation {
                 SequentialAnimation {
                     PauseAnimation {
-                        duration: 50
+                        duration: 25
                     }
-
                     PropertyAnimation {
                         target: formPasswordAgain
                         property: "height"
-                        duration: 150
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 100
                     }
                 }
-            }
-
-            ParallelAnimation {
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 25
+                    }
+                    PropertyAnimation {
+                        target: formAfterPasswordAgainSpace
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 100
+                    }
+                }
                 SequentialAnimation {
                     PauseAnimation {
                         duration: 50
                     }
-
+                    PropertyAnimation {
+                        target:backgroundFormLoginRegister
+                        property: "anchors.horizontalCenterOffset"
+                        easing.bezierCurve: [0.0553,0.0385,0.0796,-0.0381,0.109,-0.0381,0.138,-0.0381,0.185,0.0276,0.222,0.00353,0.259,-0.0205,0.332,-0.25,0.385,-0.252,0.462,-0.14,0.543,1.18,0.617,1.24,0.676,1.24,0.738,1,0.778,0.977,0.817,0.953,0.855,1.02,0.889,1.03,0.924,1.03,0.951,0.964,1,1]
+                        duration: 750
+                    }
+                }
+            }
+        },
+        Transition {
+            id: registrationToProgress
+            from: "registerState,registerStateProgress"
+            to: "registerState,registerStateProgress"
+            ParallelAnimation {
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBar
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: formBeforePasswordProgressBarSpace
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBarBackground
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBarBackground
+                        property: "width"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+            }
+        },
+        Transition {
+            id: progressToLogin
+            ParallelAnimation {
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: formPasswordAgain
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 50
+                    }
+                    PropertyAnimation {
+                        target: backgroundFormLoginRegister
+                        property: "anchors.horizontalCenterOffset"
+                        easing.bezierCurve: [0.0553,0.0385,0.0796,-0.0381,0.109,-0.0381,0.138,-0.0381,0.185,0.0276,0.222,0.00353,0.259,-0.0205,0.332,-0.25,0.385,-0.252,0.462,-0.14,0.543,1.18,0.617,1.24,0.676,1.24,0.738,1,0.778,0.977,0.817,0.953,0.855,1.02,0.889,1.03,0.924,1.03,0.951,0.964,1,1]
+                        duration: 750
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: formBeforePasswordProgressBarSpace
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 50
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBar
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 100
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 50
+                    }
                     PropertyAnimation {
                         target: formAfterPasswordAgainSpace
                         property: "height"
-                        duration: 150
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 100
                     }
                 }
-
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBarBackground
+                        property: "height"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 10
+                    }
+                    PropertyAnimation {
+                        target: passwordProgressBarBackground
+                        property: "width"
+                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
+                        duration: 90
+                    }
+                }
             }
-            to: "*"
-            from: "*"
+            to: "loginState,registerStateProgress"
+            from: "loginState,registerStateProgress"
         }
+
     ]
 }
 
-/*##^##
-Designer {
-    D{i:0}D{i:42;transitionDuration:2000}
-}
-##^##*/
+
+
