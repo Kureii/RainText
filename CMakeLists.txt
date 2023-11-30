@@ -19,12 +19,16 @@ find_package(Qt6 COMPONENTS
 )
 
 include(./src/source.cmake)
+include(./include/include.cmake)
+include(./qml/qrc.cmake)
 
 qt_add_executable(${PROJECT_NAME}
-        qml/qml.qrc
+        ${qrc}
         ${executable_sources}
-        include/gui/rain_effect.h
+        ${all_headers}
 )
+
+target_include_directories(${PROJECT_NAME} PUBLIC ./include/)
 
 #target_compile_definitions(${PROJECT_NAME}
 #        PRIVATE QT_QML_DEBUG)
