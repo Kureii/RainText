@@ -151,11 +151,18 @@ int main() {
 #include <iostream>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtQuick/QQuickView>
+#include <QtQml/qqml.h>
+#include <QQmlContext>
+#include "RainText/gui/login_register_manager.h"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
+  rain_text::gui::LoginRegisterManager login_register_manager;
+  engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
+
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
       &app, [url](QObject *obj, const QUrl &objUrl) {
