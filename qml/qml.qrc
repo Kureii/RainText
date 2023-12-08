@@ -4,5 +4,7 @@
         <file>ModernTextField.qml</file>
         <file>LoginRegisterScreen.qml</file>
         <file>BorderedButton.qml</file>
+        <file>CloseButton.qml</file>
+        <file>MyProgressBar.qml</file>
     </qresource>
 </RCC>
