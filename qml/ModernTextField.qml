@@ -47,7 +47,6 @@ Rectangle {
 
         onClicked: {
             textAreaObject.forceActiveFocus()
-            modernTextField.isFocused = true
         }
     }
 
@@ -73,10 +72,7 @@ Rectangle {
                 modernTextField.text = textAreaObject.text
             }
             function onFocusChanged() {
-                modernTextField.isFocused = true
-            }
-            function onEditingFinished() {
-                modernTextField.isFocused = false
+                modernTextField.isFocused = !modernTextField.isFocused
             }
         }
     }
