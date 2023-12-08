@@ -159,67 +159,13 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            id: closeButton
+        CloseButton {
             anchors.top: parent.top
             anchors.right: parent.right
             height: 32
             width: 32
             radius: backgroundLoginRegister.cornerRadius - 1
-            color: "transparent"
-
-            Rectangle {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                color: parent.color
-                height: parent.radius
-                width: parent.radius
-            }
-
-            Rectangle {
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                color: parent.color
-                height: parent.radius
-                width: parent.radius
-            }
-
-            Rectangle {
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                color: parent.color
-                height: parent.radius
-                width: parent.radius
-            }
-
-            MouseArea {
-                id: closeButtonMouseArea
-                hoverEnabled: true
-                anchors.fill: parent
-                onClicked: Qt.quit()
-                onContainsMouseChanged: {
-                    if (closeButtonMouseArea.containsMouse) {
-                        closeButton.color= "#c98c8c"
-                    } else {
-                        closeButton.color= "transparent"
-
-                    }
-                }
-            }
-
-            Image {
-                id: close
-                anchors.centerIn: parent
-                width:14
-                height:14
-                source: "qrc:/images/close.svg"
-                fillMode: Image.PreserveAspectFit
-                ColorOverlay {
-                     anchors.fill: close
-                     source: close
-                     color: "#0C011C"
-                }
-            }
+            visibleRightUpRadius: true
         }
 
         Rectangle {
@@ -299,8 +245,8 @@ Rectangle {
                                 if (formPasswordField.isFocused) {
                                     backgroundLoginRegister.state = "registerStateProgress"
                                 } else {
-                                    console.log("hide")
                                     backgroundLoginRegister.state = "registerState"
+
                                 }
                             }
                         }
@@ -314,30 +260,11 @@ Rectangle {
                     color: "transparent"
                 }
 
-                ProgressBar {
+                MyProgressBar {
                     id: passwordProgressBar
-                    height: 0
+                    height: 0.01
                     width: formColumn.formWidth
                     value: backgroundLoginRegister.passwordProgress
-
-                    background: Rectangle {
-                        id: passwordProgressBarBackground
-                        //y:-1
-                        radius: height / 2
-                        color: "transparent"
-                        width: parent.width
-                        height: parent.height //=== 0 ? 0: parent.height + 2
-                        //border.width: 1
-                        //border.color: backgroundLoginRegister.color
-                    }
-
-                    contentItem: Rectangle {
-                        id: contentItemPasswordProgressBar
-                        width: passwordProgressBar.value * formColumn.formWidth
-                        height: parent.height
-                        radius: height / 2
-                        color: Qt.hsla(passwordProgressBar.value * 0.4, .8, 0.45, passwordProgressBar.value === 0? 0 : 1)
-                    }
                 }
 
                 Rectangle {
@@ -417,14 +344,14 @@ Rectangle {
                 target: backgroundFormLoginRegister
                 anchors.horizontalCenterOffset: backgroundFormLoginRegister.width / 2
             }
-            PropertyChanges {
-                target: passwordProgressBarBackground
-                height: 0
-            }
 
             PropertyChanges {
-                target: passwordProgressBarBackground
-                width: 0
+                target: passwordProgressBar
+                height: 0
+            }
+            PropertyChanges {
+                target: formBeforePasswordProgressBarSpace
+                height: 0
             }
         },
         State {
@@ -440,23 +367,17 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: passwordProgressBar
-                height: 0
-            }
-
-            PropertyChanges {
                 target: backgroundFormLoginRegister
                 anchors.horizontalCenterOffset: -1 * (backgroundFormLoginRegister.width / 2)
             }
 
             PropertyChanges {
-                target: passwordProgressBarBackground
+                target: passwordProgressBar
                 height: 0
             }
-
             PropertyChanges {
-                target: passwordProgressBarBackground
-                width: 0
+                target: formBeforePasswordProgressBarSpace
+                height: 0
             }
         },
         State {
@@ -467,28 +388,17 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: formPasswordAgain
-                height: formPasswordAgain.text.length === 0 ? 22 : 46
-            }
-
-            PropertyChanges {
                 target: passwordProgressBar
                 height: 2
             }
-
-            PropertyChanges {
-                target: passwordProgressBarBackground
-                height: passwordProgressBar.height + 2
-            }
-
-            PropertyChanges {
-                target: passwordProgressBarBackground
-                width: formColumn.formWidth
-            }
-
             PropertyChanges {
                 target: formBeforePasswordProgressBarSpace
                 height: 2
+            }
+
+            PropertyChanges {
+                target: formPasswordAgain
+                height: formPasswordAgain.text.length === 0 ? 22 : 46
             }
 
             PropertyChanges {
@@ -565,28 +475,6 @@ Rectangle {
                         duration: 90
                     }
                 }
-                SequentialAnimation {
-                    PauseAnimation {
-                        duration: 10
-                    }
-                    PropertyAnimation {
-                        target: passwordProgressBarBackground
-                        property: "height"
-                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
-                        duration: 90
-                    }
-                }
-                SequentialAnimation {
-                    PauseAnimation {
-                        duration: 10
-                    }
-                    PropertyAnimation {
-                        target: passwordProgressBarBackground
-                        property: "width"
-                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
-                        duration: 90
-                    }
-                }
             }
         },
         Transition {
@@ -647,31 +535,9 @@ Rectangle {
                         duration: 100
                     }
                 }
-                SequentialAnimation {
-                    PauseAnimation {
-                        duration: 10
-                    }
-                    PropertyAnimation {
-                        target: passwordProgressBarBackground
-                        property: "height"
-                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
-                        duration: 90
-                    }
-                }
-                SequentialAnimation {
-                    PauseAnimation {
-                        duration: 10
-                    }
-                    PropertyAnimation {
-                        target: passwordProgressBarBackground
-                        property: "width"
-                        easing.bezierCurve: [0.175,0.885,0.32,1.27,1,1]
-                        duration: 90
-                    }
-                }
             }
-            to: "loginState,registerStateProgress"
-            from: "loginState,registerStateProgress"
+            to: "loginState"
+            from: "registerStateProgress"
         }
 
     ]
