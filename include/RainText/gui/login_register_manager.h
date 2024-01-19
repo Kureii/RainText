@@ -31,8 +31,6 @@ signals:
  void loginComplete();
  void errorOccurred(const QString &error);
 
-public slots:
-
 };
 
 }  // namespace rain_text::gui
