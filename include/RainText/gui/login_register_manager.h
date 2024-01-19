@@ -1,10 +1,9 @@
 /* This file was created by Kureii (Tomas Adamek)
  * Date created: 19. 11. 2023
- * This file is under the MIT license
+ * This file is under the GPL-3 license
  */
 
-#ifndef RAINTEXT_LOGIN_REGISTER_MANAGER_H
-#define RAINTEXT_LOGIN_REGISTER_MANAGER_H
+#pragma once
 
 #include <QObject>
 namespace rain_text::gui {
@@ -35,4 +34,3 @@ signals:
 
 }  // namespace rain_text::gui
 
-#endif  // RAINTEXT_LOGIN_REGISTER_MANAGER_H
