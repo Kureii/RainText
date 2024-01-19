@@ -89,7 +89,5 @@ float LoginRegisterManager::PasswordStrength(const QString &password) {
 
 //================================= Private method =============================
 
-//================================= Slots ======================================
-
 //================================= End namespace ==============================
 }  // namespace rain_text::gui
