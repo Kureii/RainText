@@ -6,5 +6,8 @@
         <file>BorderedButton.qml</file>
         <file>CloseButton.qml</file>
         <file>MyProgressBar.qml</file>
+        <file>PasswordManagerScreen.qml</file>
+        <file>CustomCheckBox.qml</file>
+
     </qresource>
 </RCC>
