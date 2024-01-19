@@ -1,6 +1,6 @@
 /* This file was created by Kureii (Tomas Adamek)
  * Date created: 19. 11. 2023
- * This file is under the MIT license
+ * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
 #include "RainText/gui/login_register_manager.h"
