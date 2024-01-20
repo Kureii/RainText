@@ -14,15 +14,18 @@ Rectangle {
 
     property string text: ""
     property string placeholderText: ""
-    property color textColor: "#111"
-    property color placeholderTextColor: "#6b0f0f"
-    property color fillUnderlineColor: "#070a93"
-    property color selectionBlockColor: "#bada55"
-    property color selectionTextColor: "#000"
+    property color textColor: "#0C011C"
+    property color placeholderTextColor: "#0C011C"
+    property color fillUnderlineColor: "#0C011C"
+    property color selectionBlockColor: "#FF9800"
+    property color selectionTextColor: "#0C011C"
     property bool passwordMode: false
     property bool passwordIsHidden: true
     property bool isFocused: false
 
+    onTextChanged: {
+        textAreaObject.text = modernTextField.text
+    }
 
     Column {
         width: parent.width
@@ -91,6 +94,20 @@ Rectangle {
         }
 
         Image {
+            id: showHideIconFocus
+            visible: showHideButton.focus
+            anchors.fill: parent
+            anchors.margins: 0
+            source: modernTextField.passwordIsHidden ? "qrc:/images/eye.svg" : "qrc:/images/eye-slash.svg"
+            fillMode: Image.PreserveAspectFit
+            ColorOverlay {
+                anchors.fill: showHideIconFocus
+                source: showHideIconFocus
+                color: modernTextField.selectionBlockColor
+            }
+        }
+
+        Image {
             id: showHideIcon
             anchors.fill: parent
             anchors.margins: 2
@@ -107,6 +124,17 @@ Rectangle {
             textAreaObject.forceActiveFocus()
             modernTextField.passwordIsHidden = !modernTextField.passwordIsHidden
         }
+
+        Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Space || event.key === Qt.Key_Enter) {
+                event.accepted = true
+                modernTextField.passwordIsHidden = !modernTextField.passwordIsHidden
+                showHideButton.focus = true
+                modernTextField.isFocused = true
+
+            }
+        }
+
     }
 
 
@@ -114,7 +142,7 @@ Rectangle {
         id: fillUnderline
         width: 0
         height: 1
-        color: modernTextField.fillUnderlineColor
+        color: textAreaObject.focus? modernTextField.selectionBlockColor : modernTextField.fillUnderlineColor
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 2
@@ -135,7 +163,7 @@ Rectangle {
     states: [
         State {
             name: "Extend"
-            when: textAreaObject.focus || textAreaObject.text.length > 0
+            when: textAreaObject.focus || textAreaObject.text.length > 0 || showHideButton.focus
 
             PropertyChanges {
                 target: modernTextField
@@ -155,7 +183,7 @@ Rectangle {
         },
         State {
             name: "Collapsed"
-            when: !textAreaObject.focus && textAreaObject.text.length === 0
+            when: !textAreaObject.focus && textAreaObject.text.length === 0 && !showHideButton.focus
         }
     ]
     transitions: [
