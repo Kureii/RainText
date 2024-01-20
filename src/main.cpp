@@ -155,13 +155,16 @@ int main() {
 #include <QtQml/qqml.h>
 #include <QQmlContext>
 #include "RainText/gui/login_register_manager.h"
+#include "RainText/gui/generate_password.h"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
   rain_text::gui::LoginRegisterManager login_register_manager;
+  rain_text::gui::GeneratePassword generate_password;
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
+  engine.rootContext()->setContextProperty("generate_password", &generate_password);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
