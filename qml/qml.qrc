@@ -8,6 +8,6 @@
         <file>MyProgressBar.qml</file>
         <file>PasswordManagerScreen.qml</file>
         <file>CustomCheckBox.qml</file>
-
+        <file>SizePicker.qml</file>
     </qresource>
 </RCC>
