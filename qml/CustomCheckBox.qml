@@ -9,9 +9,10 @@ CheckBox {
 
     property color borderColor: "#0C011C"
     property color checkedColor: "#FF9800"
+    property color backgroundColor: "#ECDFD4"
 
     indicator: Rectangle {
-        id: rectangle
+        id: checkBoxChecker
         width: 18
         height: 18
         border.width: 0
@@ -19,6 +20,12 @@ CheckBox {
         anchors.left: parent.left
         anchors.leftMargin: 8
 
+        Rectangle {
+            anchors.fill: parent
+            color: customCheckBox.checkedColor
+            radius: 5
+            visible: customCheckBox.focus
+        }
 
         Rectangle {
             visible: customCheckBox.checked
@@ -27,6 +34,14 @@ CheckBox {
             anchors.centerIn: parent
             color: customCheckBox.checkedColor
             radius: 4
+        }
+        Rectangle {
+            anchors.centerIn: parent
+            width: checkBoxChecker.width - 2
+            height: checkBoxChecker.height - 2
+            color: customCheckBox.backgroundColor
+            radius: 5
+            visible: customCheckBox.focus
         }
         Image {
             id: uncheckedIconImage
@@ -39,6 +54,7 @@ CheckBox {
                 color: customCheckBox.borderColor
             }
         }
+
 
         Image {
             id: checkedIconImage
