@@ -7,5 +7,7 @@
         <file>add.svg</file>
         <file>checked-square.svg</file>
         <file>unchecked-square.svg</file>
+        <file>arrow-up.svg</file>
+        <file>arrow-down.svg</file>
     </qresource>
 </RCC>
