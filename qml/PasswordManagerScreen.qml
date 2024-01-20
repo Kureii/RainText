@@ -229,12 +229,18 @@ Rectangle {
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
                                 event.accepted = true;
-                                majusculeGenPassChBox.focus = true
+                                if (formConfirmButton.enabled) {
+                                    formConfirmButton.focus = true
+                                } else {
+                                    majusculeGenPassChBox.focus = true
+                                }
                             }
                             if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
                                 event.accepted = true;
                                 formUsernameField.focus = true;
                             }
+
+
                         }
                         /*Connections {
                             target:formPasswordField
@@ -357,7 +363,18 @@ Rectangle {
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
                                 event.accepted = true;
-                                buttonGenPass.focus = true
+                                if (buttonGenPass.enabled) {
+                                    buttonGenPass.focus = true
+                                } else if (formConfirmButton.enabled) {
+                                    formConfirmButton.focus = true
+                                } else if (formHeadlineField.text === "") {
+                                    formHeadlineField.focus = true
+                                } else if (formUsernameField.text === "") {
+                                    formUsernameField.focus = true
+                                } else {
+                                    formPasswordField.focus = true
+                                }
+
                             }
                             if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
                                 event.accepted = true;
@@ -398,13 +415,31 @@ Rectangle {
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
                                 event.accepted = true;
-                                formConfirmButton.focus = true
+                                if (formConfirmButton.enabled) {
+                                    formConfirmButton.focus = true
+                                } else if (formHeadlineField.text === "") {
+                                    formHeadlineField.focus = true
+                                } else if (formUsernameField.text === "") {
+                                    formUsernameField.focus = true
+                                } else {
+                                    formPasswordField.focus = true
+                                }
                             }
                             if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
                                 event.accepted = true;
                                 passGenLength.focus = true;
                             }
+                            if (event.key === Qt.Key_Enter) {
+                                event.accepted = true;
+                                generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked,  passGenLength.value)
+                            }
+                            if (event.key === Qt.Key_S || event.key === Qt.Key_H) {
+                                event.accepted = true
+                                formPasswordField.passwordIsHidden = !formPasswordField.passwordIsHidden
+                            }
                         }
+
+                        onClicked: generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked,  passGenLength.value)
 
 
                         //enabled: backgroundLoginRegister.canConfirmForm
@@ -434,6 +469,16 @@ Rectangle {
                     radius: passwordManagerScreen.cornerRadius * 2
                     border.width: formConfirmButton.pressed ? 2 : 0
                     border.color: formConfirmButton.pressed ? "#734500" : "transparent"
+                    Rectangle {
+                        visible: formConfirmButton.focus
+                        anchors.centerIn: parent
+                        height: parent.height - 4
+                        width: parent.width - 4
+                        color: "transparent"
+                        border.width: 2
+                        border.color: "#ECDFD4"
+                        radius: passwordManagerScreen.cornerRadius * 2 - 2
+                    }
                 }
 
                 contentItem: Text {
@@ -535,4 +580,12 @@ Rectangle {
             }
         }
     }
+
+    Connections {
+        target: generate_password
+        onPasswordGenerated: function(password) {
+            formPasswordField.text = password
+        }
+    }
 }
+
