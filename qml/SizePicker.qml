@@ -29,13 +29,10 @@ Column {
     }
 
     function adjustColorBrightness(color, brightness) {
-        // Normalizujte hodnotu jasu na rozsah 0.5 - 1
         brightness = (brightness * 0.5) + 0.5;
 
-        // Pokud je barva objekt Color, převeďte ji na hex řetězec
         var hexColor = typeof color === 'string' ? color : color.toString().slice(0, 7);
 
-        // Ořízněte případnou alfa hodnotu a '0x' prefix
         hexColor = hexColor.replace(/^(#|0x)/, '');
         if (hexColor.length > 6) { // ARGB format
             hexColor = hexColor.substring(2); // Odstraňte alfa kanál
