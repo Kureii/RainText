@@ -1,6 +1,7 @@
 set(raintext_gui_headers
         ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/gui/login_register_manager.h
         ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/gui/generate_password.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/gui/copy_to_clipboard.h
 
 )
 

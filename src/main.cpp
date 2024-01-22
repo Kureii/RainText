@@ -156,6 +156,7 @@ int main() {
 #include <QQmlContext>
 #include "RainText/gui/login_register_manager.h"
 #include "RainText/gui/generate_password.h"
+#include "RainText/gui/copy_to_clipboard.h"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
@@ -163,8 +164,10 @@ int main(int argc, char* argv[]) {
   QQmlApplicationEngine engine;
   rain_text::gui::LoginRegisterManager login_register_manager;
   rain_text::gui::GeneratePassword generate_password;
+  rain_text::gui::CopyToClipboard copy_to_clipboard;
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
   engine.rootContext()->setContextProperty("generate_password", &generate_password);
+  engine.rootContext()->setContextProperty("copy_to_clipboard", &copy_to_clipboard);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
