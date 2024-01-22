@@ -9,5 +9,9 @@
         <file>unchecked-square.svg</file>
         <file>arrow-up.svg</file>
         <file>arrow-down.svg</file>
+        <file>trash.svg</file>
+        <file>edit.svg</file>
+        <file>copy.svg</file>
+        <file>copy-success.svg</file>
     </qresource>
 </RCC>
