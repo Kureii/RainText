@@ -1,10 +1,11 @@
 {
   "ui": {
-    "colorMode": "lightMode",
+    "colorMode": "Rain Text light",
     "colors": {
-      "lightMode": {
+      "Rain Text light": {
         "primaryColor": "#FF9800",
         "primaryPressedColor": "#8A5300",
+        "primaryHoveredColor" : "#b56c00",
         "notEnablePrimaryColor": "#F0B762",
         "textColor": "#0C011C",
         "notEnableTextColor": "#453957",
@@ -15,22 +16,33 @@
         "drawerBackgroundColor": "##FAF6F2",
         "borderButtonColor": "#1C0F01",
         "borderButtonFocusColor": "#FFA000",
-        "nonEnabledBorderButtonColor": "#75614B"
+        "nonEnabledBorderButtonColor": "#75614B",
+        "borderButtonHoveredColor" : "#",
+        "registerLoginSwapButtonBorderColor" : "#",
+        "registerLoginSwapButtonFillColor" : "#",
+        "registerLoginSwapButtonFillHoveredColor" : "#",
+        "registerLoginSwapButtonFillPressedColor" : "#"
       },
-      "darkMode": {
+      "Rain Text dark": {
         "primaryColor": "#FF9800",
-        "focusColor": "#FF9800",
-        "focusOnPrimaryColor": "#",
-        "backgroundColor": "#",
-        "textColor": "#",
-        "textOnPrimaryColor": "#",
-        "notEnablePrimaryColor": "#",
-        "notEnableTextColor": "#",
-        "drawerBackgroundColor": "#",
-        "primaryPressedColor": "#",
-        "borderButtonColor": "#",
-        "borderButtonFocusColor": "#",
-        "nonEnabledBorderButtonColor": "#"
+        "primaryPressedColor": "#8A5300",
+        "primaryHoveredColor" : "#b56c00",
+        "notEnablePrimaryColor": "#F0B762",
+        "textColor": "#0C011C",
+        "notEnableTextColor": "#453957",
+        "focusColor": "#FFA000",
+        "textOnPrimaryColor": "#1C1001",
+        "focusOnPrimaryColor": "#E3C59A",
+        "backgroundColor": "#ECDFD4",
+        "drawerBackgroundColor": "##FAF6F2",
+        "borderButtonColor": "#1C0F01",
+        "borderButtonFocusColor": "#FFA000",
+        "nonEnabledBorderButtonColor": "#75614B",
+        "borderButtonHoveredColor" : "#",
+        "registerLoginSwapButtonBorderColor" : "#",
+        "registerLoginSwapButtonFillColor" : "#",
+        "registerLoginSwapButtonFillHoveredColor" : "#",
+        "registerLoginSwapButtonFillPressedColor" : "#"
       }
     },
     "language": "en"
