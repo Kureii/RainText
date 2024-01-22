@@ -8,6 +8,24 @@ Rectangle {
 
     property int cornerRadius: 5
 
+    property color primaryColor: "#FF9800"
+    property color primaryPressedColor: "#8A5300"
+    property color primaryHoveredColor: "#b56c00"
+    property color notEnablePrimaryColor: "#F0B762"
+    property color textColor: "#0C011C"
+    property color notEnableTextColor: "#453957"
+    property color focusColor: "#FFA000"
+    property color textOnPrimaryColor: "#1C1001"
+    property color focusOnPrimaryColor: "#E3C59A"
+    property color backgroundColor: "#ECDFD4"
+    property color drawerBackgroundColor: "#FAF6F2"
+    property color borderButtonColor: "#1C0F01"
+    property color borderButtonFocusColor: "#FFA000"
+    property color nonEnabledBorderButtonColor: "#75614B"
+    property color borderButtonHoveredColor: "#78562C"
+
+    color: passwordManagerScreen.backgroundColor
+
     focus: true
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_S) {
