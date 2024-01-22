@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
+
 Item {
     id: passwordRecordListItem
 
@@ -15,17 +16,12 @@ Item {
     property string passwordText: "Password"
 
     signal requestDeletion(int index)
-    signal requestMoveUp(int index)
-    signal requestMoveDown(int index)
-    signal requestEdit(int index, string headline, string username, string password)
 
-    /*onFocusChanged: {
-        if (focus) {
-            state = "focus"
-        } else {
-            state = "basic"
-        }
-    }*/
+    signal requestMoveUp(int index)
+
+    signal requestMoveDown(int index)
+
+    signal requestEdit(int index, string headline, string username, string password)
 
     Popup {
         id: toastPopup
@@ -39,38 +35,27 @@ Item {
             border.width: 2
         }
 
-        // Content of your toast
         Label {
             text: toastPopup.message
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            // další vlastnosti pro styling Label
         }
 
         property string message: ""
 
         Timer {
             id: toastTimer
-            interval: 2000 // 2 seconds
-            onTriggered: toastPopup.close() // Close the popup when the timer triggers
+            interval: 2000
+            onTriggered: toastPopup.close()
         }
 
         function showToast(msg) {
-            message = msg; // Set the message property that the Label will use
-            toastPopup.open(); // Open the popup
-            toastTimer.restart(); // Restart the timer
+            message = msg;
+            toastPopup.open();
+            toastTimer.restart();
         }
     }
 
-
-    Keys.onPressed: {
-        if (event.key === Qt.Key_Tab && event.modifiers & Qt.ControlModifier) {
-            // Logika pro Ctrl+Tab přepínání mezi ikonovými tlačítky
-        } else if (event.key === Qt.Key_Escape) {
-            // Logika pro Escape vystoupení na focus celého itemu
-        }
-    }
-    
 
     DropShadow {
         id: passwordRecordListItemShadow
@@ -89,9 +74,7 @@ Item {
         width: parent.width - 5
         scale: 1
     }
-    FocusScope {
-
-        Rectangle {
+    Rectangle {
         id: passwordRecordListRectangle
         height: passwordRecordListRectangleToShadow.height
         width: passwordRecordListRectangleToShadow.width
@@ -121,18 +104,17 @@ Item {
 
                 ColumnLayout {
                     Layout.preferredHeight: passwordRecordListRectangle.height
-                    Layout.preferredWidth:passwordRecordListRectangle.width / 12
+                    Layout.preferredWidth: passwordRecordListRectangle.width / 12
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
 
                     IconButton {
                         enabled: index !== 0
                         text: ""
                         height: 18
                         image: "qrc:/images/arrow-up.svg"
-                        Layout.maximumWidth:passwordRecordListRectangle.width / 12
+                        Layout.maximumWidth: passwordRecordListRectangle.width / 12
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                         onClicked: requestMoveUp(index)
                     }
@@ -142,12 +124,10 @@ Item {
                         text: ""
                         height: 18
                         image: "qrc:/images/arrow-down.svg"
-                        Layout.maximumWidth:passwordRecordListRectangle.width / 12
+                        Layout.maximumWidth: passwordRecordListRectangle.width / 12
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                         onClicked: requestMoveDown(index)
                     }
-
-
                 }
 
                 Rectangle {
@@ -177,13 +157,13 @@ Item {
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth:passwordRecordListRectangle.width / 24 * 18
+                    Layout.preferredWidth: passwordRecordListRectangle.width / 24 * 18
 
                     RowLayout {
 
                         Text {
                             id: copyHeadlineText
-                            text: passwordRecordListItem.headlineText //qsTr("Headline")
+                            text: passwordRecordListItem.headlineText
                             Layout.fillWidth: true
                         }
 
@@ -221,7 +201,7 @@ Item {
                         Layout.fillWidth: true
 
                         Text {
-                            id:copyUsernameItemText
+                            id: copyUsernameItemText
                             text: passwordRecordListItem.usernameText
                             Layout.fillWidth: true
                         }
@@ -272,7 +252,7 @@ Item {
 
                         IconButton {
                             image: "qrc:/images/eye-slash.svg"
-                            changeImage:true
+                            changeImage: true
                             imageOff: "qrc:/images/eye.svg"
                             text: ""
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -287,7 +267,7 @@ Item {
                         }
 
                         IconButton {
-                            id:passwordRecordButton
+                            id: passwordRecordButton
                             image: "qrc:/images/copy.svg"
                             text: ""
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -305,7 +285,6 @@ Item {
                                 passwordRecordButton.focus = false
                             }
                         }
-
                     }
                 }
 
@@ -330,8 +309,8 @@ Item {
                 }
 
                 RowLayout {
-                    Layout.preferredWidth:passwordRecordListRectangle.width / 48 * 7 - 4
-                    Layout.maximumWidth:passwordRecordListRectangle.width / 48 * 7 - 4
+                    Layout.preferredWidth: passwordRecordListRectangle.width / 48 * 7 - 4
+                    Layout.maximumWidth: passwordRecordListRectangle.width / 48 * 7 - 4
 
                     IconButton {
                         id: editRecord
@@ -368,46 +347,4 @@ Item {
             }
         }
     }
-    }
-
-
-    /*states: State {
-        name: "focus"
-        PropertyChanges {
-            target: passwordRecordListItem
-            x: 5
-            //y: passwordRecordListItem.y - dragArea.mouseY * 50
-            scale: 1.025
-        }
-        PropertyChanges{
-            target: passwordRecordListItemShadow
-            verticalOffset: 3
-            horizontalOffset: 3
-            radius: 3
-        }
-    }
-    transitions: Transition {
-        ParallelAnimation {
-            NumberAnimation {
-                property: "scale"
-                duration: 200
-            }
-            NumberAnimation {
-                property: "verticalOffset"
-                duration: 200
-            }
-            NumberAnimation {
-                property: "horizontalOffset"
-                duration: 200
-            }
-            NumberAnimation {
-                property: "radius"
-                duration: 200
-            }
-            NumberAnimation {
-                property: "x"
-                duration: 200
-            }
-        }
-    }*/
 }
