@@ -9,5 +9,7 @@
         <file>PasswordManagerScreen.qml</file>
         <file>CustomCheckBox.qml</file>
         <file>SizePicker.qml</file>
+        <file>PasswordRecordListItem.qml</file>
+        <file>IconButton.qml</file>
     </qresource>
 </RCC>
