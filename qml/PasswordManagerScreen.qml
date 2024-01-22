@@ -28,98 +28,35 @@ Rectangle {
         }
     }
 
-    Button {
-        id: buttonAddRecord
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        onClicked: bottomDrawer.open()
+    IconButton {
+        id: addButton
         anchors.rightMargin: 12
         anchors.bottomMargin: 12
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
         height: 32
-        width: addRecordButtonIcon.width + addRecordButtonText.width + 15
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            radius: 5
-            border.width: 1
-            border.color: "#0C011C"
-        }
-        RowLayout {
-            anchors.fill: parent
-            spacing: 5
-            Image {
-                id: addRecordButtonIcon
-
-                source: "qrc:/images/add.svg"
-                Layout.leftMargin: 5
-                Layout.fillHeight: true
-                fillMode: Image.PreserveAspectFit
-                ColorOverlay {
-                    anchors.fill: addRecordButtonIcon
-                    source: addRecordButtonIcon
-                    color: "#0C011C"
-                }
-            }
-
-            Text {
-                id: addRecordButtonText
-                text: "Add record"
-                horizontalAlignment: Text.AlignRight
-                verticalAlignment: Text.AlignVCenter
-                Layout.rightMargin: 5
-                Layout.fillHeight: true
-                font.bold: false
-                color: "#0C011C"
-            }
-        }
+        addToWidth: 25
+        imageSize: 25
+        onClicked: bottomDrawer.open()
+        image: "qrc:/images/add.svg"
+        spacing: 5
+        radius: 5
+        text: qsTr("Add record")
     }
 
-    Button {
+    IconButton {
         id: settingsButton
         anchors.rightMargin: 12
         anchors.topMargin: 12
         anchors.top: parent.top
         anchors.right: parent.right
         height: 28
-        width: settingsButtonText.width + settingsButtonIcon.width + 20
+        addToWidth: 20
         onClicked: rightDrawer.open()
-
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            radius: 5
-            border.width: 1
-            border.color: "#0C011C"
-        }
-        RowLayout {
-            anchors.fill: parent
-            spacing: 5
-            Image {
-                id: settingsButtonIcon
-                source: "qrc:/images/setting.svg"
-                Layout.leftMargin: 5
-                Layout.fillHeight: true
-                fillMode: Image.PreserveAspectFit
-                ColorOverlay {
-                    anchors.fill: settingsButtonIcon
-                    source: settingsButtonIcon
-                    color: "#0C011C"
-                }
-            }
-
-            Text {
-                id: settingsButtonText
-                text: "Settings"
-                horizontalAlignment: Text.AlignRight
-                verticalAlignment: Text.AlignVCenter
-                Layout.rightMargin: 5
-                Layout.fillHeight: true
-                font.bold: false
-                color: "#0C011C"
-            }
-        }
+        image: "qrc:/images/setting.svg"
+        spacing: 5
+        radius: 5
+        text: qsTr("Settings")
     }
 
     Drawer {
@@ -239,28 +176,7 @@ Rectangle {
                                 event.accepted = true;
                                 formUsernameField.focus = true;
                             }
-
-
                         }
-                        /*Connections {
-                            target:formPasswordField
-                            function onTextChanged() {
-                                backgroundLoginRegister.canConfirmForm = login_register_manager.CheckFields(formUsernameField.text,
-                                    formPasswordField.text,
-                                    formPasswordAgain.text)
-                                backgroundLoginRegister.passwordProgress = login_register_manager.PasswordStrength(formPasswordField.text)
-                            }
-                            function onIsFocusedChanged() {
-                                if (backgroundLoginRegister.state !== "loginState") {
-                                    if (formPasswordField.isFocused) {
-                                        backgroundLoginRegister.state = "registerStateProgress"
-                                    } else {
-                                        backgroundLoginRegister.state = "registerState"
-
-                                    }
-                                }
-                            }
-                        }*/
                     }
                 }
 
@@ -400,7 +316,7 @@ Rectangle {
                         background: Rectangle {
                             color: buttonGenPass.enabled ? (buttonGenPass.hovered ? "#ffc89f" : "#ffddc2") : "#a69c94"
                             radius: passwordManagerScreen.cornerRadius * 2
-                            border.width: buttonGenPass.focus? 3: 1
+                            border.width: buttonGenPass.focus ? 3 : 1
                             border.color: buttonGenPass.enabled ? (buttonGenPass.hovered ? (buttonGenPass.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
                         }
 
@@ -431,20 +347,14 @@ Rectangle {
                             }
                             if (event.key === Qt.Key_Enter) {
                                 event.accepted = true;
-                                generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked,  passGenLength.value)
+                                generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked, passGenLength.value)
                             }
                             if (event.key === Qt.Key_S || event.key === Qt.Key_H) {
                                 event.accepted = true
                                 formPasswordField.passwordIsHidden = !formPasswordField.passwordIsHidden
                             }
                         }
-
-                        onClicked: generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked,  passGenLength.value)
-
-
-                        //enabled: backgroundLoginRegister.canConfirmForm
-                        //onClicked: login_register_manager.ConfirmFormUser(formUsernameField.text, formPasswordField.text)
-
+                        onClicked: generate_password.ClickToGenerateButton(majusculeGenPassChBox.checked, minusculeGenPassChBox.checked, numberGenPassChBox.checked, specialGenPassChBox.checked, passGenLength.value)
                     }
                 }
             }
@@ -455,7 +365,6 @@ Rectangle {
                 width: formColumn.formWidth
                 color: "transparent"
             }
-
 
             Button {
                 id: formConfirmButton
@@ -489,10 +398,12 @@ Rectangle {
                     color: formConfirmButton.enabled ? "#0C011C" : "#021F3C"
                     anchors.centerIn: parent
                 }
-                //enabled: backgroundLoginRegister.canConfirmForm
                 onClicked: {
-                    //login_register_manager.ConfirmFormUser(formUsernameField.text, formPasswordField.text)
-
+                    passwordListModel.append({
+                        headlineText: formHeadlineField.text,
+                        usernameText: formUsernameField.text,
+                        passwordText: formPasswordField.text
+                    })
                     bottomDrawer.close();
                     formHeadlineField.text = "";
                     formUsernameField.text = "";
@@ -501,6 +412,11 @@ Rectangle {
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Enter) {
+                        passwordListModel.append({
+                            headlineText: formHeadlineField.text,
+                            usernameText: formUsernameField.text,
+                            passwordText: formPasswordField.text
+                        })
                         bottomDrawer.close();
                         formHeadlineField.text = "";
                         formUsernameField.text = "";
@@ -517,12 +433,463 @@ Rectangle {
                 }
             }
         }
+    }
 
+    Drawer {
+        id: editDrawer
+        width: parent.width
+        height: parent.height / 5 * 4
+        edge: Qt.TopEdge
+
+        property int index: -1;
+
+        onOpenedChanged: {
+            if (bottomDrawer.opened) {
+                overlay.visible = true
+            } else {
+                overlay.visible = false
+            }
+        }
+        focus: true
+        Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Tab) {
+                event.accepted = true;
+                editFormHeadlineField.focus = true
+            }
+            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                event.accepted = true;
+                editFormConfirmButton.focus = true;
+            }
+        }
+
+        Column {
+            id: editFormColumn
+            anchors.centerIn: parent
+            spacing: 5
+            anchors.fill: parent
+            leftPadding: (parent.width - formWidth) / 2
+            rightPadding: (parent.width - formWidth) / 2
+
+            property int formWidth: formColumn.width - parent.width / 5 * 2
+            property int settingWidth: 40 + Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width) + Math.max(numberGenPassChBox.width, specialGenPassChBox.width)
+
+            Rectangle {
+                width: editFormColumn.formWidth
+                height: (editFormColumn.height - Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + editOldPasswordHeadline.height)) / 2
+                color: "transparent"
+            }
+            Text {
+                id: editHeadlineText
+                text: "Create record"
+            }
+            Rectangle {
+                id: editHeadllineSeparator
+                color: "#0C011C"
+                width: formColumn.formWidth
+                height: 1
+            }
+            Row {
+                width: formColumn.formWidth
+                height: Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + editOldPasswordHeadline.height)
+                Column {
+
+                    ModernTextField {
+                        id: editFormHeadlineField
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                        placeholderText: "Headline"
+                        placeholderTextColor: "#0C011C"
+                        fillUnderlineColor: "#0C011C"
+                        color: "transparent"
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Tab) {
+                                event.accepted = true;
+                                editFormUsernameField.focus = true
+                            }
+                            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                event.accepted = true;
+                                editFottomDrawer.focus = true;
+                            }
+                        }
+                    }
+
+                    ModernTextField {
+                        id: editFormUsernameField
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                        placeholderText: "Username"
+                        placeholderTextColor: "#0C011C"
+                        fillUnderlineColor: "#0C011C"
+                        color: "transparent"
+
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Tab) {
+                                event.accepted = true;
+                                editFormPasswordField.focus = true
+                            }
+                            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                event.accepted = true;
+                                editFormHeadlineField.focus = true;
+                            }
+                        }
+                    }
+
+                    Text {
+                        id: editOldPasswordHeadline
+                        text: "Old password"
+                    }
+
+                    TextArea {
+                        id: editOldPasswordText
+                        text: "password"
+                        color: "#999"
+                        selectByMouse: true
+                        readOnly: true
+                    }
+                    Rectangle {
+                        color: "#999"
+                        height: 1
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                    }
+
+                    ModernTextField {
+                        id: editFormPasswordField
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                        placeholderText: "Password"
+                        passwordMode: true
+                        placeholderTextColor: "#0C011C"
+                        fillUnderlineColor: "#0C011C"
+                        color: "transparent"
+
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Tab) {
+                                event.accepted = true;
+                                if (editFormConfirmButton.enabled) {
+                                    editFormConfirmButton.focus = true
+                                } else {
+                                    editMajusculeGenPassChBox.focus = true
+                                }
+                            }
+                            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                event.accepted = true;
+                                editFormUsernameField.focus = true;
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    height: parent.height
+                    width: 10
+                    color: "transparent"
+                }
+
+                Column {
+                    id: editSettingsGenPass
+                    width: editFormColumn.settingWidth
+                    Row {
+                        Column {
+                            width: Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width)
+                            CustomCheckBox {
+                                id: editMajusculeGenPassChBox
+                                text: "Upper latters"
+                                Keys.onPressed: (event) => {
+                                    if (event.key === Qt.Key_Tab) {
+                                        event.accepted = true;
+                                        editMinusculeGenPassChBox.focus = true
+                                    }
+                                    if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                        event.accepted = true;
+                                        editFormPasswordField.focus = true;
+                                    }
+                                }
+                            }
+                            CustomCheckBox {
+                                id: editMinusculeGenPassChBox
+                                text: "Lower latters"
+                                Keys.onPressed: (event) => {
+                                    if (event.key === Qt.Key_Tab) {
+                                        event.accepted = true;
+                                        editNumberGenPassChBox.focus = true
+                                    }
+                                    if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                        event.accepted = true;
+                                        editMajusculeGenPassChBox.focus = true;
+                                    }
+                                }
+                            }
+                        }
+                        Rectangle {
+                            width: 30
+                            height: editMajusculeGenPassChBox.height + editNumberGenPassChBox.height
+                            color: "transparent"
+                        }
+                        Column {
+                            width: Math.max(editNumberGenPassChBox.width, editSpecialGenPassChBox.width)
+                            CustomCheckBox {
+                                id: editNumberGenPassChBox
+                                text: "Numbers"
+                                Keys.onPressed: (event) => {
+                                    if (event.key === Qt.Key_Tab) {
+                                        event.accepted = true;
+                                        editSpecialGenPassChBox.focus = true
+                                    }
+                                    if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                        event.accepted = true;
+                                        editMinusculeGenPassChBox.focus = true;
+                                    }
+                                }
+                            }
+                            CustomCheckBox {
+                                id: editSpecialGenPassChBox
+                                text: "Special chars"
+                                Keys.onPressed: (event) => {
+                                    if (event.key === Qt.Key_Tab) {
+                                        event.accepted = true;
+                                        editPassGenLength.focus = true
+                                    }
+                                    if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                        event.accepted = true;
+                                        editNumberGenPassChBox.focus = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        height: 10
+                        width: editFormColumn.settingWidth
+                        color: "transparent"
+                    }
+
+                    SizePicker {
+                        id: editPassGenLength
+                        width: editFormColumn.settingWidth
+                        to: 64
+                        from: 8
+                        value: 12
+                        stepSize: 1
+
+                        text: "Password length"
+
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Tab) {
+                                event.accepted = true;
+                                if (editButtonGenPass.enabled) {
+                                    editButtonGenPass.focus = true
+                                } else if (editFormConfirmButton.enabled) {
+                                    editFormConfirmButton.focus = true
+                                } else if (editFormHeadlineField.text === "") {
+                                    editFormHeadlineField.focus = true
+                                } else if (editFormUsernameField.text === "") {
+                                    editFormUsernameField.focus = true
+                                } else {
+                                    editFormPasswordField.focus = true
+                                }
+
+                            }
+                            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                event.accepted = true;
+                                editSpecialGenPassChBox.focus = true;
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        height: 10
+                        width: editFormColumn.settingWidth
+                        color: "transparent"
+                    }
+
+
+                    Button {
+                        id: editButtonGenPass
+                        width: editFormColumn.settingWidth - 60
+                        height: 25
+                        enabled: editMajusculeGenPassChBox.checked || editMinusculeGenPassChBox.checked || editNumberGenPassChBox.checked || editSpecialGenPassChBox.checked
+                        text: "Generate password"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        background: Rectangle {
+                            color: editButtonGenPass.enabled ? (editButtonGenPass.hovered ? "#ffc89f" : "#ffddc2") : "#a69c94"
+                            radius: passwordManagerScreen.cornerRadius * 2
+                            border.width: editButtonGenPass.focus ? 3 : 1
+                            border.color: editButtonGenPass.enabled ? (editButtonGenPass.hovered ? (editButtonGenPass.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
+                        }
+
+                        contentItem: Text {
+                            text: editButtonGenPass.text
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            font: editButtonGenPass.font
+                            color: editButtonGenPass.enabled ? "#0C011C" : "#021F3C"
+                            anchors.centerIn: parent
+                        }
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Tab) {
+                                event.accepted = true;
+                                if (editFormConfirmButton.enabled) {
+                                    editFormConfirmButton.focus = true
+                                } else if (editFormHeadlineField.text === "") {
+                                    editFormHeadlineField.focus = true
+                                } else if (editFormUsernameField.text === "") {
+                                    editFormUsernameField.focus = true
+                                } else {
+                                    editFormPasswordField.focus = true
+                                }
+                            }
+                            if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                                event.accepted = true;
+                                editPassGenLength.focus = true;
+                            }
+                            if (event.key === Qt.Key_Enter) {
+                                event.accepted = true;
+                                generate_password.ClickToGenerateButton(editMajusculeGenPassChBox.checked, editMinusculeGenPassChBox.checked, editNumberGenPassChBox.checked, editSpecialGenPassChBox.checked, editPassGenLength.value)
+                            }
+                            if (event.key === Qt.Key_S || event.key === Qt.Key_H) {
+                                event.accepted = true
+                                formPasswordField.passwordIsHidden = !formPasswordField.passwordIsHidden
+                            }
+                        }
+
+                        onClicked: generate_password.ClickToGenerateButton(editMajusculeGenPassChBox.checked, editMinusculeGenPassChBox.checked, editNumberGenPassChBox.checked, editSpecialGenPassChBox.checked, editPassGenLength.value)
+
+                    }
+                }
+            }
+
+            Rectangle {
+                id: editFormAfterPasswordSpace
+                height: 12
+                width: editFormColumn.formWidth
+                color: "transparent"
+            }
+
+            Button {
+                id: editFormConfirmButton
+                width: editFormColumn.formWidth
+                text: "Save changes"
+                height: 40
+                enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
+                background: Rectangle {
+                    id: editButtonBackground
+                    color: editFormConfirmButton.enabled ? (editFormConfirmButton.hovered ? (editFormConfirmButton.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
+                    radius: passwordManagerScreen.cornerRadius * 2
+                    border.width: editFormConfirmButton.pressed ? 2 : 0
+                    border.color: editFormConfirmButton.pressed ? "#734500" : "transparent"
+                    Rectangle {
+                        visible: editFormConfirmButton.focus
+                        anchors.centerIn: parent
+                        height: parent.height - 4
+                        width: parent.width - 4
+                        color: "transparent"
+                        border.width: 2
+                        border.color: "#ECDFD4"
+                        radius: passwordManagerScreen.cornerRadius * 2 - 2
+                    }
+                }
+
+                contentItem: Text {
+                    text: editFormConfirmButton.text
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font: editFormConfirmButton.font
+                    color: editFormConfirmButton.enabled ? "#0C011C" : "#021F3C"
+                    anchors.centerIn: parent
+                }
+                onClicked: {
+                    passwordListModel.setProperty(editDrawer.index, "headlineText", editFormHeadlineField.text)
+                    passwordListModel.setProperty(editDrawer.index, "usernameText", editFormUsernameField.text)
+                    passwordListModel.setProperty(editDrawer.index, "passwordText", editFormPasswordField.text)
+                    editDrawer.close()
+                }
+
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Tab) {
+                        event.accepted = true;
+                        editEditDrawer.focus = true;
+                    }
+                    if (event.key === Qt.Key_Tab && event.modifiers & Qt.ShiftModifier) {
+                        event.accepted = true;
+                        editPassGenLength.focus = true;
+                    }
+                }
+            }
+        }
+    }
+
+    ListModel {
+        id: passwordListModel
+        ListElement {
+            headlineText: "1"
+            usernameText: "1"
+            passwordText: "1"
+        }
+        ListElement {
+            headlineText: "2"
+            usernameText: "2"
+            passwordText: "2"
+        }
+        ListElement {
+            headlineText: "3"
+            usernameText: "3"
+            passwordText: "3"
+        }
+        ListElement {
+            headlineText: "4"
+            usernameText: "4"
+            passwordText: "4"
+        }
+
+    }
+
+    ListView {
+        id: gridViewPasswordsRecords
+        width: 500
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
+        model: passwordListModel
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        delegate: PasswordRecordListItem {
+            id: passwordRecordListItem
+            width: 500
+            height: 110
+            headlineText: model.headlineText
+            usernameText: model.usernameText
+            passwordText: model.passwordText
+
+            Connections {
+                target: passwordRecordListItem
+
+                function onRequestDeletion(index) {
+                    passwordListModel.remove(index)
+                }
+
+                function onRequestMoveUp(index) {
+                    passwordListModel.move(index, index - 1, 1)
+                }
+
+                function onRequestMoveDown(index) {
+                    passwordListModel.move(index, index + 1, 1)
+                }
+
+                function onRequestEdit(index, headline, username, password) {
+                    editFormHeadlineField.text = headline
+                    editFormUsernameField.text = username
+                    editFormPasswordField.text = password
+                    editOldPasswordText.text = password
+                    editDrawer.open()
+                    editDrawer.index = index
+                }
+            }
+        }
     }
 
     Drawer {
         id: rightDrawer
-        width: parent.width / 3
+        width: 305
         height: parent.height
         edge: Qt.RightEdge
         onOpenedChanged: {
@@ -532,21 +899,47 @@ Rectangle {
                 overlay.visible = false
             }
         }
-        Column {
-            spacing: 10
+        RowLayout {
+
+            spacing: 0
             anchors.fill: parent
+            anchors.rightMargin: 5
+            anchors.leftMargin: 5
+            Rectangle {
+                id: settingsLeftSpace
+                color: "transparent"
+                Layout.preferredWidth: 10
+                Layout.fillHeight: true
 
-            Switch {
-                text: "Nastavení 1"
             }
+            ColumnLayout {
+                SizePicker {
+                    from: 3
+                    to: 30
+                    stepSize: 3
+                    text: "Encrypting iterations"
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
+                    width: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
+                    value: 15
 
-            Switch {
-                text: "Nastavení 2"
+                }
+                Switch {
+                    text: "Nastavení 1"
+                }
+
+                Switch {
+                    text: "Nastavení 2"
+                }
             }
+            Rectangle {
+                id: settingsRightSpace
+                color: "transparent"
+                Layout.preferredWidth: 10
+                Layout.fillHeight: true
 
-            // Další nastavení...
+            }
         }
-        // Přidat obsah pro pravé menu
     }
 
     Rectangle {
@@ -558,11 +951,8 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                //overlay.focus = false
                 bottomDrawer.close()
                 rightDrawer.close()
-                //buttonAddRecord.focus = true
-                //settingsButton.focus = true
             }
         }
 
@@ -572,19 +962,17 @@ Rectangle {
                 (event.key === Qt.Key_N && event.modifiers & Qt.ControlModifier) ||
                 event.key === Qt.Key_S) {
                 event.accepted = true;
-                //overlay.focus = false
                 bottomDrawer.close()
                 rightDrawer.close()
-                //buttonAddRecord.focus = true
-                //settingsButton.focus = true
             }
         }
     }
 
     Connections {
         target: generate_password
-        onPasswordGenerated: function(password) {
+        function onPasswordGenerated(password) {
             formPasswordField.text = password
+            editFormPasswordField.text = password
         }
     }
 }
