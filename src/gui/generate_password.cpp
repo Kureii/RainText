@@ -17,8 +17,7 @@ GeneratePassword::GeneratePassword(QObject* parent) : QObject(parent) {}
 void GeneratePassword::ClickToGenerateButton(bool majusculeGenPass,
                                              bool minusculeGenPass,
                                              bool numberGenPass,
-                                             bool specialGenPass,
-                                             int length) {
+                                             bool specialGenPass, int length) {
   std::string passwordChars;
   if (majusculeGenPass) {
     passwordChars += "QWERTZUIOPASDFGHJKLYXCVBNM";
@@ -46,8 +45,6 @@ void GeneratePassword::ClickToGenerateButton(bool majusculeGenPass,
 
   emit passwordGenerated(QString::fromStdString(password));
 }
-
-
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS

@@ -9,19 +9,17 @@
 namespace rain_text::gui {
 
 class GeneratePassword : public QObject {
- Q_OBJECT
-public:
+  Q_OBJECT
+ public:
   explicit GeneratePassword(QObject *parent = nullptr);
 
   Q_INVOKABLE void ClickToGenerateButton(bool majusculeGenPass,
-                                        bool minusculeGenPass,
-                                        bool numberGenPass,
-                                        bool lspecialGenPass,
-                                        int length);
+                                         bool minusculeGenPass,
+                                         bool numberGenPass,
+                                         bool lspecialGenPass, int length);
 
-signals:
+ signals:
   void passwordGenerated(const QString &password);
-
 };
 
-} // rain_text
+}  // namespace rain_text::gui

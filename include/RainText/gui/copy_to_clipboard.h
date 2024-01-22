@@ -1,5 +1,5 @@
 /* This file was created by Kureii (Tomas Adamek)
-* Date created: 21. 01. 2024
+ * Date created: 21. 01. 2024
  * This file is under the GPL-3 license
  */
 
@@ -11,9 +11,10 @@ namespace rain_text::gui {
 class CopyToClipboard : public QObject {
   Q_OBJECT
 
-public:
+ public:
   explicit CopyToClipboard(QObject *parent = nullptr);
 
   Q_INVOKABLE void copyToClipboard(const QString &text);
 };
-}
+
+}  // namespace rain_text::gui

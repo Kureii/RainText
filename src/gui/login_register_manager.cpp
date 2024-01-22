@@ -4,11 +4,11 @@
  */
 //================================= Includes ===================================
 #include "RainText/gui/login_register_manager.h"
-#include <iostream>
+
+#include <QChar>
 #include <QDebug>
 #include <QRegularExpression>
-#include <QChar>
-
+#include <iostream>
 
 //================================= Namespace ==================================
 namespace rain_text::gui {
@@ -21,15 +21,14 @@ bool LoginRegisterManager::CheckFields(const QString &username,
                                        const QString &password,
                                        const QString &password_again) {
   if (state_ != "loginState") {
-    return username.length() >= 3 && password.length() >= 8 && password == password_again;
+    return username.length() >= 3 && password.length() >= 8 &&
+           password == password_again;
   }
   return username.length() >= 3 && password.length() >= 8;
 }
 
 void LoginRegisterManager::ConfirmFormUser(const QString &username,
-                                           const QString &password) {
-
-}
+                                           const QString &password) {}
 void LoginRegisterManager::StateChange(const QString &new_state) {
   state_ = new_state.toStdString();
 }
@@ -47,7 +46,8 @@ float LoginRegisterManager::PasswordStrength(const QString &password) {
   if (password.contains(QRegularExpression("[0-9]"))) {
     result += .2;
   }
-  if (password.contains(QRegularExpression("[!@#$%^&*()_+={}\\[\\]:;\"\'<>,.?/|\\\\-]"))) {
+  if (password.contains(
+          QRegularExpression("[!@#$%^&*()_+={}\\[\\]:;\"\'<>,.?/|\\\\-]"))) {
     result += .3;
   }
   QRegularExpression pattern("^[A-Z][a-z]*[0-9]+$");

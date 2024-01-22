@@ -14,23 +14,21 @@ class LoginRegisterManager : public QObject {
   explicit LoginRegisterManager(QObject *parent = nullptr);
 
   Q_INVOKABLE void ConfirmFormUser(const QString &username,
-                                const QString &password);
+                                   const QString &password);
 
   Q_INVOKABLE void StateChange(const QString &new_state);
 
-  Q_INVOKABLE bool CheckFields(const QString &username,
-                               const QString &password,
+  Q_INVOKABLE bool CheckFields(const QString &username, const QString &password,
                                const QString &password_again);
 
   Q_INVOKABLE float PasswordStrength(const QString &password);
+
  private:
   std::string state_;
-signals:
- void registrationComplete();
- void loginComplete();
- void errorOccurred(const QString &error);
-
+ signals:
+  void registrationComplete();
+  void loginComplete();
+  void errorOccurred(const QString &error);
 };
 
 }  // namespace rain_text::gui
-
