@@ -3,10 +3,10 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/gui/copy_to_clipboard.h"
-
 #include <QClipboard>
 #include <QGuiApplication>
+
+#include "RainText/gui/copy_to_clipboard.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::gui {

@@ -4,9 +4,9 @@
  */
 //================================= Includes ===================================
 
-#include "RainText/gui/generate_password.h"
-
 #include <random>
+
+#include "RainText/gui/generate_password.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::gui {

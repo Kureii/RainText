@@ -5,10 +5,10 @@
 #include <QQmlApplicationEngine>
 #include <QtQuick/QQuickView>
 #include <QQmlContext>
-#include "RainText/gui/login_register_manager.h"
-#include "RainText/gui/generate_password.h"
-#include "RainText/gui/copy_to_clipboard.h"
-#include "RainText/settings/setting_loader.h"
+#include "RainText/gui/login_register_manager.hpp"
+#include "RainText/gui/generate_password.hpp"
+#include "RainText/gui/copy_to_clipboard.hpp"
+#include "RainText/settings/setting_loader.hpp"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);

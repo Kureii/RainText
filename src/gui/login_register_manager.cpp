@@ -3,12 +3,12 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/gui/login_register_manager.h"
-
 #include <QChar>
 #include <QDebug>
 #include <QRegularExpression>
 #include <iostream>
+
+#include "RainText/gui/login_register_manager.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::gui {
