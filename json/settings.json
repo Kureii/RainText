@@ -8,6 +8,7 @@
         "primaryHoveredColor" : "#b56c00",
         "notEnablePrimaryColor": "#F0B762",
         "textColor": "#0C011C",
+        "textColorOnPrimyry" : "#150133",
         "notEnableTextColor": "#453957",
         "focusColor": "#FFA000",
         "textOnPrimaryColor": "#1C1001",
