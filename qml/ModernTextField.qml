@@ -47,7 +47,6 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-
         onClicked: {
             textAreaObject.forceActiveFocus()
         }
@@ -131,12 +130,9 @@ Rectangle {
                 modernTextField.passwordIsHidden = !modernTextField.passwordIsHidden
                 showHideButton.focus = true
                 modernTextField.isFocused = true
-
             }
         }
-
     }
-
 
     Rectangle {
         id: fillUnderline
@@ -146,7 +142,6 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 2
-
     }
 
     Connections {
@@ -179,8 +174,8 @@ Rectangle {
                 target: fillUnderline
                 width: modernTextField.width
             }
-
         },
+
         State {
             name: "Collapsed"
             when: !textAreaObject.focus && textAreaObject.text.length === 0 && !showHideButton.focus
@@ -194,6 +189,7 @@ Rectangle {
                     PauseAnimation {
                         duration: 100
                     }
+
                     PropertyAnimation {
                         target: modernTextField
                         property: "height"
@@ -201,10 +197,12 @@ Rectangle {
                         duration: 150
                     }
                 }
+
                 SequentialAnimation {
                     PauseAnimation {
                         duration: 100
                     }
+
                     PropertyAnimation {
                         target: placeholderTextObject
                         property: "font.pointSize"
@@ -212,11 +210,12 @@ Rectangle {
                         duration: 150
                     }
                 }
-                SequentialAnimation {
 
+                SequentialAnimation {
                     PauseAnimation {
                         duration: 100
                     }
+
                     PropertyAnimation {
                         target: fillUnderline
                         property: "width"
@@ -224,19 +223,9 @@ Rectangle {
                         duration: 150
                     }
                 }
-
             }
             to: "*"
             from: "*"
         }
     ]
-
-
-
-
 }
-/*##^##
-Designer {
-    D{i:0}D{i:11}D{i:17;transitionDuration:2000}
-}
-##^##*/
