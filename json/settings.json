@@ -19,6 +19,7 @@
         "borderButtonFocusColor": "#FFA000",
         "notEnabledBorderButtonColor": "#75614B",
         "borderButtonHoveredColor" : "#78562C",
+        "borderButtonPressedColor" : "#9b703b",
         "registerLoginSwapButtonBorderColor" : "#ECDFD4",
         "registerLoginSwapButtonFillColor" : "#00ECDFD4",
         "registerLoginSwapButtonFillHoveredColor" : "#11D1C7BE",

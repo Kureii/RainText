@@ -90,6 +90,7 @@ ApplicationWindow {
         borderButtonFocusColor: mainWindow.hasColorError ? "#FFA000" : appColors["borderButtonFocusColor"]
         notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
         borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
+        borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonPressedColor"]
     }
     //LoginRegisterScreen {}
 }
