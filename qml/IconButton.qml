@@ -21,6 +21,7 @@ Item{
     property color focusColor: "#FF9800"
     property color inactiveColor: "#A19595"
     property color pressedColor: "#e58701"
+    property color hoveredColor: "#78562C"
     property bool buttonOn: false
     property bool enabled: true
     property int borderWidth: 1
@@ -37,8 +38,18 @@ Item{
             iconButton.clicked();
             iconButton.buttonOn = !iconButton.buttonOn;
         }
+
         onPressed: iconButton.pressed()
 
+        property color changingColor: iconButtonButton.enabled ? (iconButtonButton.hovered ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.hoveredColor) : iconButton.textColor) : iconButton.inactiveColor
+
+        onPressedChanged: {
+            if (iconButtonButton.pressedColor) {
+                iconButtonButton.changingColor = iconButton.pressedColor
+            } else {
+                iconButtonButton.changingColor = iconButtonButton.enabled ? (iconButtonButton.hovered ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.hoveredColor) : iconButton.textColor) : iconButton.inactiveColor
+            }
+        }
 
         background: Rectangle {
             anchors.fill: parent
@@ -51,7 +62,7 @@ Item{
                 color: "transparent"
                 radius: iconButton.radius
                 border.width: iconButton.borderWidth + 1
-                border.color: iconButtonButton.enabled ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.textColor) : iconButton.inactiveColor
+                border.color: iconButtonButton.changingColor
             }
         }
         RowLayout {
@@ -88,7 +99,7 @@ Item{
                     ColorOverlay {
                         anchors.fill: iconButtonIcon
                         source: iconButtonIcon
-                        color: iconButtonButton.enabled ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.textColor) : iconButton.inactiveColor
+                        color: iconButtonButton.changingColor
                     }
                 }
 
@@ -116,7 +127,7 @@ Item{
                     ColorOverlay {
                         anchors.fill: iconButtonIconOnOff
                         source: iconButtonIconOnOff
-                        color: iconButtonButton.enabled ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.textColor) : iconButton.inactiveColor
+                        color: iconButtonButton.changingColor
                     }
                 }
             }
@@ -129,7 +140,7 @@ Item{
                 Layout.rightMargin: iconButton.spacing
                 Layout.fillHeight: true
                 font.bold: false
-                color: iconButtonButton.enabled ? (iconButtonButton.pressed ? iconButton.pressedColor : iconButton.textColor) : iconButton.inactiveColor
+                color: iconButtonButton.changingColor
             }
         }
     }
