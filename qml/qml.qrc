@@ -11,5 +11,6 @@
         <file>SizePicker.qml</file>
         <file>PasswordRecordListItem.qml</file>
         <file>IconButton.qml</file>
+        <file>FlatButton.qml</file>
     </qresource>
 </RCC>
