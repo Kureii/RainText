@@ -88,7 +88,7 @@ ApplicationWindow {
         drawerBackgroundColor: mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
         borderButtonColor: mainWindow.hasColorError ? "#1C0F01" : appColors["borderButtonColor"]
         borderButtonFocusColor: mainWindow.hasColorError ? "#FFA000" : appColors["borderButtonFocusColor"]
-        nonEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
+        notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
         borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
     }
     //LoginRegisterScreen {}
