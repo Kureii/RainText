@@ -13,7 +13,8 @@ Rectangle {
     property color primaryHoveredColor: "#b56c00"
     property color notEnablePrimaryColor: "#F0B762"
     property color textColor: "#0C011C"
-    property color notEnableTextColor: "#453957"
+    property color textColorOnPrimyry: "#150133"
+    property color notEnableTextColor: "#695981"
     property color focusColor: "#FFA000"
     property color textOnPrimaryColor: "#1C1001"
     property color focusOnPrimaryColor: "#E3C59A"
@@ -21,8 +22,9 @@ Rectangle {
     property color drawerBackgroundColor: "#FAF6F2"
     property color borderButtonColor: "#1C0F01"
     property color borderButtonFocusColor: "#FFA000"
-    property color nonEnabledBorderButtonColor: "#75614B"
+    property color notEnabledBorderButtonColor: "#75614B"
     property color borderButtonHoveredColor: "#78562C"
+    property color borderButtonPressedColor: "#9b703b"
 
     color: passwordManagerScreen.backgroundColor
 
@@ -55,6 +57,11 @@ Rectangle {
         height: 32
         addToWidth: 25
         imageSize: 25
+        textColor: passwordManagerScreen.textColor
+        focusColor: passwordManagerScreen.focusColor
+        inactiveColor: passwordManagerScreen.notEnabledBorderButtonColor
+        pressedColor: passwordManagerScreen.borderButtonPressedColor
+        hoveredColor: passwordManagerScreen.borderButtonHoveredColor
         onClicked: bottomDrawer.open()
         image: "qrc:/images/add.svg"
         spacing: 5
@@ -70,6 +77,11 @@ Rectangle {
         anchors.right: parent.right
         height: 28
         addToWidth: 20
+        textColor: passwordManagerScreen.textColor
+        focusColor: passwordManagerScreen.focusColor
+        inactiveColor: passwordManagerScreen.notEnabledBorderButtonColor
+        pressedColor: passwordManagerScreen.borderButtonPressedColor
+        hoveredColor: passwordManagerScreen.borderButtonHoveredColor
         onClicked: rightDrawer.open()
         image: "qrc:/images/setting.svg"
         spacing: 5
@@ -102,6 +114,11 @@ Rectangle {
             }
         }
 
+        background: Rectangle {
+            anchors.fill: parent
+            color: passwordManagerScreen.drawerBackgroundColor
+        }
+
         Column {
             id: formColumn
             anchors.centerIn: parent
@@ -120,11 +137,11 @@ Rectangle {
             }
             Text {
                 id: headlineText
-                text: "Create record"
+                text: qsTr("Create record")
             }
             Rectangle {
                 id: headllineSeparator
-                color: "#0C011C"
+                color: passwordManagerScreen.textColor
                 width: formColumn.formWidth
                 height: 1
             }
@@ -136,9 +153,12 @@ Rectangle {
                     ModernTextField {
                         id: formHeadlineField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: "Headline"
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderText: qsTr("Headline")
+                        textColor: passwordManagerScreen.textColor
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -155,9 +175,12 @@ Rectangle {
                     ModernTextField {
                         id: formUsernameField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: "Username"
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderText: qsTr("Username")
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        textColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
 
                         Keys.onPressed: (event) => {
@@ -175,10 +198,13 @@ Rectangle {
                     ModernTextField {
                         id: formPasswordField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: "Password"
+                        placeholderText: qsTr("Password")
                         passwordMode: true
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        textColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
 
                         Keys.onPressed: (event) => {
@@ -212,7 +238,7 @@ Rectangle {
                             width: Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width)
                             CustomCheckBox {
                                 id: majusculeGenPassChBox
-                                text: "Upper latters"
+                                text: qsTr("Upper latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -226,7 +252,7 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: minusculeGenPassChBox
-                                text: "Lower latters"
+                                text: qsTr("Lower latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -249,7 +275,7 @@ Rectangle {
                             width: Math.max(numberGenPassChBox.width, specialGenPassChBox.width)
                             CustomCheckBox {
                                 id: numberGenPassChBox
-                                text: "Numbers"
+                                text: qsTr("Numbers")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -263,7 +289,7 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: specialGenPassChBox
-                                text: "Special chars"
+                                text: qsTr("Special chars")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -292,7 +318,7 @@ Rectangle {
                         value: 12
                         stepSize: 1
 
-                        text: "Password length"
+                        text: qsTr("Password length")
 
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -324,28 +350,13 @@ Rectangle {
                     }
 
 
-                    Button {
+                    FlatButton {
                         id: buttonGenPass
                         width: formColumn.settingWidth - 60
                         height: 25
                         enabled: majusculeGenPassChBox.checked || minusculeGenPassChBox.checked || numberGenPassChBox.checked || specialGenPassChBox.checked
-                        text: "Generate password"
+                        text: qsTr("Generate password")
                         anchors.horizontalCenter: parent.horizontalCenter
-                        background: Rectangle {
-                            color: buttonGenPass.enabled ? (buttonGenPass.hovered ? "#ffc89f" : "#ffddc2") : "#a69c94"
-                            radius: passwordManagerScreen.cornerRadius * 2
-                            border.width: buttonGenPass.focus ? 3 : 1
-                            border.color: buttonGenPass.enabled ? (buttonGenPass.hovered ? (buttonGenPass.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
-                        }
-
-                        contentItem: Text {
-                            text: buttonGenPass.text
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font: buttonGenPass.font
-                            color: buttonGenPass.enabled ? "#0C011C" : "#021F3C"
-                            anchors.centerIn: parent
-                        }
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
                                 event.accepted = true;
@@ -384,38 +395,13 @@ Rectangle {
                 color: "transparent"
             }
 
-            Button {
+            FlatButton {
                 id: formConfirmButton
                 width: formColumn.formWidth
-                text: "Save record"
+                text: qsTr("Save record")
                 height: 40
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
-                background: Rectangle {
-                    id: buttonBackground
-                    color: formConfirmButton.enabled ? (formConfirmButton.hovered ? (formConfirmButton.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
-                    radius: passwordManagerScreen.cornerRadius * 2
-                    border.width: formConfirmButton.pressed ? 2 : 0
-                    border.color: formConfirmButton.pressed ? "#734500" : "transparent"
-                    Rectangle {
-                        visible: formConfirmButton.focus
-                        anchors.centerIn: parent
-                        height: parent.height - 4
-                        width: parent.width - 4
-                        color: "transparent"
-                        border.width: 2
-                        border.color: "#ECDFD4"
-                        radius: passwordManagerScreen.cornerRadius * 2 - 2
-                    }
-                }
 
-                contentItem: Text {
-                    text: formConfirmButton.text
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font: formConfirmButton.font
-                    color: formConfirmButton.enabled ? "#0C011C" : "#021F3C"
-                    anchors.centerIn: parent
-                }
                 onClicked: {
                     passwordListModel.append({
                         headlineText: formHeadlineField.text,
@@ -480,6 +466,11 @@ Rectangle {
             }
         }
 
+        background: Rectangle {
+            anchors.fill: parent
+            color: passwordManagerScreen.drawerBackgroundColor
+        }
+
         Column {
             id: editFormColumn
             anchors.centerIn: parent
@@ -493,30 +484,33 @@ Rectangle {
 
             Rectangle {
                 width: editFormColumn.formWidth
-                height: (editFormColumn.height - Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + editOldPasswordHeadline.height)) / 2
+                height: (editFormColumn.height - (Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + oldPassSpace2.height + oldPassSpace1.height + editOldPasswordHeadline.height) + editFormConfirmButton.height)) / 3
                 color: "transparent"
             }
             Text {
                 id: editHeadlineText
-                text: "Create record"
+                text: qsTr("Edit record")
             }
             Rectangle {
                 id: editHeadllineSeparator
-                color: "#0C011C"
+                color: passwordManagerScreen.notEnableTextColor
                 width: formColumn.formWidth
                 height: 1
             }
             Row {
                 width: formColumn.formWidth
-                height: Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + editOldPasswordHeadline.height)
+                height: Math.max(editSettingsGenPass.height, editFormHeadlineField.height + editFormUsernameField.height + editFormPasswordField.height + editOldPasswordText.height + oldPassSpace2.height + oldPassSpace1.height+ editOldPasswordHeadline.height)
                 Column {
 
                     ModernTextField {
                         id: editFormHeadlineField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: "Headline"
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderText: qsTr("Headline")
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        textColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -533,9 +527,12 @@ Rectangle {
                     ModernTextField {
                         id: editFormUsernameField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: "Username"
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderText: qsTr("Username")
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        textColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
 
                         Keys.onPressed: (event) => {
@@ -550,31 +547,49 @@ Rectangle {
                         }
                     }
 
+                    Rectangle {
+                        id: oldPassSpace1
+                        color: "transparent"
+                        height: 5
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                    }
+
                     Text {
                         id: editOldPasswordHeadline
-                        text: "Old password"
+                        text: qsTr("Old password")
+                        font.pointSize: 8
+                        color: passwordManagerScreen.notEnableTextColor
                     }
 
                     TextArea {
                         id: editOldPasswordText
-                        text: "password"
-                        color: "#999"
+                        color: passwordManagerScreen.notEnableTextColor
                         selectByMouse: true
                         readOnly: true
                     }
                     Rectangle {
-                        color: "#999"
+                        color: passwordManagerScreen.notEnableTextColor
                         height: 1
+                        width: editFormColumn.formWidth - editFormColumn.settingWidth
+                    }
+
+                    Rectangle {
+                        id: oldPassSpace2
+                        color: "transparent"
+                        height: 5
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
                     }
 
                     ModernTextField {
                         id: editFormPasswordField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: "Password"
+                        placeholderText: qsTr("Password")
                         passwordMode: true
-                        placeholderTextColor: "#0C011C"
-                        fillUnderlineColor: "#0C011C"
+                        placeholderTextColor: passwordManagerScreen.textColor
+                        fillUnderlineColor: passwordManagerScreen.textColor
+                        textColor: passwordManagerScreen.textColor
+                        selectionTextColor: passwordManagerScreen.textColor
+                        selectionBlockColor: passwordManagerScreen.focusColor
                         color: "transparent"
 
                         Keys.onPressed: (event) => {
@@ -608,7 +623,7 @@ Rectangle {
                             width: Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width)
                             CustomCheckBox {
                                 id: editMajusculeGenPassChBox
-                                text: "Upper latters"
+                                text: qsTr("Upper latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -622,7 +637,7 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: editMinusculeGenPassChBox
-                                text: "Lower latters"
+                                text: qsTr("Lower latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -644,7 +659,7 @@ Rectangle {
                             width: Math.max(editNumberGenPassChBox.width, editSpecialGenPassChBox.width)
                             CustomCheckBox {
                                 id: editNumberGenPassChBox
-                                text: "Numbers"
+                                text: qsTr("Numbers")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -658,7 +673,7 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: editSpecialGenPassChBox
-                                text: "Special chars"
+                                text: qsTr("Special chars")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -687,7 +702,7 @@ Rectangle {
                         value: 12
                         stepSize: 1
 
-                        text: "Password length"
+                        text: qsTr("Password length")
 
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -719,28 +734,14 @@ Rectangle {
                     }
 
 
-                    Button {
+                    FlatButton {
                         id: editButtonGenPass
                         width: editFormColumn.settingWidth - 60
                         height: 25
                         enabled: editMajusculeGenPassChBox.checked || editMinusculeGenPassChBox.checked || editNumberGenPassChBox.checked || editSpecialGenPassChBox.checked
-                        text: "Generate password"
+                        text: qsTr("Generate password")
                         anchors.horizontalCenter: parent.horizontalCenter
-                        background: Rectangle {
-                            color: editButtonGenPass.enabled ? (editButtonGenPass.hovered ? "#ffc89f" : "#ffddc2") : "#a69c94"
-                            radius: passwordManagerScreen.cornerRadius * 2
-                            border.width: editButtonGenPass.focus ? 3 : 1
-                            border.color: editButtonGenPass.enabled ? (editButtonGenPass.hovered ? (editButtonGenPass.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
-                        }
 
-                        contentItem: Text {
-                            text: editButtonGenPass.text
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font: editButtonGenPass.font
-                            color: editButtonGenPass.enabled ? "#0C011C" : "#021F3C"
-                            anchors.centerIn: parent
-                        }
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
                                 event.accepted = true;
@@ -781,38 +782,13 @@ Rectangle {
                 color: "transparent"
             }
 
-            Button {
+            FlatButton {
                 id: editFormConfirmButton
                 width: editFormColumn.formWidth
-                text: "Save changes"
+                text: qsTr("Save changes")
                 height: 40
                 enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
-                background: Rectangle {
-                    id: editButtonBackground
-                    color: editFormConfirmButton.enabled ? (editFormConfirmButton.hovered ? (editFormConfirmButton.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
-                    radius: passwordManagerScreen.cornerRadius * 2
-                    border.width: editFormConfirmButton.pressed ? 2 : 0
-                    border.color: editFormConfirmButton.pressed ? "#734500" : "transparent"
-                    Rectangle {
-                        visible: editFormConfirmButton.focus
-                        anchors.centerIn: parent
-                        height: parent.height - 4
-                        width: parent.width - 4
-                        color: "transparent"
-                        border.width: 2
-                        border.color: "#ECDFD4"
-                        radius: passwordManagerScreen.cornerRadius * 2 - 2
-                    }
-                }
 
-                contentItem: Text {
-                    text: editFormConfirmButton.text
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font: editFormConfirmButton.font
-                    color: editFormConfirmButton.enabled ? "#0C011C" : "#021F3C"
-                    anchors.centerIn: parent
-                }
                 onClicked: {
                     passwordListModel.setProperty(editDrawer.index, "headlineText", editFormHeadlineField.text)
                     passwordListModel.setProperty(editDrawer.index, "usernameText", editFormUsernameField.text)
@@ -917,6 +893,12 @@ Rectangle {
                 overlay.visible = false
             }
         }
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: passwordManagerScreen.drawerBackgroundColor
+        }
+
         RowLayout {
 
             spacing: 0
@@ -935,7 +917,7 @@ Rectangle {
                     from: 3
                     to: 30
                     stepSize: 3
-                    text: "Encrypting iterations"
+                    text: qsTr("Encrypting iterations")
                     Layout.fillWidth: true
                     Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     width: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
@@ -943,11 +925,11 @@ Rectangle {
 
                 }
                 Switch {
-                    text: "Nastavení 1"
+                    text: qsTr("Nastavení 1")
                 }
 
                 Switch {
-                    text: "Nastavení 2"
+                    text: qsTr("Nastavení 2")
                 }
             }
             Rectangle {
