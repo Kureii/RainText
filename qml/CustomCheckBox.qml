@@ -19,6 +19,7 @@ CheckBox {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 8
+        color: "transparent"
 
         Rectangle {
             anchors.fill: parent
@@ -35,6 +36,7 @@ CheckBox {
             color: customCheckBox.checkedColor
             radius: 4
         }
+
         Rectangle {
             anchors.centerIn: parent
             width: checkBoxChecker.width - 2
@@ -43,6 +45,7 @@ CheckBox {
             radius: 5
             visible: customCheckBox.focus
         }
+
         Image {
             id: uncheckedIconImage
             visible: !customCheckBox.checked
@@ -55,7 +58,6 @@ CheckBox {
             }
         }
 
-
         Image {
             id: checkedIconImage
             visible: customCheckBox.checked
@@ -67,7 +69,5 @@ CheckBox {
                 color: customCheckBox.borderColor
             }
         }
-
-
     }
 }
