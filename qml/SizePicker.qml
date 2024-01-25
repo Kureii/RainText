@@ -14,15 +14,17 @@ Column {
     property real to: 64.0
     property real stepSize: 1.0
     property real value: 12.0
+    width: 120
+    height: 40
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Up || event.key === Qt.Key_Right) {
-            if (value < passGenLength.to) {
+            if (value < sizePicker.to) {
                 sizePicker.value += sizePicker.stepSize;
             }
         }
         if (event.key === Qt.Key_Down || event.key === Qt.Key_Left) {
-            if (value > passGenLength.from) {
+            if (value > sizePicker.from) {
                 sizePicker.value -= sizePicker.stepSize;
             }
         }
@@ -49,14 +51,13 @@ Column {
         return Qt.rgba(newR / 255, newG / 255, newB / 255, 1);
     }
 
-
     Text {
         text: sizePicker.text
         color: sizePicker.textColor
     }
     Rectangle {
         height: 3
-        width: formColumn.settingWidth
+        width: sizePicker.settingWidth
         color: "transparent"
     }
     RowLayout {
@@ -71,9 +72,9 @@ Column {
             to: sizePicker.to
             from: sizePicker.from
             value: sizePicker.value
-            width: formColumn.settingWidth
-            Layout.minimumWidth: formColumn.settingWidth - 80
-            Layout.maximumWidth: formColumn.settingWidth - 80
+            width: sizePicker.width
+            Layout.minimumWidth: sizePicker.width - 80
+            Layout.maximumWidth: sizePicker.width - 80
             onValueChanged: sizePickerSpinBox.value = sizePickerSlider.value
 
 
@@ -83,8 +84,8 @@ Column {
                 x: sizePickerSlider.leftPadding
                 y: sizePickerSlider.topPadding + (sizePickerSlider.availableHeight - height) / 2
                 width: sizePickerSlider.availableWidth
-                height: passwordManagerScreen.cornerRadius * 2
-                radius: passwordManagerScreen.cornerRadius
+                height: sizePicker.radius * 2
+                radius: sizePicker.radius
                 color: sizePicker.backgroundColor
                 border.width: 2
                 border.color: sizePicker.adjustColorBrightness(sizePicker.backgroundColor, 0.9)
@@ -102,7 +103,7 @@ Column {
                 y: sizePickerSlider.topPadding + (sizePickerSlider.availableHeight - height) / 2
                 width: 20
                 height: 20
-                radius: passwordManagerScreen.cornerRadius
+                radius: sizePicker.radius
                 color: handleMouseArea.pressed ? sizePicker.adjustColorBrightness(sizePicker.backgroundColor, 0.9) : sizePicker.backgroundColor
                 border.width: sizePicker.focus ? 2 : 0
                 border.color: sizePicker.adjustColorBrightness(sizePicker.primaryHexColor, 1.25)
@@ -120,6 +121,8 @@ Column {
 
         }
         SpinBox {
+            focus: false
+            focusPolicy: Qt.NoFocus
             id: sizePickerSpinBox
             width: 60
             Layout.rightMargin: 10
@@ -135,7 +138,7 @@ Column {
             background: Rectangle {
                 color: sizePicker.backgroundColor
                 anchors.fill: parent
-                radius: passwordManagerScreen.cornerRadius
+                radius: sizePicker.radius
                 border.color: sizePicker.adjustColorBrightness(sizePicker.backgroundColor, 0.9)
                 border.width: 1
             }
@@ -156,7 +159,7 @@ Column {
                 width: parent.width / 5 * 2
                 height: parent.height / 2
                 color: upIndicator.enabled ? (upIndicator.hovered ? (upIndicator.clicked ? sizePicker.adjustColorBrightness(sizePicker.primaryHexColor, 0.8) : sizePicker.adjustColorBrightness(sizePicker.primaryHexColor, 0.9)) : sizePicker.primaryHexColor) : sizePicker.adjustColorBrightness(sizePicker.backgroundColor, 0.8)
-                radius: passwordManagerScreen.cornerRadius
+                radius: sizePicker.radius
 
                 Rectangle {
                     color: parent.color
