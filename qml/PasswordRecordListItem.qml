@@ -11,9 +11,16 @@ Item {
     property color backgroundColor: "#ECDFD4"
     property color textColor: "#0C011C"
     property color focusColor: "#FF9800"
+    property color borderButtonColor: "#1C0F01"
+    property color borderButtonFocusColor: "#FFA000"
+    property color notEnabledBorderButtonColor: "#75614B"
+    property color borderButtonHoveredColor: "#78562C"
+    property color borderButtonPressedColor: "#9b703b"
+    property color lineColor: "#695981"
     property string headlineText: "Headline"
     property string usernameText: "Username"
     property string passwordText: "Password"
+    property string passwordDotText: "⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁"
 
     signal requestDeletion(int index)
 
@@ -87,7 +94,7 @@ Item {
 
             Rectangle {
                 Layout.preferredHeight: 1
-                color: passwordRecordListItem.textColor
+                color: passwordRecordListItem.lineColor
                 Layout.fillWidth: true
             }
 
@@ -117,6 +124,11 @@ Item {
                         Layout.maximumWidth: passwordRecordListRectangle.width / 12
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                         onClicked: requestMoveUp(index)
+                        textColor: passwordRecordListItem.textColor
+                        focusColor: passwordRecordListItem.focusColor
+                        inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                        pressedColor: passwordRecordListItem.borderButtonPressedColor
+                        hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                     }
 
                     IconButton {
@@ -127,6 +139,11 @@ Item {
                         Layout.maximumWidth: passwordRecordListRectangle.width / 12
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                         onClicked: requestMoveDown(index)
+                        textColor: passwordRecordListItem.textColor
+                        focusColor: passwordRecordListItem.focusColor
+                        inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                        pressedColor: passwordRecordListItem.borderButtonPressedColor
+                        hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                     }
                 }
 
@@ -141,7 +158,7 @@ Item {
                     id: rectangle1
                     Layout.preferredWidth: 1
                     Layout.preferredHeight: passwordRecordListRectangle.height - 2
-                    color: passwordRecordListItem.textColor
+                    color: passwordRecordListItem.lineColor
                     Layout.bottomMargin: 2
                     Layout.topMargin: 2
                     Layout.fillHeight: true
@@ -161,10 +178,12 @@ Item {
 
                     RowLayout {
 
-                        Text {
+                        TextArea {
                             id: copyHeadlineText
                             text: passwordRecordListItem.headlineText
                             Layout.fillWidth: true
+                            selectByMouse: true
+                            readOnly: true
                         }
 
                         Timer {
@@ -181,6 +200,11 @@ Item {
                             image: "qrc:/images/copy.svg"
                             Layout.preferredHeight: 24
                             Layout.preferredWidth: 24
+                            textColor: passwordRecordListItem.textColor
+                            focusColor: passwordRecordListItem.focusColor
+                            inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                            pressedColor: passwordRecordListItem.borderButtonPressedColor
+                            hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                             onClicked: {
                                 copy_to_clipboard.copyToClipboard(copyHeadlineText.text)
                                 copyHeadlineButton.image = "qrc:/images/copy-success.svg"
@@ -193,17 +217,19 @@ Item {
 
                     Rectangle {
                         Layout.preferredHeight: 1
-                        color: passwordRecordListItem.textColor
+                        color: passwordRecordListItem.lineColor
                         Layout.fillWidth: true
                     }
 
                     RowLayout {
                         Layout.fillWidth: true
 
-                        Text {
+                        TextArea {
                             id: copyUsernameItemText
                             text: passwordRecordListItem.usernameText
                             Layout.fillWidth: true
+                            selectByMouse: true
+                            readOnly: true
                         }
 
                         Timer {
@@ -220,6 +246,11 @@ Item {
                             image: "qrc:/images/copy.svg"
                             Layout.preferredHeight: 24
                             Layout.preferredWidth: 24
+                            textColor: passwordRecordListItem.textColor
+                            focusColor: passwordRecordListItem.focusColor
+                            inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                            pressedColor: passwordRecordListItem.borderButtonPressedColor
+                            hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                             onClicked: {
                                 copy_to_clipboard.copyToClipboard(copyUsernameItemText.text)
                                 copyUsernameItemButton.image = "qrc:/images/copy-success.svg"
@@ -234,12 +265,23 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
 
-                        Text {
+                        TextArea {
                             id: passwordRecordText
-                            text: "⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁"
+                            text: passwordRecordListItem.passwordDotText
                             property string tempText: passwordRecordListItem.passwordText
                             Layout.fillWidth: true
-
+                            selectByMouse: true
+                            readOnly: true
+                            Keys.onPressed: (event) => {
+                                if (event.key === Qt.Key_C && (event.modifiers & Qt.ControlModifier)) {
+                                    event.accepted = true;
+                                    if (passwordRecordText.text === passwordRecordListItem.passwordDotText) {
+                                        copy_to_clipboard.copyToClipboard(passwordRecordText.tempText)
+                                    } else {
+                                        copy_to_clipboard.copyToClipboard(passwordRecordText.text)
+                                    }
+                                }
+                            }
                         }
 
                         Timer {
@@ -258,6 +300,11 @@ Item {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.preferredHeight: 24
                             Layout.preferredWidth: 24
+                            textColor: passwordRecordListItem.textColor
+                            focusColor: passwordRecordListItem.focusColor
+                            inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                            pressedColor: passwordRecordListItem.borderButtonPressedColor
+                            hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                             onClicked: {
                                 var textA = passwordRecordText.text
                                 var textB = passwordRecordText.tempText
@@ -273,8 +320,13 @@ Item {
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             Layout.preferredHeight: 24
                             Layout.preferredWidth: 24
+                            textColor: passwordRecordListItem.textColor
+                            focusColor: passwordRecordListItem.focusColor
+                            inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                            pressedColor: passwordRecordListItem.borderButtonPressedColor
+                            hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                             onClicked: {
-                                if (passwordRecordText.text === "⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁") {
+                                if (passwordRecordText.text === passwordRecordListItem.passwordDotText) {
                                     copy_to_clipboard.copyToClipboard(passwordRecordText.tempText)
                                 } else {
                                     copy_to_clipboard.copyToClipboard(passwordRecordText.text)
@@ -298,7 +350,7 @@ Item {
                 Rectangle {
                     width: 1
                     height: passwordRecordListRectangle.height - 2
-                    color: passwordRecordListItem.textColor
+                    color: passwordRecordListItem.lineColor
                 }
 
                 Rectangle {
@@ -318,6 +370,11 @@ Item {
                         text: ""
                         Layout.preferredHeight: 24
                         Layout.preferredWidth: 24
+                        textColor: passwordRecordListItem.textColor
+                        focusColor: passwordRecordListItem.focusColor
+                        inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                        pressedColor: passwordRecordListItem.borderButtonPressedColor
+                        hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                         onClicked: {
                             if (passwordRecordText.text === "⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁ ⦁") {
                                 requestEdit(index, copyHeadlineText.text, copyUsernameItemText.text, passwordRecordText.tempText)
@@ -335,6 +392,11 @@ Item {
                         Layout.preferredWidth: 24
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: requestDeletion(index)
+                        textColor: passwordRecordListItem.textColor
+                        focusColor: passwordRecordListItem.focusColor
+                        inactiveColor: passwordRecordListItem.notEnabledBorderButtonColor
+                        pressedColor: passwordRecordListItem.borderButtonPressedColor
+                        hoveredColor: passwordRecordListItem.borderButtonHoveredColor
                     }
                 }
 

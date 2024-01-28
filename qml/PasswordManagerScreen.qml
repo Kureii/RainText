@@ -853,6 +853,15 @@ Rectangle {
             headlineText: model.headlineText
             usernameText: model.usernameText
             passwordText: model.passwordText
+            backgroundColor: passwordManagerScreen.backgroundColor
+            textColor: passwordManagerScreen.textColor
+            focusColor: passwordManagerScreen.focusColor
+            borderButtonColor: passwordManagerScreen.borderButtonColor
+            borderButtonFocusColor: passwordManagerScreen.borderButtonFocusColor
+            notEnabledBorderButtonColor: passwordManagerScreen.notEnabledBorderButtonColor
+            borderButtonHoveredColor: passwordManagerScreen.borderButtonHoveredColor
+            borderButtonPressedColor: passwordManagerScreen.borderButtonPressedColor
+            lineColor: passwordManagerScreen.notEnableTextColor
 
             Connections {
                 target: passwordRecordListItem
