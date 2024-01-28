@@ -184,6 +184,7 @@ Item {
                             Layout.fillWidth: true
                             selectByMouse: true
                             readOnly: true
+                            selectionColor: passwordRecordListItem.focusColor
                         }
 
                         Timer {
@@ -230,6 +231,7 @@ Item {
                             Layout.fillWidth: true
                             selectByMouse: true
                             readOnly: true
+                            selectionColor: passwordRecordListItem.focusColor
                         }
 
                         Timer {
@@ -272,6 +274,7 @@ Item {
                             Layout.fillWidth: true
                             selectByMouse: true
                             readOnly: true
+                            selectionColor: passwordRecordListItem.focusColor
                             Keys.onPressed: (event) => {
                                 if (event.key === Qt.Key_C && (event.modifiers & Qt.ControlModifier)) {
                                     event.accepted = true;
