@@ -38,3 +38,12 @@
 ![FlatButtonFocused](./images/FlatButtonFocused.png)
 
 ![FlatButtonPressed](./images/FlatButtonPressed.png)
+
+## TODO
+
+1. [ ] separate default themes and custom themes
+2. [ ] add font load by theme file
+3. [ ] create a more advanced error system for loading styles and fixing errors at runtime
+4. [ ] add custom style by user (save name to user db)
+5. [ ] create more complex shortcuts navigation system (tab-switch only by records and when you enter to item, you should press ctrl-tab to switch another record or press ctrl+enter to go back to focus records)
+6. [ ] do first time run tutorial and add it under F1 and button in settings
