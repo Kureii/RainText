@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QtQuick/QQuickView>
 #include <QQmlContext>
+#include <QFontDatabase>
 #include "RainText/gui/login_register_manager.hpp"
 #include "RainText/gui/generate_password.hpp"
 #include "RainText/gui/copy_to_clipboard.hpp"
@@ -12,6 +13,13 @@
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
+
+
+  int fontId = QFontDatabase::addApplicationFont(":/fonts/Comfortaa-Regular.ttf");
+  if (fontId != -1) {
+    QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+    app.setFont(QFont(family));
+  }
 
   QQmlApplicationEngine engine;
   rain_text::gui::LoginRegisterManager login_register_manager;
