@@ -10,12 +10,15 @@ ApplicationWindow {
     visible: true
     width: 840
     height: 500
+    x: Screen.width / 2 - width / 2
+    y: Screen.height / 2 - height / 2
+
     title: "Vítej v Qt QML"
-    color: appColors["drawerBackgroundColor"]//"transparent"
+    color: "transparent"//appColors["drawerBackgroundColor"]//
     minimumHeight: 500
     minimumWidth: 800
     property bool hasColorError: false
-    //flags: Qt.Window | Qt.FramelessWindowHint
+    flags: Qt.Window | Qt.FramelessWindowHint
 
     Component.onCompleted: {
         if (settings_manager.hasError) {
@@ -72,7 +75,7 @@ ApplicationWindow {
         }
     }*/
 
-    PasswordManagerScreen {
+    /*PasswordManagerScreen {
         id: passwordManagerScreen
         anchors.fill: parent
         primaryColor: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
@@ -91,6 +94,6 @@ ApplicationWindow {
         notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
         borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
         borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonPressedColor"]
-    }
-    //LoginRegisterScreen {}
+    }*/
+    LoginRegisterScreen {}
 }
