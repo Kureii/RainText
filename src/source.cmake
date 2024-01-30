@@ -5,12 +5,23 @@ set(gui_sources
 )
 
 set(setting_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/settings/setting_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/settings/setting_loader.cpp
+)
+
+set(register_login_sources
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/register_login/register.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/register_login/login.cpp
+)
+
+set(hash_sources
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/hash/hash.cpp
 )
 
 set(sources
-    ${gui_sources}
-    ${setting_sources}
+        ${gui_sources}
+        ${setting_sources}
+        ${register_login_sources}
+        ${hash_sources}
 )
 
 set(executable_sources
