@@ -13,14 +13,18 @@
 //================================= Namespace ==================================
 namespace rain_text::gui {
 
+//================================= Defines ====================================
+
+#define LOGIN_STATE "loginState"
+
 //================================= Public method ==============================
 LoginRegisterManager::LoginRegisterManager(QObject *parent) : QObject(parent) {
-  state_ = "loginState";
+  state_ = LOGIN_STATE;
 }
 bool LoginRegisterManager::CheckFields(const QString &username,
                                        const QString &password,
                                        const QString &password_again) {
-  if (state_ != "loginState") {
+  if (state_ != LOGIN_STATE) {
     return username.length() >= 3 && password.length() >= 8 &&
            password == password_again;
   }
@@ -28,10 +32,18 @@ bool LoginRegisterManager::CheckFields(const QString &username,
 }
 
 void LoginRegisterManager::ConfirmFormUser(const QString &username,
-                                           const QString &password) {}
+                                           const QString &password) {
+  if (state_ == LOGIN_STATE) {
+    qDebug("login");
+  } else {
+    qDebug("register");
+  }
+}
+
 void LoginRegisterManager::StateChange(const QString &new_state) {
   state_ = new_state.toStdString();
 }
+
 float LoginRegisterManager::PasswordStrength(const QString &password) {
   if (password.isNull() || password.isEmpty()) {
     return 0.0f;
