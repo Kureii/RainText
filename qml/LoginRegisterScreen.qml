@@ -39,8 +39,8 @@ Rectangle {
 
         onPositionChanged: {
             if (dragArea.pressed) {
-                window.x += (mouseX - dragPosition.x)
-                window.y += (mouseY - dragPosition.y)
+                mainWindow.x += (mouseX - dragPosition.x)
+                mainWindow.y += (mouseY - dragPosition.y)
             }
         }
     }
@@ -153,8 +153,8 @@ Rectangle {
 
             onPositionChanged: {
                 if (dragArea2.pressed) {
-                    window.x += (mouseX - dragPosition.x)
-                    window.y += (mouseY - dragPosition.y)
+                    mainWindow.x += (mouseX - dragPosition.x)
+                    mainWindow.y += (mouseY - dragPosition.y)
                 }
             }
         }
