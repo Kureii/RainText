@@ -8,6 +8,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+add_definitions(-DMAIN_DB_PATH=\"./database/main.db\")
+
 find_package(Qt6 COMPONENTS
         Core
         Quick
@@ -15,12 +17,14 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         Svg
+        Sql
         REQUIRED
 )
 
 include(./src/source.cmake)
 include(./include/include.cmake)
 include(./qml/qrc.cmake)
+add_subdirectory(lib)
 
 qt_add_executable(${PROJECT_NAME}
         ${qrc}
@@ -28,7 +32,13 @@ qt_add_executable(${PROJECT_NAME}
         ${all_headers}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ./include/)
+target_include_directories(${PROJECT_NAME}
+        PUBLIC ./include/
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/MD5
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF/
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/argon2/include
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt
+)
 
 #target_compile_definitions(${PROJECT_NAME}
 #        PRIVATE QT_QML_DEBUG)
@@ -46,6 +56,11 @@ target_link_libraries(${PROJECT_NAME}
         PRIVATE Qt::Gui
         PRIVATE Qt::Widgets
         PRIVATE Qt::Svg
+        PRIVATE Qt::Sql
+        md5_lib
+        sha3lib::sha3
+        scryptlib::scrypt
+        argon2lib::argon2
 )
 
 
@@ -77,7 +92,6 @@ endif ()
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 
-add_subdirectory(lib)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
@@ -108,10 +122,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
             PkgConfig::GTK4
             SQLite::SQLite3
             Threads::Threads
-            md5_lib
-            sha3lib::sha3
-            scryptlib::scrypt
-            argon2lib::argon2
             RainTextCore
             )
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
