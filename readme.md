@@ -15,6 +15,10 @@
 | <kdb>H</kdb>  / <kdb>S</kdb>                    | On button "Generate password" | Show / hide password     |
 | <kdb>Space</kdb>  / <kdb>Enter</kdb>            | Checkboxes / Buttons          | Click on item            |
 
+## Known issues
+
+- Window work doesn't work properly on wayland
+
 ## Customize
 
 ### New color scheme
@@ -38,6 +42,7 @@
 ![FlatButtonFocused](./images/FlatButtonFocused.png)
 
 ![FlatButtonPressed](./images/FlatButtonPressed.png)
+
 
 ## TODO
 
