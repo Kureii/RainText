@@ -36,7 +36,7 @@ QString Hash::GetDbName(QString username) {
   return result;
 }
 
-QString Hash::GetPswdHash(QString password, QString username) {
+QByteArray Hash::GetPswdHash(QString password, QString username) {
   uint8_t salt[64];
   sha3_HashBuffer(512, SHA3_FLAGS_NONE, password.data(), password.size(), salt,
                   64);
@@ -44,7 +44,7 @@ QString Hash::GetPswdHash(QString password, QString username) {
   std::string data = password.toStdString() + "\x1E" + username.toStdString();
   libscrypt_scrypt(reinterpret_cast<const uint8_t*>(data.data()), data.size(),
                    salt, 64, 65536, 8, 1, password_hash, 64);
-  return uint8_array_to_hex_string(password_hash, 64);
+  return {reinterpret_cast<char*>(password_hash), 64};
 }
 std::vector<uint8_t> Hash::GetKey(QString password, QString username) {
   uint8_t pre_salt[64];

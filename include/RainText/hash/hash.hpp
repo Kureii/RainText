@@ -13,7 +13,7 @@ namespace rain_text::hash {
 class Hash {
  public:
   static QString GetDbName(QString username);
-  static QString GetPswdHash(QString password, QString username);
+  static QByteArray GetPswdHash(QString password, QString username);
   static std::vector<uint8_t> GetKey(QString password, QString username);
   static QString uint8_array_to_hex_string(const uint8_t* data, size_t length);
 };
