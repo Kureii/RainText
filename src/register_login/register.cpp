@@ -18,7 +18,9 @@ namespace rain_text::register_login {
 //================================= Public method ==============================
 Register::Register(QString username, QString password)
     : username_(username), password_(password) {}
-bool Register::IsRegisterSusccessful(QString& path) {}
+bool Register::IsRegisterSusccessful(QString& path) {
+  return false;
+}
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
