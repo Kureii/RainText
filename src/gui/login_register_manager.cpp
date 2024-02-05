@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <iostream>
+#include <memory>
+#include "RainText/register_login/login.hpp"
+#include "RainText/register_login/register.hpp"
 
 #include "RainText/gui/login_register_manager.hpp"
 
@@ -34,9 +37,16 @@ bool LoginRegisterManager::CheckFields(const QString &username,
 void LoginRegisterManager::ConfirmFormUser(const QString &username,
                                            const QString &password) {
   if (state_ == LOGIN_STATE) {
-    qDebug("login");
+    //auto login =std::make_unique<rain_text::register_login::Login>(username.toStdString(), password.toStdString());
+    // @todo
   } else {
-    qDebug("register");
+    auto registration = std::make_unique<rain_text::register_login::Register>(username, password);
+    QString path;
+    if (registration->IsRegisterSusccessful(path)) {
+      // regitred
+    } else {
+      // error9
+    }
   }
 }
 
