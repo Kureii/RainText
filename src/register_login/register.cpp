@@ -5,12 +5,13 @@
 //================================= Includes ===================================
 #include "RainText/register_login/register.hpp"
 
-#include <QString>
-#include <QFile>
 #include <QDir>
-#include <QtSql/QSqlQuery>
+#include <QFile>
+#include <QString>
 #include <QtSql/QSqlError>
+#include <QtSql/QSqlQuery>
 
+#include "RainText/hash/hash.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::register_login {
@@ -19,7 +20,12 @@ namespace rain_text::register_login {
 Register::Register(QString username, QString password)
     : username_(username), password_(password) {}
 bool Register::IsRegisterSusccessful(QString& path) {
-  return false;
+  path = CreateUser(username_, password_);
+  if (path.isEmpty()) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 //================================= Testing method =============================
@@ -41,12 +47,12 @@ QString Register::CreateUser(const QString& username,
 
   if (!db_.open()) {
     qDebug() << "Cannot open database:" << db_.lastError().text();
-    return QString();
+    return {};
   }
 
   QString sql =
       "CREATE TABLE IF NOT EXISTS users("
-      "hash TEXT UNIQUE NOT NULL,"
+      "hash BLOB UNIQUE NOT NULL,"
       "PRIMARY KEY (hash)"
       ");";
 
@@ -55,12 +61,23 @@ QString Register::CreateUser(const QString& username,
     qDebug() << "SQL execution error:" << query.lastError().text();
   }
 
-  auto dbName = "";//hash::GetDbName(username);
+  auto dbToken = rain_text::hash::Hash::GetPswdHash(password, username);
+  QString insertSql = "INSERT INTO users (hash) VALUES (?);";
+  QSqlQuery insertQuery;
+  insertQuery.prepare(insertSql);
+  insertQuery.addBindValue(dbToken);
+
+  if (!insertQuery.exec()) {
+    qDebug() << "SQL insert error:" << insertQuery.lastError().text();
+    return {};
+  }
+
+  auto dbName = rain_text::hash::Hash::GetDbName(username);
 
   QString path = "./database/" + QString(dbName) + ".db";
 
   if (QFile::exists(path)) {
-    return QString();
+    return {};
   }
 
   db_.close();
