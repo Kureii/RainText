@@ -13,7 +13,7 @@ ApplicationWindow {
     x: Screen.width / 2 - width / 2
     y: Screen.height / 2 - height / 2
 
-    title: "Vítej v Qt QML"
+    title: "RainText"
     color: "transparent"//appColors["drawerBackgroundColor"]//
     minimumHeight: 500
     minimumWidth: 800
@@ -50,7 +50,6 @@ ApplicationWindow {
         modality: Qt.ApplicationModal
         buttons:  MessageDialog.Ok
         onAccepted: Qt.quit()
-
     }
 
     /*DropShadow {
@@ -75,8 +74,9 @@ ApplicationWindow {
         }
     }*/
 
-    /*PasswordManagerScreen {
+    PasswordManagerScreen {
         id: passwordManagerScreen
+        visible: false
         anchors.fill: parent
         primaryColor: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
         primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : appColors["primaryPressedColor"]
@@ -94,6 +94,22 @@ ApplicationWindow {
         notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
         borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
         borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonPressedColor"]
-    }*/
-    LoginRegisterScreen {}
+    }
+    LoginRegisterScreen {
+        id: loginRegisterScreen
+        visible: true
+    }
+
+    Connections {
+        target: login_register_manager
+
+        function onLoadDb(title) {
+            console.log("loadDb")
+            loginRegisterScreen.visible = false
+            passwordManagerScreen.visible = true
+            mainWindow.color = appColors["drawerBackgroundColor"]
+            mainWindow.title = title
+            mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
+        }
+    }
 }
