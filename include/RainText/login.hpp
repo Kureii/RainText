@@ -7,16 +7,22 @@
 
 #include <string>
 #include <vector>
+#include <QString>
 
 namespace rain_text::register_login {
 
 class Login {
-  std::string username_;
-  std::string password_;
+  QString username_;
+  QString password_;
   std::vector<uint8_t> key_;
 public:
-  Login(std::string username, std::string password);
+  Login(QString username, QString password);
 
+  bool IsLoginSusccessful(QString &path, std::vector<uint8_t> &key);
+
+private:
+  bool VerifyUser(QString &path, std::vector<uint8_t> &key);
 };
+
 
 }  // namespace rain_text::register_login
