@@ -37,15 +37,22 @@ bool LoginRegisterManager::CheckFields(const QString &username,
 
 void LoginRegisterManager::ConfirmFormUser(const QString &username,
                                            const QString &password) {
+  QString path;
+  std::vector<uint8_t> key;
   if (state_ == LOGIN_STATE) {
-    //auto login =std::make_unique<rain_text::register_login::Login>(username.toStdString(), password.toStdString());
-    // @todo
+    auto login = std::make_unique<register_login::Login>(username, password);
+    if (login->IsLoginSusccessful(path,key)) {
+      qDebug("susscess");
+      emit loadDb(username);
+    } else {
+      qDebug("error");
+    }
   } else {
-    auto registration = std::make_unique<rain_text::register_login::Register>(username, password);
-    QString path;
+    auto registration = std::make_unique<register_login::Register>(username, password);
     if (registration->IsRegisterSusccessful(path)) {
       auto printPath = path.toStdString();
       qDebug(printPath.data());
+      emit loadDb(username);
     } else {
       // error
     }

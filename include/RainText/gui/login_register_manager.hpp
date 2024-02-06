@@ -29,6 +29,8 @@ class LoginRegisterManager : public QObject {
   void registrationComplete();
   void loginComplete();
   void errorOccurred(const QString &error);
+  void loadDb(const QString &title);
+  void updateLoadDbProgress(float &progress);
 };
 
 }  // namespace rain_text::gui
