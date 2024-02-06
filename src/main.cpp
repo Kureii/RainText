@@ -1,15 +1,16 @@
 
 
-#include <iostream>
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtQuick/QQuickView>
 #include <QQmlContext>
-#include <QFontDatabase>
-#include "RainText/gui/login_register_manager.hpp"
-#include "RainText/gui/generate_password.hpp"
+#include <QtQuick/QQuickView>
+#include <iostream>
+
+#include "../include/RainText/setting_loader.hpp"
 #include "RainText/gui/copy_to_clipboard.hpp"
-#include "RainText/settings/setting_loader.hpp"
+#include "RainText/gui/generate_password.hpp"
+#include "RainText/gui/login_register_manager.hpp"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);

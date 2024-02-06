@@ -3,7 +3,7 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/settings/setting_loader.hpp"
+#include "RainText/setting_loader.hpp"
 
 #include <QFile>
 #include <QJsonDocument>

@@ -3,7 +3,7 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/register_login/register.hpp"
+#include "RainText/register.hpp"
 
 #include <QDir>
 #include <QFile>
@@ -11,7 +11,7 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 
-#include "RainText/hash/hash.hpp"
+#include "RainText/hash.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::register_login {

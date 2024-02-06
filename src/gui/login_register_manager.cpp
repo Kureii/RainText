@@ -3,15 +3,16 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
+#include "RainText/gui/login_register_manager.hpp"
+
 #include <QChar>
 #include <QDebug>
 #include <QRegularExpression>
 #include <iostream>
 #include <memory>
-#include "RainText/register_login/login.hpp"
-#include "RainText/register_login/register.hpp"
 
-#include "RainText/gui/login_register_manager.hpp"
+#include "RainText/login.hpp"
+#include "RainText/register.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::gui {
@@ -43,9 +44,10 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
     auto registration = std::make_unique<rain_text::register_login::Register>(username, password);
     QString path;
     if (registration->IsRegisterSusccessful(path)) {
-      // regitred
+      auto printPath = path.toStdString();
+      qDebug(printPath.data());
     } else {
-      // error9
+      // error
     }
   }
 }

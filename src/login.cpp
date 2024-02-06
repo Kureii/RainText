@@ -3,7 +3,7 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/register_login/login.hpp"
+#include "RainText/login.hpp"
 
 //================================= Namespace ==================================
 namespace rain_text::register_login {

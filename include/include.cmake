@@ -5,16 +5,16 @@ set(raintext_gui_headers
 )
 
 set(raintext_settings_headers
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/settings/setting_loader.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/setting_loader.hpp
 )
 
 set(raintext_register_login_headers
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/register_login/register.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/register_login/login.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/register.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/login.hpp
 )
 
 set(raintext_hash_headers
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/hash/hash.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/hash.hpp
 )
 
 set(all_headers

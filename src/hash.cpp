@@ -3,7 +3,7 @@
  * This file is under the GPL-3 license
  */
 //================================= Includes ===================================
-#include "RainText/hash/hash.hpp"
+#include "RainText/hash.hpp"
 
 #include <argon2.h>
 #include <libscrypt.h>
