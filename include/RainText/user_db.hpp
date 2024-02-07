@@ -14,10 +14,9 @@
 namespace rain_text {
 
 class UserDb {
-  std::vector<uint8_t> key_;
   QString path_;
 public:
-  UserDb(const std::vector<uint8_t> &key, const QString &path);
+  UserDb(const QString &path);
 
   std::vector<EncryptedRecordItem> GetAllRecords();
 

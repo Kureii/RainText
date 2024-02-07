@@ -11,8 +11,8 @@
 //================================= Namespace ==================================
 namespace rain_text {
 //================================= Public method ==============================
-UserDb::UserDb(const std::vector<uint8_t>& key, const QString& path)
-    : key_(key), path_(path) {}
+UserDb::UserDb(const QString& path)
+    : path_(path) {}
 
 std::vector<EncryptedRecordItem> UserDb::GetAllRecords() {
   std::vector<EncryptedRecordItem> items;
