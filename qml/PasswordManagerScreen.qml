@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
+import RainText.models
 
 Rectangle {
     id: passwordManagerScreen
@@ -403,11 +404,7 @@ Rectangle {
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
 
                 onClicked: {
-                    passwordListModel.append({
-                        headlineText: formHeadlineField.text,
-                        usernameText: formUsernameField.text,
-                        passwordText: formPasswordField.text
-                    })
+                    recordListModel.addRecordItem(formHeadlineField.text, formUsernameField.text, formPasswordField.text)
                     bottomDrawer.close();
                     formHeadlineField.text = "";
                     formUsernameField.text = "";
@@ -790,9 +787,7 @@ Rectangle {
                 enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
 
                 onClicked: {
-                    passwordListModel.setProperty(editDrawer.index, "headlineText", editFormHeadlineField.text)
-                    passwordListModel.setProperty(editDrawer.index, "usernameText", editFormUsernameField.text)
-                    passwordListModel.setProperty(editDrawer.index, "passwordText", editFormPasswordField.text)
+                    recordListModel.editRecordItem(editDrawer.index, editFormHeadlineField.text, editFormUsernameField.text, editFormPasswordField.text)
                     editDrawer.close()
                 }
 
@@ -810,31 +805,6 @@ Rectangle {
         }
     }
 
-    ListModel {
-        id: passwordListModel
-        ListElement {
-            headlineText: "1"
-            usernameText: "1"
-            passwordText: "1"
-        }
-        ListElement {
-            headlineText: "2"
-            usernameText: "2"
-            passwordText: "2"
-        }
-        ListElement {
-            headlineText: "3"
-            usernameText: "3"
-            passwordText: "3"
-        }
-        ListElement {
-            headlineText: "4"
-            usernameText: "4"
-            passwordText: "4"
-        }
-
-    }
-
     ListView {
         id: gridViewPasswordsRecords
         width: 500
@@ -842,7 +812,9 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.topMargin: 0
         anchors.bottomMargin: 0
-        model: passwordListModel
+        model: RecordListModel {
+            id: recordListModel
+        }
 
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -867,15 +839,15 @@ Rectangle {
                 target: passwordRecordListItem
 
                 function onRequestDeletion(index) {
-                    passwordListModel.remove(index)
+                    recordListModel.removeRecordItem(index)
                 }
 
                 function onRequestMoveUp(index) {
-                    passwordListModel.move(index, index - 1, 1)
+                    recordListModel.moveRecordItem(index, index - 1, 1)
                 }
 
                 function onRequestMoveDown(index) {
-                    passwordListModel.move(index, index + 1, 1)
+                    recordListModel.moveRecordItem(index, index + 1, 1)
                 }
 
                 function onRequestEdit(index, headline, username, password) {
