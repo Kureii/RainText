@@ -1,5 +1,3 @@
-
-
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -7,10 +5,11 @@
 #include <QtQuick/QQuickView>
 #include <iostream>
 
-#include "../include/RainText/setting_loader.hpp"
+#include "RainText/setting_loader.hpp"
 #include "RainText/gui/copy_to_clipboard.hpp"
 #include "RainText/gui/generate_password.hpp"
 #include "RainText/gui/login_register_manager.hpp"
+#include "RainText/record_list_model.hpp"
 
 int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
@@ -21,6 +20,8 @@ int main(int argc, char* argv[]) {
     QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
     app.setFont(QFont(family));
   }
+
+  qmlRegisterType<rain_text::model::RecordListModel>("RainText.models", 0, 1, "RecordListModel");
 
   QQmlApplicationEngine engine;
   rain_text::gui::LoginRegisterManager login_register_manager;
