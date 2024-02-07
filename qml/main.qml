@@ -10,11 +10,9 @@ ApplicationWindow {
     visible: true
     width: 840
     height: 500
-    x: Screen.width / 2 - width / 2
-    y: Screen.height / 2 - height / 2
 
     title: "RainText"
-    color: "transparent"//appColors["drawerBackgroundColor"]//
+    color: "transparent"
     minimumHeight: 500
     minimumWidth: 800
     property bool hasColorError: false
@@ -73,6 +71,29 @@ ApplicationWindow {
         FlatButton {
         }
     }*/
+    LoginRegisterScreen {
+        id: loginRegisterScreen
+        visible: true
+    }
+
+    LoadDbScreen {
+        id: loadDbScreen
+        visible: false
+        anchors.fill: parent
+        textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
+        progressBarBackground: mainWindow.hasColorError ? "#c3b9af" : appColors["loadProgressBarBackground"]
+        progressBarForeground: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
+        text: "test"
+        value: 0.5
+
+        onValueChanged: {
+            if (value >= 1) {
+                loadDbScreen.visible = false
+                passwordManagerScreen. visible = true
+            }
+        }
+
+    }
 
     PasswordManagerScreen {
         id: passwordManagerScreen
@@ -95,10 +116,6 @@ ApplicationWindow {
         borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
         borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonPressedColor"]
     }
-    LoginRegisterScreen {
-        id: loginRegisterScreen
-        visible: true
-    }
 
     Connections {
         target: login_register_manager
@@ -106,7 +123,7 @@ ApplicationWindow {
         function onLoadDb(title) {
             console.log("loadDb")
             loginRegisterScreen.visible = false
-            passwordManagerScreen.visible = true
+            loadDbScreen.visible = true
             mainWindow.color = appColors["drawerBackgroundColor"]
             mainWindow.title = title
             mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
