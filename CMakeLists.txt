@@ -38,6 +38,7 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/SHA3IUF/
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/argon2/include
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscrypt
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/RainTextCore/include
 )
 
 #target_compile_definitions(${PROJECT_NAME}
