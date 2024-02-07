@@ -15,9 +15,14 @@ namespace rain_text::register_login {
 //================================= Public method ==============================
  Login::Login(QString username, QString password) : password_(std::move(password)), username_(std::move(username)) {}
 
-bool Login::IsLoginSusccessful(QString &path, std::vector<uint8_t> &key) {
-   return VerifyUser(path, key);
+bool Login::IsLoginSusccessful(QString &path) {
+   return VerifyUser(path);
  }
+
+std::vector<uint8_t> Login::GetKey() {
+   return hash::Hash::GetKey(password_,username_);
+ }
+
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
@@ -25,7 +30,7 @@ bool Login::IsLoginSusccessful(QString &path, std::vector<uint8_t> &key) {
 #endif
 
 //================================= Private method =============================
-bool Login::VerifyUser(QString& path, std::vector<uint8_t>& key) {
+bool Login::VerifyUser(QString& path) {
    path = "";
    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
    db.setDatabaseName(MAIN_DB_PATH);
@@ -56,8 +61,6 @@ bool Login::VerifyUser(QString& path, std::vector<uint8_t>& key) {
    }
 
    db.close();
-
-  key = hash::Hash::GetKey(password_,username_);
 
    return true;
  }

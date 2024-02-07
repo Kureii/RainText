@@ -18,10 +18,11 @@ class Login {
 public:
   Login(QString username, QString password);
 
-  bool IsLoginSusccessful(QString &path, std::vector<uint8_t> &key);
+  bool IsLoginSusccessful(QString &path);
+  std::vector<uint8_t> GetKey();
 
 private:
-  bool VerifyUser(QString &path, std::vector<uint8_t> &key);
+  bool VerifyUser(QString &path);
 };
 
 
