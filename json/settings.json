@@ -23,7 +23,8 @@
         "registerLoginSwapButtonBorderColor" : "#ECDFD4",
         "registerLoginSwapButtonFillColor" : "#00ECDFD4",
         "registerLoginSwapButtonFillHoveredColor" : "#11D1C7BE",
-        "registerLoginSwapButtonFillPressedColor" : "#33ECDED3"
+        "registerLoginSwapButtonFillPressedColor" : "#33ECDED3",
+        "loadProgressBarBackground" : "#c3b9af"
       },
       "Rain Text dark": {
         "primaryColor": "#FF9800",
