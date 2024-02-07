@@ -127,7 +127,6 @@ ApplicationWindow {
             mainWindow.color = appColors["drawerBackgroundColor"]
             mainWindow.title = title
             mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
-            loadDbScreen.value = 1
         }
     }
 }
