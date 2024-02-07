@@ -6,10 +6,15 @@
 #pragma once
 
 #include <QObject>
+#include <QFutureWatcher>
+#include "RainText/record_list_model.hpp"
+#include "RainText/structs.hpp"
+
 namespace rain_text::gui {
 
 class LoginRegisterManager : public QObject {
   Q_OBJECT
+  Q_PROPERTY(model::RecordListModel* recordListModel READ recordListModel NOTIFY recordListModelChanged)
  public:
   explicit LoginRegisterManager(QObject *parent = nullptr);
 
@@ -23,14 +28,26 @@ class LoginRegisterManager : public QObject {
 
   Q_INVOKABLE float PasswordStrength(const QString &password);
 
+  model::RecordListModel* recordListModel() const {
+    return m_recordListModel_;
+  }
  private:
   std::string state_;
+  QFutureWatcher<void> watcher_;
+  model::RecordListModel *m_recordListModel_;
+
  signals:
+  void recordListModelChanged();
   void registrationComplete();
   void loginComplete();
   void errorOccurred(const QString &error);
   void loadDb(const QString &title);
-  void updateLoadDbProgress(float &progress);
+  void updateLoadDbProgress(float progress, const QString &message);
+  void newItem(RecordItem item);
+
+  public slots:
+    void onAsyncOperationFinished();
+    void handleNewItem(RecordItem item);
 };
 
 }  // namespace rain_text::gui
