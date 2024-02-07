@@ -63,7 +63,7 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
 
             // Get key and database records
             auto key = login->GetKey();
-            auto userDb = std::make_shared<UserDb>(key, path);
+            auto userDb = std::make_unique<UserDb>(path);
             auto records = userDb->GetAllRecords();
 
             if (records.empty()) {
