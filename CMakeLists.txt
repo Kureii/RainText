@@ -62,6 +62,7 @@ target_link_libraries(${PROJECT_NAME}
         sha3lib::sha3
         scryptlib::scrypt
         argon2lib::argon2
+        RainTextCore
 )
 
 
