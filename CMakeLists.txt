@@ -9,6 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 add_definitions(-DMAIN_DB_PATH=\"./database/main.db\")
+add_definitions(-DMAX_THREADS=8)
 
 find_package(Qt6 COMPONENTS
         Core
