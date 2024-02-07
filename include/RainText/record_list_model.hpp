@@ -7,14 +7,11 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include "RainText/structs.hpp"
 
 namespace rain_text::model {
 
-struct RecordItem {
-  QString headlineText;
-  QString usernameText;
-  QString passwordText;
-};
+
 
 class RecordListModel : public QAbstractListModel {
   Q_OBJECT
