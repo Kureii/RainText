@@ -13,6 +13,7 @@ set(raintext_another_headers
         ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/user_db.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/structs.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/encrypt_decrypt.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/RainText/enrollment_manager.hpp
 )
 
 
