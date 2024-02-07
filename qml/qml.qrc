@@ -12,5 +12,6 @@
         <file>PasswordRecordListItem.qml</file>
         <file>IconButton.qml</file>
         <file>FlatButton.qml</file>
+        <file>LoadDbScreen.qml</file>
     </qresource>
 </RCC>
