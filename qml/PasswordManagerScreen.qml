@@ -403,7 +403,7 @@ Rectangle {
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
 
                 onClicked: {
-                    recordListModel.addRecordItem(formHeadlineField.text, formUsernameField.text, formPasswordField.text)
+                    login_register_manager.recordListModel.addRecordItem(formHeadlineField.text, formUsernameField.text, formPasswordField.text)
                     bottomDrawer.close();
                     formHeadlineField.text = "";
                     formUsernameField.text = "";
@@ -412,11 +412,8 @@ Rectangle {
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Enter) {
-                        passwordListModel.append({
-                            headlineText: formHeadlineField.text,
-                            usernameText: formUsernameField.text,
-                            passwordText: formPasswordField.text
-                        })
+                        login_register_manager.recordListModel.addRecordItem(formHeadlineField.text,formUsernameField.text,formPasswordField.text)
+
                         bottomDrawer.close();
                         formHeadlineField.text = "";
                         formUsernameField.text = "";
@@ -786,7 +783,7 @@ Rectangle {
                 enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
 
                 onClicked: {
-                    recordListModel.editRecordItem(editDrawer.index, editFormHeadlineField.text, editFormUsernameField.text, editFormPasswordField.text)
+                    login_register_manager.recordListModel.editRecordItem(editDrawer.index, editFormHeadlineField.text, editFormUsernameField.text, editFormPasswordField.text)
                     editDrawer.close()
                 }
 
@@ -811,7 +808,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.topMargin: 0
         anchors.bottomMargin: 0
-        model: recordListModel
+        model: login_register_manager.recordListModel
         anchors.horizontalCenter: parent.horizontalCenter
 
         delegate: PasswordRecordListItem {
@@ -835,15 +832,15 @@ Rectangle {
                 target: passwordRecordListItem
 
                 function onRequestDeletion(index) {
-                    recordListModel.removeRecordItem(index)
+                    login_register_manager.recordListModel.removeRecordItem(index)
                 }
 
                 function onRequestMoveUp(index) {
-                    recordListModel.moveRecordItem(index, index - 1, 1)
+                    login_register_manager.recordListModel.moveRecordItem(index, index - 1, 1)
                 }
 
                 function onRequestMoveDown(index) {
-                    recordListModel.moveRecordItem(index, index + 1, 1)
+                    login_register_manager.recordListModel.moveRecordItem(index, index + 1, 1)
                 }
 
                 function onRequestEdit(index, headline, username, password) {
