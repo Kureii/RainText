@@ -11,16 +11,16 @@
 namespace rain_text {
 
 struct EncryptedRecordItem {
-  std::vector<uint8_t> encryptedHeadline{};
-  std::vector<uint8_t> encryptedUsername{};
-  std::vector<uint8_t> encryptedPassword{};
-  int iterations{};
+  std::vector<uint8_t> encryptedHeadline;
+  std::vector<uint8_t> encryptedUsername;
+  std::vector<uint8_t> encryptedPassword;
+  int iterations;
 };
 
 struct RecordItem {
-  QString headlineText{};
-  QString usernameText{};
-  QString passwordText{};
+  QString headlineText;
+  QString usernameText;
+  QString passwordText;
 };
 
 }  // namespace rain_text

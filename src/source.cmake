@@ -11,6 +11,8 @@ set(another_sources
         ${CMAKE_CURRENT_SOURCE_DIR}/src/login.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/record_list_model.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/user_db.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/encrypt_decrypt.cpp
+
 
 )
 

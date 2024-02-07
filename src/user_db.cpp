@@ -8,7 +8,6 @@
 #include <QFile>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
-#include "core/rain_text_core.h"
 //================================= Namespace ==================================
 namespace rain_text {
 //================================= Public method ==============================
@@ -60,27 +59,6 @@ std::vector<EncryptedRecordItem> UserDb::GetAllRecords() {
   return items;
 }
 
-model::RecordItem UserDb::DecryptRecordItem(EncryptedRecordItem &eItem) {
-  model::RecordItem item;
-  auto RTCore = std::make_unique<rain_text_core::RainTextCore>(static_cast<uint16_t>(eItem.iterations),key_, eItem.encryptedHeadline);
-  std::vector<uint8_t> output;
-
-  // Decrypt headline
-  RTCore->Decrypt(output);
-  item.headlineText = QString::fromUtf8(reinterpret_cast<const char*>(output.data()), output.size());
-
-  // Decrypt username
-  RTCore->SetText(eItem.encryptedUsername);
-  RTCore->Decrypt(output);
-  item.usernameText = QString::fromUtf8(reinterpret_cast<const char*>(output.data()), output.size());
-
-  // Decrypt password
-  RTCore->SetText(eItem.encryptedPassword);
-  RTCore->Decrypt(output);
-  item.passwordText = QString::fromUtf8(reinterpret_cast<const char*>(output.data()), output.size());
-
-  return item;
-}
 
 
 //================================= Testing method =============================
@@ -106,8 +84,8 @@ bool UserDb::CreateTbale(QSqlDatabase& db) {
       "id INTEGER PRIMARY KEY AUTOINCREMENT, "
       "headline BLOB, "
       "username BLOB, "
-      "password BLOB),"
-      "iterations INTEGER");
+      "password BLOB,"
+      "iterations INTEGER)");
 
   if (!success) {
     qDebug() << "Cannot create table:" << query.lastError().text();
