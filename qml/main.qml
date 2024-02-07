@@ -83,7 +83,7 @@ ApplicationWindow {
         textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
         progressBarBackground: mainWindow.hasColorError ? "#c3b9af" : appColors["loadProgressBarBackground"]
         progressBarForeground: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
-        text: "test"
+        text: ""
         value: 0.5
 
         onValueChanged: {
@@ -127,6 +127,10 @@ ApplicationWindow {
             mainWindow.color = appColors["drawerBackgroundColor"]
             mainWindow.title = title
             mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
+        }
+        function onUpdateLoadDbProgress(progress, mes) {
+            loadDbScreen.text = mes;
+            loadDbScreen.value = progress;
         }
     }
 }
