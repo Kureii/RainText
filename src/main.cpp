@@ -21,13 +21,13 @@ int main(int argc, char* argv[]) {
     app.setFont(QFont(family));
   }
 
-  qmlRegisterType<rain_text::model::RecordListModel>("RainText.models", 0, 1, "RecordListModel");
 
   QQmlApplicationEngine engine;
   rain_text::gui::LoginRegisterManager login_register_manager;
   rain_text::gui::GeneratePassword generate_password;
   rain_text::gui::CopyToClipboard copy_to_clipboard;
   rain_text::settings::SettingLoader settings_manager;
+  rain_text::model::RecordListModel record_list_model;
 
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
   engine.rootContext()->setContextProperty("generate_password", &generate_password);
@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
   engine.rootContext()->setContextProperty("appColors", settings_manager.GetColors());
   engine.rootContext()->setContextProperty("appColorModes", settings_manager.GetColorModes());
   engine.rootContext()->setContextProperty("appCurrentColorMode", settings_manager.GetCurrentColorMode());
+  engine.rootContext()->setContextProperty("recordListModel", &record_list_model);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

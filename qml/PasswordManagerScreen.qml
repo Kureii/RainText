@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-import RainText.models
 
 Rectangle {
     id: passwordManagerScreen
@@ -812,10 +811,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.topMargin: 0
         anchors.bottomMargin: 0
-        model: RecordListModel {
-            id: recordListModel
-        }
-
+        model: recordListModel
         anchors.horizontalCenter: parent.horizontalCenter
 
         delegate: PasswordRecordListItem {
