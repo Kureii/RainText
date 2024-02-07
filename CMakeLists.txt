@@ -18,6 +18,7 @@ find_package(Qt6 COMPONENTS
         Widgets
         Svg
         Sql
+        Concurrent
         REQUIRED
 )
 
@@ -58,6 +59,7 @@ target_link_libraries(${PROJECT_NAME}
         PRIVATE Qt::Widgets
         PRIVATE Qt::Svg
         PRIVATE Qt::Sql
+        PRIVATE Qt6::Concurrent
         md5_lib
         sha3lib::sha3
         scryptlib::scrypt
