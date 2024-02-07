@@ -12,7 +12,7 @@ namespace rain_text {
 
 //================================= Public method ==============================
 RecordItem EncryptDecrypt::DecryptRecordItem(EncryptedRecordItem &eItem,
-                                             std::vector<uint8_t> &key) {
+                                             const std::vector<uint8_t> &key) {
   RecordItem item;
   auto RTCore = std::make_unique<rain_text_core::RainTextCore>(
       static_cast<uint16_t>(eItem.iterations), key, eItem.encryptedHeadline);
@@ -38,9 +38,8 @@ RecordItem EncryptDecrypt::DecryptRecordItem(EncryptedRecordItem &eItem,
   return item;
 }
 
-EncryptedRecordItem EncryptDecrypt::EncryptRecordItem(RecordItem &item,
-                                                      std::vector<uint8_t> &key,
-                                                      uint16_t iterations) {
+EncryptedRecordItem EncryptDecrypt::EncryptRecordItem(
+    RecordItem &item, const std::vector<uint8_t> &key, uint16_t iterations) {
   EncryptedRecordItem eItem;
   eItem.iterations = iterations;
   auto RTCore = std::make_unique<rain_text_core::RainTextCore>(
