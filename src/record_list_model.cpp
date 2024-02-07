@@ -10,25 +10,27 @@
 namespace rain_text::model {
 
 //================================= Public method ==============================
-RecordListModel::RecordListModel(QObject *parent)
-    : QAbstractListModel(parent) {
-}
+RecordListModel::RecordListModel(QObject* parent)
+    : QAbstractListModel(parent) {}
 
-int RecordListModel::rowCount(const QModelIndex &parent) const {
+int RecordListModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
   return m_items.count();
 }
 
-QVariant RecordListModel::data(const QModelIndex &index, int role) const {
-  if (index.row() < 0 || index.row() >= m_items.count())
-    return QVariant();
+QVariant RecordListModel::data(const QModelIndex& index, int role) const {
+  if (index.row() < 0 || index.row() >= m_items.count()) return QVariant();
 
-  const RecordItem &item = m_items[index.row()];
+  const RecordItem& item = m_items[index.row()];
   switch (role) {
-    case HeadlineRole: return item.headlineText;
-    case UsernameRole: return item.usernameText;
-    case PasswordRole: return item.passwordText;
-    default: return QVariant();
+    case HeadlineRole:
+      return item.headlineText;
+    case UsernameRole:
+      return item.usernameText;
+    case PasswordRole:
+      return item.passwordText;
+    default:
+      return QVariant();
   }
 }
 
@@ -40,20 +42,21 @@ QHash<int, QByteArray> RecordListModel::roleNames() const {
   return roles;
 }
 
-void RecordListModel::addRecordItem(const RecordItem &item) {
+void RecordListModel::addRecordItem(const RecordItem& item) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
   m_items << item;
   endInsertRows();
 }
 
-void RecordListModel::addRecordItem(const QString& headline, const QString& username, const QString& password) {
+void RecordListModel::addRecordItem(const QString& headline,
+                                    const QString& username,
+                                    const QString& password) {
   auto item = RecordItem{headline, username, password};
   addRecordItem(item);
 }
 
 void RecordListModel::removeRecordItem(int index) {
-  if (index < 0 || index >= m_items.size())
-    return;
+  if (index < 0 || index >= m_items.size()) return;
 
   beginRemoveRows(QModelIndex(), index, index);
   m_items.removeAt(index);
@@ -61,24 +64,28 @@ void RecordListModel::removeRecordItem(int index) {
 }
 
 void RecordListModel::moveRecordItem(int fromIndex, int toIndex) {
-  if (fromIndex < 0 || fromIndex >= m_items.size() || toIndex < 0 || toIndex >= m_items.size() || fromIndex == toIndex)
+  if (fromIndex < 0 || fromIndex >= m_items.size() || toIndex < 0 ||
+      toIndex >= m_items.size() || fromIndex == toIndex)
     return;
 
-  beginMoveRows(QModelIndex(), fromIndex, fromIndex, QModelIndex(), toIndex > fromIndex ? toIndex + 1 : toIndex);
+  beginMoveRows(QModelIndex(), fromIndex, fromIndex, QModelIndex(),
+                toIndex > fromIndex ? toIndex + 1 : toIndex);
   m_items.move(fromIndex, toIndex);
   endMoveRows();
 }
 
-void RecordListModel::editRecordItem(int index, const QString& headline, const QString& username, const QString& password) {
-  if (index < 0 || index >= m_items.size())
-    return;
+void RecordListModel::editRecordItem(int index, const QString& headline,
+                                     const QString& username,
+                                     const QString& password) {
+  if (index < 0 || index >= m_items.size()) return;
 
   RecordItem& item = m_items[index];
   item.headlineText = headline;
   item.usernameText = username;
   item.passwordText = password;
 
-  emit dataChanged(this->index(index), this->index(index), {HeadlineRole, UsernameRole, PasswordRole});
+  emit dataChanged(this->index(index), this->index(index),
+                   {HeadlineRole, UsernameRole, PasswordRole});
 }
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
