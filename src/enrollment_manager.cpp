@@ -6,7 +6,6 @@
 #include "RainText/enrollment_manager.hpp"
 
 #include <qtconcurrentrun.h>
-
 #include <QFutureWatcher>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
@@ -25,7 +24,6 @@ EnrollmentManager::EnrollmentManager(QString &path, std::vector<uint8_t> &key,
 
 //================================= Protected method ===========================
 void EnrollmentManager::run() {
-  qDebug("run thread");
   QSqlDatabase db;
   if (!QSqlDatabase::contains("User")) {
     db = QSqlDatabase::addDatabase("QSQLITE", "User");
@@ -35,7 +33,7 @@ void EnrollmentManager::run() {
   }
 
   if (!db.open()) {
-    qDebug() << "Cannot open database:" << db.lastError().text();
+    qWarning() << "Cannot open database:" << db.lastError().text();
   }
 
   QSqlQuery query(db);
@@ -127,26 +125,20 @@ void EnrollmentManager::run() {
 //================================= Public slots ===============================
 void EnrollmentManager::addRecords(const QList<RecordItem> &listModel,
                                    int iterations) {
-  qDebug() << "Add records from thread";
-  {
     QMutexLocker locker(&mutex_);
     data_ = listModel;
     iterations_ = iterations;
     condition_.notify_one();
-  }
-  qDebug() << "Add records from end";
 }
 
 void EnrollmentManager::terminate(const QList<RecordItem> &listModel,
                                   int iterations) {
-  {
     QMutexLocker locker(&mutex_);
     terminate_ = true;
     data_ = listModel;
     iterations_ = iterations;
     condition_.notify_one();
     wait();
-  }
 }
 
 //================================= Testing method =============================
