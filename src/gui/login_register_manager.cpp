@@ -64,7 +64,7 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
     if (login->IsLoginSusccessful(path)) {
       path_ = path;
       emit loadDb(username);
-      auto future = asyncDecryptRecords(path, std::move(login));
+      auto future = getKey(path, std::move(login));
       watcher_.setFuture(future);
     } else {
       QString msg = "";
@@ -176,39 +176,50 @@ void LoginRegisterManager::startEnrollmentThread() {
   enrollmentManager = new EnrollmentManager(path, key);
   enrollmentManager->moveToThread(enrollmentManagerThread);
 
-  auto success = connect(enrollmentManagerThread, &QThread::started, enrollmentManager,
-          &EnrollmentManager::run);
+  auto success = connect(enrollmentManagerThread, &QThread::started,
+                         enrollmentManager, &EnrollmentManager::run);
   if (!success) {
-    qWarning() << "Error: connect(enrollmentManagerThread, &QThread::started, enrollmentManager, &EnrollmentManager::run)";
+    qWarning() << "Error: connect(enrollmentManagerThread, &QThread::started, "
+                  "enrollmentManager, &EnrollmentManager::run)";
   }
 
-  success = connect(this, &LoginRegisterManager::terminateThread, enrollmentManager,
-          &EnrollmentManager::terminate, Qt::DirectConnection);
+  success =
+      connect(this, &LoginRegisterManager::terminateThread, enrollmentManager,
+              &EnrollmentManager::terminate, Qt::DirectConnection);
   if (!success) {
-    qWarning() << "Error: connect(this, &LoginRegisterManager::terminateThread, enrollmentManager, &EnrollmentManager::terminate, Qt::DirectConnection)";
+    qWarning() << "Error: connect(this, "
+                  "&LoginRegisterManager::terminateThread, enrollmentManager, "
+                  "&EnrollmentManager::terminate, Qt::DirectConnection)";
   }
 
-
-  success = connect(enrollmentManagerThread, &QThread::finished, enrollmentManager,
-          &QObject::deleteLater);
+  success = connect(enrollmentManagerThread, &QThread::finished,
+                    enrollmentManager, &QObject::deleteLater);
   if (!success) {
-    qWarning() << "Error: connect(enrollmentManagerThread, &QThread::finished, enrollmentManager, &QObject::deleteLater)";
+    qWarning() << "Error: connect(enrollmentManagerThread, &QThread::finished, "
+                  "enrollmentManager, &QObject::deleteLater)";
   }
 
-  success = connect(enrollmentManager, &EnrollmentManager::finished, m_recordListModel_,
-          &model::RecordListModel::savingFinished);
+  success =
+      connect(enrollmentManager, &EnrollmentManager::finished,
+              m_recordListModel_, &model::RecordListModel::savingFinished);
   if (!success) {
-    qWarning() << "Error: connect(enrollmentManager, &EnrollmentManager::finished, m_recordListModel_, &model::RecordListModel::savingFinished)";
+    qWarning()
+        << "Error: connect(enrollmentManager, &EnrollmentManager::finished, "
+           "m_recordListModel_, &model::RecordListModel::savingFinished)";
   }
 
-  connect(m_recordListModel_, &model::RecordListModel::saveChanges, this, [this](const QList<RecordItem> &listModel, int iterations) {
-    qDebug() << "Lambda function received saveChanges signal.";
-    enrollmentManager->addRecords(listModel, iterations);
-}, Qt::QueuedConnection);
+  connect(
+      m_recordListModel_, &model::RecordListModel::saveChanges, this,
+      [this](const QList<RecordItem> &listModel, int iterations) {
+        qDebug() << "Lambda function received saveChanges signal.";
+        enrollmentManager->addRecords(listModel, iterations);
+      },
+      Qt::QueuedConnection);
 
-  /*success = connect(m_recordListModel_, &model::RecordListModel::saveChanges, enrollmentManager, &EnrollmentManager::addRecords);
-  if (!success) {
-    qWarning() << "Error: connect(m_recordListModel_, &model::RecordListModel::saveChanges, enrollmentManager, &EnrollmentManager::addRecords)";
+  /*success = connect(m_recordListModel_, &model::RecordListModel::saveChanges,
+  enrollmentManager, &EnrollmentManager::addRecords); if (!success) { qWarning()
+  << "Error: connect(m_recordListModel_, &model::RecordListModel::saveChanges,
+  enrollmentManager, &EnrollmentManager::addRecords)";
   }*/
 
   enrollmentManagerThread->start();
@@ -216,59 +227,85 @@ void LoginRegisterManager::startEnrollmentThread() {
   qDebug() << "RecordListModel thread:" << m_recordListModel_->thread();
   qDebug() << "EnrollmentManager thread:" << enrollmentManager->thread();
   qDebug() << "Current thread:" << QThread::currentThread();
-
 }
-QFuture<void> LoginRegisterManager::asyncDecryptRecords(
-  QString &path, std::unique_ptr<register_login::Login> login) {
-  QFuture<void> future =
-      QtConcurrent::run([this, path, login = std::move(login)]() mutable {
-        QString mes = "Generate key";
-        float progress = 0.01f;
-        emit updateLoadDbProgress(progress, mes);
 
-        auto key = login->GetKey();
-        emit setNewKey(key);
-        auto userDb = std::make_unique<UserDb>(path);
-        auto records = userDb->GetAllRecords();
+QFuture<void> LoginRegisterManager::getKey(QString path,
+    std::unique_ptr<register_login::Login> login) {
+  QString mes = "Generate key";
+  float progress = 0.01f;
+  emit updateLoadDbProgress(progress, mes);
 
-        if (records.empty()) {
-          qDebug() << "records are empty";
-          return;
-        }
-        qDebug() << "records are not empty";
 
-        iterations_ = records[0].iterations;
+  return QtConcurrent::run([this,path, login = std::move(login)]() {
+    auto key = login->GetKey();
+    QMetaObject::invokeMethod(this, [this, key]() {
+            emit setNewKey(key);
+        }, Qt::QueuedConnection);
+    prepareForDecrypt(path).waitForFinished();
+  });
+}
 
-        qDebug() << "getting iterations";
-        auto updateProgressAndEmitItem = [this](const RecordItem &item,
-                                                int index, int total) {
-          float progress = static_cast<float>(index + 1) / total;
-          emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
-          emit newItem(item);
-        };
-        qDebug() << "prepared update";
+QFuture<void> LoginRegisterManager::prepareForDecrypt(
+    QString path) {
+  return QtConcurrent::run([this, path]() mutable {
+    float progress = 0.01f;
 
-        size_t totalRecords = records.size();
-        float progressIncrement = 1.0f / totalRecords;
-        qDebug() << "create watchers";
-        QVector<QFutureWatcher<RecordItem> *> watchers; // Možná stále potřebuješ udržet odkazy, ale pozor na správu paměti
+    auto userDb = std::make_unique<UserDb>(path);
+    auto records = userDb->GetAllRecords();
 
-        for (int i = 0; i < records.size(); ++i) {
-            auto watcher = new QFutureWatcher<RecordItem>();
-            connect(watcher, &QFutureWatcher<RecordItem>::finished, this,
-                    [watcher, this, i, totalRecords]() {
-                        auto item = watcher->result();
-                        watcher->deleteLater();
-                    });
-            auto record = records[i];
-            QFuture<RecordItem> future = QtConcurrent::run([=, &key]() {
-                auto copaRecord= record;
-                return EncryptDecrypt::DecryptRecordItem(copaRecord, key);
-            });
-            watcher->setFuture(future);
-        }
-      });
-  return future;
+    if (records.empty()) {
+      qDebug() << "records are empty";
+      return;
+    }
+    qDebug() << "records are not empty";
+
+    iterations_ = records[0].iterations;
+    auto iterations = iterations_;
+
+    qDebug() << "getting iterations, number of records: " << records.size();
+
+    size_t totalRecords = records.size();
+    qDebug() << "create watchers";
+
+    QVector<QFuture<RecordItem>> futures;
+
+    for (auto i = 0; i < totalRecords; ++i) {
+      auto record = records[i];
+      qDebug() << "create future for decrypt";
+      QFuture<RecordItem> future = asyncDecrypt(record, totalRecords, progress);
+      futures.append(future);
+    }
+
+    qDebug() << "wait for finish";
+
+    for (auto &future : futures) {
+      future.waitForFinished();
+      auto item = future.result();
+      emit newItem(item);
+    }
+  });
+}
+
+QFuture<RecordItem> LoginRegisterManager::asyncDecrypt(
+    EncryptedRecordItem eItem, size_t totalRecords, float progress) {
+  return QtConcurrent::run([this, eItem, progress, totalRecords]()mutable ->RecordItem {
+    std::vector<uint8_t> key;
+    qDebug() << "Ill get key in asyncDecrypt";
+    {
+      QMutexLocker locker(&progressMutex_);
+      key = key_;
+    }
+    qDebug() << "decrypting";
+    auto item = EncryptDecrypt::DecryptRecordItem(eItem, key);
+    {
+      qDebug() << "Ill update progress";
+      QMutexLocker locker(&progressMutex_);
+      progress += 1.0f / totalRecords;
+    }
+    qDebug() << "updateProgressAndEmitItem lambda";
+    emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
+    return item;
+  });
 }
 
 //================================= End namespace ==============================

@@ -37,6 +37,7 @@ public:
 private:
   std::string state_;
   QFutureWatcher<void> watcher_;
+  QMutex progressMutex_;
   model::RecordListModel *m_recordListModel_;
   EnrollmentManager* pEnrollmentManager_;
   std::vector<uint8_t> key_;
@@ -46,7 +47,9 @@ private:
   QString path_;
 
   void startEnrollmentThread();
-  QFuture<void> asyncDecryptRecords(QString &path, std::unique_ptr<register_login::Login> login);
+  QFuture<void> getKey(QString path, std::unique_ptr<register_login::Login> login);
+  QFuture<void> prepareForDecrypt(QString path);
+  QFuture<RecordItem> asyncDecrypt(EncryptedRecordItem eItem, size_t totalRecords, float progress);
 
 signals:
   void recordListModelChanged();
