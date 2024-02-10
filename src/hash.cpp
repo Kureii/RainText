@@ -56,7 +56,7 @@ std::vector<uint8_t> Hash::GetKey(QString password, QString username) {
   uint8_t pre_result[1024];
   libscrypt_scrypt(reinterpret_cast<const uint8_t*>(data.data()), data.size(),
                    pre_salt, 64, 131072, 16, 1, salt, 64);
-  argon2id_hash_raw(7, 1 << 18, 2, password.data(), password.size(), salt, 64,
+  argon2id_hash_raw(7, 1 << 18, 6, password.data(), password.size(), salt, 64,
                     pre_result, 1024);
   std::vector<uint8_t> result;
   for (auto& i : pre_result) {
