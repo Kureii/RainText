@@ -12,14 +12,24 @@
 namespace rain_text {
 //================================= Public method ==============================
 UserDb::UserDb(const QString& path)
-    : path_(path) {}
+    : path_(path) {
+  bool dbExist = DbExist();
+  auto db = GetDb();
+  if (!db.open()) {
+    qWarning() << "Cannot open database:" << db.lastError().text();
+    // emit error
+  }
+  if (!CreateTbale(db)) {
+    // emit error
+  }
+}
 
 std::vector<EncryptedRecordItem> UserDb::GetAllRecords() {
   std::vector<EncryptedRecordItem> items;
   bool dbExist = DbExist();
   auto db = GetDb();
   if (!db.open()) {
-    qDebug() << "Cannot open database:" << db.lastError().text();
+    qWarning() << "Cannot open database:" << db.lastError().text();
     // emit error
     return items;
   }
@@ -32,7 +42,7 @@ std::vector<EncryptedRecordItem> UserDb::GetAllRecords() {
   QSqlQuery query(db);
   if (!query.exec(
           "SELECT headline, username, password, iterations FROM data")) {
-    qDebug() << "Load data error:" << query.lastError().text();
+      qWarning() << "Load data error:" << query.lastError().text();
     // emit error
     return items;
   }
@@ -88,7 +98,7 @@ bool UserDb::CreateTbale(QSqlDatabase& db) {
       "iterations INTEGER)");
 
   if (!success) {
-    qDebug() << "Cannot create table:" << query.lastError().text();
+    qWarning() << "Cannot create table:" << query.lastError().text();
     return false;
   }
 
