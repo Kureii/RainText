@@ -45,7 +45,6 @@ QHash<int, QByteArray> RecordListModel::roleNames() const {
 void RecordListModel::addRecordItem(const RecordItem& item) {
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
   m_items << item;
-  qDebug() << "add item from db";
   endInsertRows();
 }
 
@@ -53,10 +52,8 @@ void RecordListModel::addRecordItem(const QString& headline,
                                     const QString& username,
                                     const QString& password,
                                     const int iterations) {
-  qDebug() << "adding record from model";
   auto item = RecordItem{headline, username, password};
   addRecordItem(item);
-  qDebug() << "emit saveChanges";
   emit saveChanges(m_items, iterations);
 }
 

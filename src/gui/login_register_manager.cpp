@@ -75,7 +75,6 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
         std::make_unique<register_login::Register>(username, password);
     if (registration->IsRegisterSusccessful(path)) {
       auto printPath = path.toStdString();
-      qDebug(printPath.data());
       emit loadDb(username);
       /*auto userDb = UserDb(key, path);
       progress = 1;
@@ -145,7 +144,6 @@ float LoginRegisterManager::PasswordStrength(const QString &password) {
 void LoginRegisterManager::onAsyncOperationFinished() {
   QString msg = QString("Done");
   float progress = 1.0f;
-  qDebug("Done message");
   emit updateLoadDbProgress(progress, msg);
   startEnrollmentThread();
 }
@@ -254,29 +252,21 @@ QFuture<void> LoginRegisterManager::prepareForDecrypt(
     auto records = userDb->GetAllRecords();
 
     if (records.empty()) {
-      qDebug() << "records are empty";
       return;
     }
-    qDebug() << "records are not empty";
 
     iterations_ = records[0].iterations;
     auto iterations = iterations_;
 
-    qDebug() << "getting iterations, number of records: " << records.size();
-
     size_t totalRecords = records.size();
-    qDebug() << "create watchers";
 
     QVector<QFuture<RecordItem>> futures;
 
     for (auto i = 0; i < totalRecords; ++i) {
       auto record = records[i];
-      qDebug() << "create future for decrypt";
       QFuture<RecordItem> future = asyncDecrypt(record, totalRecords, progress);
       futures.append(future);
     }
-
-    qDebug() << "wait for finish";
 
     for (auto &future : futures) {
       future.waitForFinished();
@@ -290,19 +280,15 @@ QFuture<RecordItem> LoginRegisterManager::asyncDecrypt(
     EncryptedRecordItem eItem, size_t totalRecords, float progress) {
   return QtConcurrent::run([this, eItem, progress, totalRecords]()mutable ->RecordItem {
     std::vector<uint8_t> key;
-    qDebug() << "Ill get key in asyncDecrypt";
     {
       QMutexLocker locker(&progressMutex_);
       key = key_;
     }
-    qDebug() << "decrypting";
     auto item = EncryptDecrypt::DecryptRecordItem(eItem, key);
     {
-      qDebug() << "Ill update progress";
       QMutexLocker locker(&progressMutex_);
       progress += 1.0f / totalRecords;
     }
-    qDebug() << "updateProgressAndEmitItem lambda";
     emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
     return item;
   });
