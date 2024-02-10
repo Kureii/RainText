@@ -76,10 +76,12 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
     if (registration->IsRegisterSusccessful(path)) {
       auto printPath = path.toStdString();
       emit loadDb(username);
-      /*auto userDb = UserDb(key, path);
-      progress = 1;
-      mes = "Done";
-      emit updateLoadDbProgress(progress, mes);*/
+      auto future =
+          QtConcurrent::run([this, registration = std::move(registration)]() {
+            auto key = registration->GetKey();
+            emit setNewKey(key);
+          });
+      watcher_.setFuture(future);
     } else {
       QString msg = "";
       emit registerError(msg);
@@ -209,42 +211,27 @@ void LoginRegisterManager::startEnrollmentThread() {
   connect(
       m_recordListModel_, &model::RecordListModel::saveChanges, this,
       [this](const QList<RecordItem> &listModel, int iterations) {
-        qDebug() << "Lambda function received saveChanges signal.";
         enrollmentManager->addRecords(listModel, iterations);
       },
       Qt::QueuedConnection);
-
-  /*success = connect(m_recordListModel_, &model::RecordListModel::saveChanges,
-  enrollmentManager, &EnrollmentManager::addRecords); if (!success) { qWarning()
-  << "Error: connect(m_recordListModel_, &model::RecordListModel::saveChanges,
-  enrollmentManager, &EnrollmentManager::addRecords)";
-  }*/
-
   enrollmentManagerThread->start();
-
-  qDebug() << "RecordListModel thread:" << m_recordListModel_->thread();
-  qDebug() << "EnrollmentManager thread:" << enrollmentManager->thread();
-  qDebug() << "Current thread:" << QThread::currentThread();
 }
 
-QFuture<void> LoginRegisterManager::getKey(QString path,
-    std::unique_ptr<register_login::Login> login) {
+QFuture<void> LoginRegisterManager::getKey(
+    QString path, std::unique_ptr<register_login::Login> login) {
   QString mes = "Generate key";
   float progress = 0.01f;
   emit updateLoadDbProgress(progress, mes);
 
-
-  return QtConcurrent::run([this,path, login = std::move(login)]() {
+  return QtConcurrent::run([this, path, login = std::move(login)]() {
     auto key = login->GetKey();
-    QMetaObject::invokeMethod(this, [this, key]() {
-            emit setNewKey(key);
-        }, Qt::QueuedConnection);
+    QMetaObject::invokeMethod(
+        this, [this, key]() { emit setNewKey(key); }, Qt::QueuedConnection);
     prepareForDecrypt(path).waitForFinished();
   });
 }
 
-QFuture<void> LoginRegisterManager::prepareForDecrypt(
-    QString path) {
+QFuture<void> LoginRegisterManager::prepareForDecrypt(QString path) {
   return QtConcurrent::run([this, path]() mutable {
     float progress = 0.01f;
 
@@ -278,20 +265,21 @@ QFuture<void> LoginRegisterManager::prepareForDecrypt(
 
 QFuture<RecordItem> LoginRegisterManager::asyncDecrypt(
     EncryptedRecordItem eItem, size_t totalRecords, float progress) {
-  return QtConcurrent::run([this, eItem, progress, totalRecords]()mutable ->RecordItem {
-    std::vector<uint8_t> key;
-    {
-      QMutexLocker locker(&progressMutex_);
-      key = key_;
-    }
-    auto item = EncryptDecrypt::DecryptRecordItem(eItem, key);
-    {
-      QMutexLocker locker(&progressMutex_);
-      progress += 1.0f / totalRecords;
-    }
-    emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
-    return item;
-  });
+  return QtConcurrent::run(
+      [this, eItem, progress, totalRecords]() mutable -> RecordItem {
+        std::vector<uint8_t> key;
+        {
+          QMutexLocker locker(&progressMutex_);
+          key = key_;
+        }
+        auto item = EncryptDecrypt::DecryptRecordItem(eItem, key);
+        {
+          QMutexLocker locker(&progressMutex_);
+          progress += 1.0f / totalRecords;
+        }
+        emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
+        return item;
+      });
 }
 
 //================================= End namespace ==============================
