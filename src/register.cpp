@@ -19,6 +19,7 @@ namespace rain_text::register_login {
 //================================= Public method ==============================
 Register::Register(QString username, QString password)
     : username_(username), password_(password) {}
+
 bool Register::IsRegisterSusccessful(QString& path) {
   path = CreateUser(username_, password_);
   if (path.isEmpty()) {
@@ -27,6 +28,11 @@ bool Register::IsRegisterSusccessful(QString& path) {
     return true;
   }
 }
+
+std::vector<uint8_t> Register::GetKey() {
+  return hash::Hash::GetKey(password_, username_);
+}
+
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS

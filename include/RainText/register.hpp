@@ -20,6 +20,7 @@ public:
   Register(QString username, QString password);
 
   bool IsRegisterSusccessful(QString &path);
+  std::vector<uint8_t> GetKey();
 
 private:
   QString CreateUser(const QString& username, const QString& password);
