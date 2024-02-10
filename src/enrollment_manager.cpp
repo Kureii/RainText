@@ -44,12 +44,10 @@ void EnrollmentManager::run() {
   QThreadPool pool;
   pool.setMaxThreadCount(MAX_THREADS - 2);
   while (!terminate_) {
-    qDebug() << "waiting in thread";
     {
       QMutexLocker locker(&mutex_);
       condition_.wait(locker.mutex());
     }
-    qDebug() << "mutex lock";
     if (!db.transaction()) {
       qWarning() << "Failed to start transaction:" << db.lastError();
       continue;
@@ -59,9 +57,7 @@ void EnrollmentManager::run() {
     auto data = data_;
     auto iterations = iterations_;
     auto key = key_;
-    qDebug() << "I get data!";
     if(data.empty()) {
-      qDebug() << "data empty";
       if (terminate_) break;
     }
 
@@ -123,10 +119,8 @@ void EnrollmentManager::run() {
       db.rollback();
     }
 
-    qDebug() << "Saving finished";
     if (terminate_) break;
   }
-  qDebug() << "ending thread";
   db.close();
 }
 
