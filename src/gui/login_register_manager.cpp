@@ -74,8 +74,9 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
     auto registration =
         std::make_unique<register_login::Register>(username, password);
     if (registration->IsRegisterSusccessful(path)) {
-      auto printPath = path.toStdString();
+      path_ = path;
       emit loadDb(username);
+      auto dbUser = std::make_unique<UserDb>(path);
       auto future =
           QtConcurrent::run([this, registration = std::move(registration)]() {
             auto key = registration->GetKey();
