@@ -29,13 +29,21 @@ public:
   QHash<int, QByteArray> roleNames() const override;
 
   void addRecordItem(const RecordItem &item);
-  Q_INVOKABLE void addRecordItem(const QString& headline, const QString& username, const QString& password);
-  Q_INVOKABLE void removeRecordItem(int index);
-  Q_INVOKABLE void moveRecordItem(int fromIndex, int toIndex);
-  Q_INVOKABLE void editRecordItem(int index, const QString& headline, const QString& username, const QString& password);
+  Q_INVOKABLE void addRecordItem(const QString& headline, const QString& username, const QString& password, const int iterations);
+  Q_INVOKABLE void removeRecordItem(int index, const int iterations);
+  Q_INVOKABLE void moveRecordItem(int fromIndex, int toIndex, const int iterations);
+  Q_INVOKABLE void editRecordItem(int index, const QString& headline, const QString& username, const QString& password, const int iterations);
 
+  [[nodiscard]] QList<RecordItem> GetList();
 private:
   QList<RecordItem> m_items;
+
+signals:
+  void saveChanges(const QList<RecordItem> &listModel, int iterations);
+  void savingComplete();
+
+public slots:
+  void savingFinished();
 };
 
 }

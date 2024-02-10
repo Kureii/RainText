@@ -132,7 +132,7 @@ Item {
                     }
 
                     IconButton {
-                        enabled: passwordListModel.count - 1 !== index
+                        enabled: login_register_manager.recordListModel.count - 1 !== index
                         text: ""
                         height: 18
                         image: "qrc:/images/arrow-down.svg"

@@ -403,7 +403,7 @@ Rectangle {
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
 
                 onClicked: {
-                    login_register_manager.recordListModel.addRecordItem(formHeadlineField.text, formUsernameField.text, formPasswordField.text)
+                    login_register_manager.recordListModel.addRecordItem(formHeadlineField.text, formUsernameField.text, formPasswordField.text, iterations.value)
                     bottomDrawer.close();
                     formHeadlineField.text = "";
                     formUsernameField.text = "";
@@ -412,7 +412,8 @@ Rectangle {
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Enter) {
-                        login_register_manager.recordListModel.addRecordItem(formHeadlineField.text,formUsernameField.text,formPasswordField.text)
+                        console.log("adding record")
+                        login_register_manager.recordListModel.addRecordItem(formHeadlineField.text,formUsernameField.text,formPasswordField.text, iterations.value)
 
                         bottomDrawer.close();
                         formHeadlineField.text = "";
@@ -783,7 +784,7 @@ Rectangle {
                 enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
 
                 onClicked: {
-                    login_register_manager.recordListModel.editRecordItem(editDrawer.index, editFormHeadlineField.text, editFormUsernameField.text, editFormPasswordField.text)
+                    login_register_manager.recordListModel.editRecordItem(editDrawer.index, editFormHeadlineField.text, editFormUsernameField.text, editFormPasswordField.text, iterations.value)
                     editDrawer.close()
                 }
 
@@ -832,15 +833,15 @@ Rectangle {
                 target: passwordRecordListItem
 
                 function onRequestDeletion(index) {
-                    login_register_manager.recordListModel.removeRecordItem(index)
+                    login_register_manager.recordListModel.removeRecordItem(index, iterations.value)
                 }
 
                 function onRequestMoveUp(index) {
-                    login_register_manager.recordListModel.moveRecordItem(index, index - 1, 1)
+                    login_register_manager.recordListModel.moveRecordItem(index, index - 1, 1, iterations.value)
                 }
 
                 function onRequestMoveDown(index) {
-                    login_register_manager.recordListModel.moveRecordItem(index, index + 1, 1)
+                    login_register_manager.recordListModel.moveRecordItem(index, index + 1, 1, iterations.value)
                 }
 
                 function onRequestEdit(index, headline, username, password) {
@@ -888,6 +889,7 @@ Rectangle {
             }
             ColumnLayout {
                 SizePicker {
+                    id: iterations
                     from: 3
                     to: 30
                     stepSize: 3

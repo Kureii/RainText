@@ -11,32 +11,34 @@
 #include <QWaitCondition>
 #include <vector>
 #include "RainText/structs.hpp"
+#include "RainText/record_list_model.hpp"
 
 namespace rain_text {
 
-class EnrollmentManager : public QObject {
+class EnrollmentManager : public QThread {
   Q_OBJECT
 
 public:
-  EnrollmentManager(QObject *parent = nullptr, QString path = "");
-  ~EnrollmentManager();
+  EnrollmentManager(QString &path, std::vector<uint8_t> &key, QThread *parent = nullptr);
 
-  void start(); // Funkce pro spuštění zpracování v samostatném vlákně
-  void stop();  // Funkce pro bezpečné ukončení vlákna
+  void run() override;
 
-  public slots:
-      void processRecords(QList<RecordItem> listModel, int iterations); // Slot pro zpracování záznamů
+public slots:
+  void addRecords(const QList<RecordItem> &listModel, int iterations);
+  void terminate(const QList<RecordItem> &listModel, int iterations);
 
-  signals:
-      void finished(); // Signál indikující ukončení zpracování
+signals:
+  void finished(); // Signál indikující ukončení zpracování
+  void stopEnrollmentManager();
 
 private:
-  QThread workerThread_;
   QMutex mutex_;
   QWaitCondition condition_;
-  bool stopRequested_ = false;
+  bool terminate_ = false;
   std::vector<uint8_t> key_;
   QString path_;
+  QList<RecordItem> data_;
+  int iterations_;
 };
 
 }  // namespace rain_text
