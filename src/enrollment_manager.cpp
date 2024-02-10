@@ -56,7 +56,21 @@ void EnrollmentManager::run() {
     auto iterations = iterations_;
     auto key = key_;
     if(data.empty()) {
+      qDebug() << "empty data";
+      query.exec("DELETE FROM data");
+
+
+      if (query.lastError().isValid()) {
+        qWarning() << "Failed to delete items:" << query.lastError().text();
+      }
+
+      if (!db.commit()) {
+        qWarning() << "Failed to commit transaction:" << db.lastError();
+        db.rollback();
+      }
+
       if (terminate_) break;
+      return;
     }
 
     QVector<QFuture<EncryptedRecordItem>> futures;
@@ -117,8 +131,10 @@ void EnrollmentManager::run() {
       db.rollback();
     }
 
+    qDebug() << "loop end";
     if (terminate_) break;
   }
+  qDebug() << "thread end";
   db.close();
 }
 
