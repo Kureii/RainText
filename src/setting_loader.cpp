@@ -28,6 +28,7 @@ QString SettingLoader::errorHeadline() const { return error_headline_; }
 QString SettingLoader::GetCurrentColorMode() const {
   return current_color_mode_;
 }
+int SettingLoader::GetIterations() const { return iterations_; }
 QJsonObject SettingLoader::GetColorModes() const { return color_modes_; }
 QJsonObject SettingLoader::GetColors() const { return colors_; }
 
@@ -68,6 +69,7 @@ void SettingLoader::LoadJsonFile() {
 
 void SettingLoader::LoadSettings() {
   LoadJsonFile();
+  iterations_ = json_data_["encryptIterations"].toInt();
 
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();

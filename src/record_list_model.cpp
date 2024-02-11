@@ -94,6 +94,10 @@ void RecordListModel::editRecordItem(int index, const QString& headline,
   emit saveChanges(m_items, iterations);
 }
 
+void RecordListModel::IterationsChanged(int iterations) {
+  emit saveChanges(m_items, iterations);
+}
+
 QList<RecordItem> RecordListModel::GetList() {
   return m_items;
 }

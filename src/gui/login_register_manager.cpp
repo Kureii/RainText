@@ -33,7 +33,8 @@ LoginRegisterManager::LoginRegisterManager(QObject *parent)
     : QObject(parent),
       m_recordListModel_(new model::RecordListModel(this)),
       enrollmentManagerThread(new QThread(this)),
-      enrollmentManager(nullptr) {
+      enrollmentManager(nullptr),
+      iterations_(15){
   state_ = LOGIN_STATE;
   connect(this, &LoginRegisterManager::newItem, this,
           &LoginRegisterManager::handleNewItem);
@@ -42,6 +43,10 @@ LoginRegisterManager::LoginRegisterManager(QObject *parent)
   connect(qApp, &QCoreApplication::aboutToQuit, this,
           &LoginRegisterManager::onAppQuit);
   QThreadPool::globalInstance()->setMaxThreadCount(MAX_THREADS);
+}
+
+void LoginRegisterManager::SetIterations(int iterations) {
+  iterations_ = iterations;
 }
 
 bool LoginRegisterManager::CheckFields(const QString &username,
@@ -75,6 +80,7 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
         std::make_unique<register_login::Register>(username, password);
     if (registration->IsRegisterSusccessful(path)) {
       path_ = path;
+
       emit loadDb(username);
       auto dbUser = std::make_unique<UserDb>(path);
       auto future =
@@ -143,6 +149,19 @@ float LoginRegisterManager::PasswordStrength(const QString &password) {
 
   return result <= 1 ? result : 1;
 }
+
+void LoginRegisterManager::IterationsChanged(float iterations) {
+  SetIterations(static_cast<int>(iterations));
+  m_recordListModel_->IterationsChanged(iterations_);
+}
+
+model::RecordListModel* LoginRegisterManager::recordListModel() const {
+  return m_recordListModel_;
+}
+
+int LoginRegisterManager::iterations() const {
+  return iterations_;
+}
 //================================= Public slots ===============================
 void LoginRegisterManager::onAsyncOperationFinished() {
   QString msg = QString("Done");
@@ -164,6 +183,9 @@ void LoginRegisterManager::onAppQuit() {
   enrollmentManagerThread->quit();
   enrollmentManagerThread->wait();
 }
+
+
+
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS

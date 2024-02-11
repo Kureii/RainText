@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
   rain_text::gui::GeneratePassword generate_password;
   rain_text::gui::CopyToClipboard copy_to_clipboard;
   rain_text::settings::SettingLoader settings_manager;
+  login_register_manager.SetIterations(settings_manager.GetIterations());
 
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
   engine.rootContext()->setContextProperty("generate_password", &generate_password);

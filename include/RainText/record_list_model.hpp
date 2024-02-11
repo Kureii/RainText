@@ -34,6 +34,8 @@ public:
   Q_INVOKABLE void moveRecordItem(int fromIndex, int toIndex, const int iterations);
   Q_INVOKABLE void editRecordItem(int index, const QString& headline, const QString& username, const QString& password, const int iterations);
 
+  void IterationsChanged(int iterations);
+
   [[nodiscard]] QList<RecordItem> GetList();
 private:
   QList<RecordItem> m_items;

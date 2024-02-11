@@ -11,15 +11,18 @@
 #include "RainText/structs.hpp"
 #include "RainText/enrollment_manager.hpp"
 #include "RainText/login.hpp"
-
+#include "RainText/setting_loader.hpp"
 
 namespace rain_text::gui {
 
 class LoginRegisterManager : public QObject {
 Q_OBJECT
 Q_PROPERTY(model::RecordListModel* recordListModel READ recordListModel NOTIFY recordListModelChanged)
+Q_PROPERTY(int iterations READ iterations NOTIFY iterationsChanged)
 public:
   explicit LoginRegisterManager(QObject *parent = nullptr);
+
+  void SetIterations(int iterations);
 
   Q_INVOKABLE void ConfirmFormUser(const QString &username,
                                    const QString &password);
@@ -31,9 +34,10 @@ public:
 
   Q_INVOKABLE float PasswordStrength(const QString &password);
 
-  model::RecordListModel* recordListModel() const {
-    return m_recordListModel_;
-  }
+  Q_INVOKABLE void IterationsChanged(float iterations);
+  model::RecordListModel* recordListModel() const;
+
+  int iterations() const;
 private:
   std::string state_;
   QFutureWatcher<void> watcher_;
@@ -53,6 +57,7 @@ private:
 
 signals:
   void recordListModelChanged();
+  void iterationsChanged();
   void registrationComplete();
   void loginComplete();
   void errorOccurred(const QString &error);

@@ -897,7 +897,10 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     width: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
-                    value: 15
+                    value: login_register_manager.iterations
+                    onValueChanged: {
+                        login_register_manager.IterationsChanged(iterations.value);
+                    }
 
                 }
                 Switch {

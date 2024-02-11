@@ -30,6 +30,7 @@ class SettingLoader : public QObject {
   [[nodiscard]] QString GetCurrentColorMode() const;
   [[nodiscard]] QJsonObject GetColorModes() const;
   [[nodiscard]] QJsonObject GetColors() const;
+  [[nodiscard]] int GetIterations() const;
  private:
   bool has_error_ = false;
   QString error_message_;
@@ -38,6 +39,7 @@ class SettingLoader : public QObject {
   QString current_color_mode_;
   QJsonObject color_modes_;
   QJsonObject colors_;
+  int iterations_;
 
   void LoadJsonFile();
   void LoadSettings();
