@@ -1,6 +1,6 @@
 {
   "ui": {
-    "colorMode": "Rain Text light",
+    "colorMode": "Rain Text dark",
     "colors": {
       "Rain Text light": {
         "primaryColor": "#FF9800",
@@ -24,28 +24,33 @@
         "registerLoginSwapButtonFillColor" : "#00ECDFD4",
         "registerLoginSwapButtonFillHoveredColor" : "#11D1C7BE",
         "registerLoginSwapButtonFillPressedColor" : "#33ECDED3",
-        "loadProgressBarBackground" : "#c3b9af"
+        "loadProgressBarBackground" : "#c3b9af",
+        "loginRegisterBackgroundColor" : "#021F3C"
       },
       "Rain Text dark": {
         "primaryColor": "#FF9800",
         "primaryPressedColor": "#8A5300",
         "primaryHoveredColor" : "#b56c00",
         "notEnablePrimaryColor": "#F0B762",
-        "textColor": "#0C011C",
-        "notEnableTextColor": "#453957",
+        "textColor": "#f4ecfe",
+        "textColorOnPrimary" : "#0e0121",
+        "notEnableTextColor": "#6c5e85",
         "focusColor": "#FFA000",
         "textOnPrimaryColor": "#1C1001",
-        "focusOnPrimaryColor": "#E3C59A",
-        "backgroundColor": "#ECDFD4",
-        "drawerBackgroundColor": "#FAF6F2",
-        "borderButtonColor": "#1C0F01",
+        "focusOnPrimaryColor": "#370482",
+        "backgroundColor": "#120c1c",
+        "drawerBackgroundColor": "#312a3f",
+        "borderButtonColor": "#feead5",
         "borderButtonFocusColor": "#FFA000",
-        "notEnabledBorderButtonColor": "#75614B",
-        "borderButtonHoveredColor" : "#",
-        "registerLoginSwapButtonBorderColor" : "#",
-        "registerLoginSwapButtonFillColor" : "#",
-        "registerLoginSwapButtonFillHoveredColor" : "#",
-        "registerLoginSwapButtonFillPressedColor" : "#"
+        "notEnabledBorderButtonColor": "#705e48",
+        "borderButtonHoveredColor" : "#e5c49b",
+        "borderButtonPressedColor" : "#deb480",
+        "registerLoginSwapButtonBorderColor" : "#ECDFD4",
+        "registerLoginSwapButtonFillColor" : "#00ECDFD4",
+        "registerLoginSwapButtonFillHoveredColor" : "#11D1C7BE",
+        "registerLoginSwapButtonFillPressedColor" : "#33ECDED3",
+        "loadProgressBarBackground" : "#c3b9af",
+        "loginRegisterBackgroundColor" : "#021F3C"
       }
     },
     "language": "en"
