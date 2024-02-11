@@ -13,5 +13,6 @@
         <file>IconButton.qml</file>
         <file>FlatButton.qml</file>
         <file>LoadDbScreen.qml</file>
+        <file>CustomComboBox.qml</file>
     </qresource>
 </RCC>
