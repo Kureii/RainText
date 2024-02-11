@@ -4,6 +4,7 @@
 #include <QQmlContext>
 #include <QtQuick/QQuickView>
 #include <iostream>
+#include <QTranslator>
 
 #include "RainText/setting_loader.hpp"
 #include "RainText/gui/copy_to_clipboard.hpp"
@@ -28,6 +29,10 @@ int main(int argc, char* argv[]) {
   rain_text::gui::CopyToClipboard copy_to_clipboard;
   rain_text::settings::SettingLoader settings_manager;
   login_register_manager.SetIterations(settings_manager.GetIterations());
+
+  QTranslator translator;
+  translator.load(":/locales/czech-cz_cs.qm");
+  qApp->installTranslator(&translator);
 
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
   engine.rootContext()->setContextProperty("generate_password", &generate_password);
