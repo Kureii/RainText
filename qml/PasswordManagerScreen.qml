@@ -995,6 +995,33 @@ Rectangle {
                         settings_manager.ChangeCurrentColorMode(model[themeSelect.currentIndex])
                     }
                 }
+
+                CustomComboBox{
+                    id: languageSelect
+                    //model: appValidThemes
+                    radius: passwordManagerScreen.cornerRadius
+                    implicitHeight: 30
+                    Layout.fillWidth: true
+                    backgroundColor: passwordManagerScreen.backgroundColor
+                    textColor: passwordManagerScreen.textColor
+                    primaryColor: passwordManagerScreen.primaryColor
+                    textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                    drawerBackgroundColor: passwordManagerScreen.drawerBackgroundColor
+
+                    // Component.onCompleted: {
+                    //     var defaultText = appCurrentColorMode;
+                    //     for (var i = 0; i < model.length; ++i) {
+                    //         if (model[i] === defaultText) {
+                    //             languageSelect.currentIndex = i;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+
+                    // onCurrentIndexChanged: {
+                    //     settings_manager.ChangeCurrentColorMode(model[languageSelect.currentIndex])
+                    // }
+                }
             }
             Rectangle {
                 id: settingsRightSpace
