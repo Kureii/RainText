@@ -32,6 +32,7 @@ qt_add_executable(${PROJECT_NAME}
         ${qrc}
         ${executable_sources}
         ${all_headers}
+        ${CMAKE_CURRENT_SOURCE_DIR}/locales/locales.qrc
 )
 
 target_include_directories(${PROJECT_NAME}
