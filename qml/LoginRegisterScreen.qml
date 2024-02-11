@@ -29,7 +29,6 @@ Rectangle {
     property color primaryPressedColor: "#8A5300"
     property color primaryHoveredColor: "#b56c00"
     property color notEnablePrimaryColor: "#F0B762"
-    property color textColorOnPrimyry: "#150133"
     property color notEnableTextColor: "#453957"
     property color textOnPrimaryColor: "#1C1001"
     property color focusOnPrimaryColor: "#E3C59A"
@@ -331,7 +330,7 @@ Rectangle {
                     primaryPressedColor: backgroundLoginRegister.primaryPressedColor
                     primaryHoveredColor: backgroundLoginRegister.primaryHoveredColor
                     notEnablePrimaryColor: backgroundLoginRegister.notEnablePrimaryColor
-                    textColorOnPrimyry: backgroundLoginRegister.textColorOnPrimyry
+                    textColorOnPrimyry: backgroundLoginRegister.textOnPrimaryColor
                     notEnableTextColor: backgroundLoginRegister.notEnableTextColor
                     textOnPrimaryColor: backgroundLoginRegister.textOnPrimaryColor
                     focusOnPrimaryColor: backgroundLoginRegister.focusOnPrimaryColor

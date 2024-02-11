@@ -33,9 +33,10 @@ int main(int argc, char* argv[]) {
   engine.rootContext()->setContextProperty("generate_password", &generate_password);
   engine.rootContext()->setContextProperty("copy_to_clipboard", &copy_to_clipboard);
   engine.rootContext()->setContextProperty("settings_manager", &settings_manager);
-  engine.rootContext()->setContextProperty("appColors", settings_manager.GetColors());
+  //engine.rootContext()->setContextProperty("appColors", settings_manager.GetColors());
   engine.rootContext()->setContextProperty("appColorModes", settings_manager.GetColorModes());
   engine.rootContext()->setContextProperty("appCurrentColorMode", settings_manager.GetCurrentColorMode());
+  engine.rootContext()->setContextProperty("appValidThemes", settings_manager.GetValidThemes());
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

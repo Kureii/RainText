@@ -16,7 +16,7 @@ ApplicationWindow {
     minimumHeight: 500
     minimumWidth: 800
     property bool hasColorError: false
-    flags: Qt.Window | Qt.FramelessWindowHint
+    //flags: Qt.Window | Qt.FramelessWindowHint
 
     Component.onCompleted: {
         if (settings_manager.hasError) {
@@ -26,20 +26,6 @@ ApplicationWindow {
             mainWindow.hasColorError = true
         } else {
             mainWindow.hasColorError = false
-        }
-    }
-
-    Connections {
-        target: settings_manager
-        function errorChanged(settings_manager) {
-            if (settings_manager.hasError) {
-                errorDialog.text = settings_manager.errorMessage
-                errorDialog.title = settings_manager.errorHeadline
-                errorDialog.open()
-                mainWindow.hasColorError = true
-            } else {
-                mainWindow.hasColorError = false
-            }
         }
     }
 
@@ -73,22 +59,21 @@ ApplicationWindow {
     }*/
     LoginRegisterScreen {
         id: loginRegisterScreen
-        visible: true
-        loginRegisterBackgroundColor: mainWindow.hasColorError ? "#021F3C" : appColors["loginRegisterBackgroundColor"]
-        registerLoginSwapButtonBorderColor: mainWindow.hasColorError ? "#ECDFD4" : appColors["registerLoginSwapButtonBorderColor"]
-        registerLoginSwapButtonFillColor: mainWindow.hasColorError ? "#00ECDFD4" : appColors["registerLoginSwapButtonFillColor"]
-        registerLoginSwapButtonFillHoveredColor: mainWindow.hasColorError ? "#11D1C7BE" : appColors["registerLoginSwapButtonFillHoveredColor"]
-        registerLoginSwapButtonFillPressedColor: mainWindow.hasColorError ? "#33ECDED3" : appColors["registerLoginSwapButtonFillPressedColor"]
-        backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : appColors["backgroundColor"]
-        textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
-        primaryColor: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
-        primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : appColors["primaryHoveredColor"]
-        primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : appColors["primaryHoveredColor"]
-        notEnablePrimaryColor: mainWindow.hasColorError ? "#F0B762" : appColors["notEnablePrimaryColor"]
-        textColorOnPrimyry: mainWindow.hasColorError ? "#150133" : appColors["textColorOnPrimyry"]
-        notEnableTextColor: mainWindow.hasColorError ? "#453957" : appColors["notEnableTextColor"]
-        textOnPrimaryColor: mainWindow.hasColorError ? "#1C1001" : appColors["textOnPrimaryColor"]
-        focusOnPrimaryColor: mainWindow.hasColorError ? "#E3C59A" : appColors["focusOnPrimaryColor"]
+        visible: false
+        loginRegisterBackgroundColor: mainWindow.hasColorError ? "#021F3C" : settings_manager.appColors["loginRegisterBackgroundColor"]
+        registerLoginSwapButtonBorderColor: mainWindow.hasColorError ? "#ECDFD4" : settings_manager.appColors["registerLoginSwapButtonBorderColor"]
+        registerLoginSwapButtonFillColor: mainWindow.hasColorError ? "#00ECDFD4" : settings_manager.appColors["registerLoginSwapButtonFillColor"]
+        registerLoginSwapButtonFillHoveredColor: mainWindow.hasColorError ? "#11D1C7BE" : settings_manager.appColors["registerLoginSwapButtonFillHoveredColor"]
+        registerLoginSwapButtonFillPressedColor: mainWindow.hasColorError ? "#33ECDED3" : settings_manager.appColors["registerLoginSwapButtonFillPressedColor"]
+        backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : settings_manager.appColors["backgroundColor"]
+        textColor: mainWindow.hasColorError ? "#0C011C" : settings_manager.appColors["textColor"]
+        primaryColor: mainWindow.hasColorError ? "#FF9800" : settings_manager.appColors["primaryColor"]
+        primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : settings_manager.appColors["primaryHoveredColor"]
+        primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : settings_manager.appColors["primaryHoveredColor"]
+        notEnablePrimaryColor: mainWindow.hasColorError ? "#F0B762" : settings_manager.appColors["notEnablePrimaryColor"]
+        notEnableTextColor: mainWindow.hasColorError ? "#453957" : settings_manager.appColors["notEnableTextColor"]
+        textOnPrimaryColor: mainWindow.hasColorError ? "#1C1001" : settings_manager.appColors["textOnPrimaryColor"]
+        focusOnPrimaryColor: mainWindow.hasColorError ? "#E3C59A" : settings_manager.appColors["focusOnPrimaryColor"]
 
     }
 
@@ -96,10 +81,10 @@ ApplicationWindow {
         id: loadDbScreen
         visible: false
         anchors.fill: parent
-        textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
-        progressBarBackground: mainWindow.hasColorError ? "#c3b9af" : appColors["loadProgressBarBackground"]
-        progressBarForeground: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
-        color: mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
+        textColor: mainWindow.hasColorError ? "#0C011C" : settings_manager.appColors["textColor"]
+        progressBarBackground: mainWindow.hasColorError ? "#c3b9af" : settings_manager.appColors["loadProgressBarBackground"]
+        progressBarForeground: mainWindow.hasColorError ? "#FF9800" : settings_manager.appColors["primaryColor"]
+        color: mainWindow.hasColorError ? "#FAF6F2" : settings_manager.appColors["drawerBackgroundColor"]
         text: ""
         value: 0.5
 
@@ -114,24 +99,24 @@ ApplicationWindow {
 
     PasswordManagerScreen {
         id: passwordManagerScreen
-        visible: false
+        visible: true
         anchors.fill: parent
-        primaryColor: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
-        primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : appColors["primaryPressedColor"]
-        primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : appColors["primaryHoveredColor"]
-        notEnablePrimaryColor: mainWindow.hasColorError ? "#F0B762" : appColors["notEnablePrimaryColor"]
-        textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
-        textOnPrimaryColor: mainWindow.hasColorError ? "#1C1001" : appColors["textOnPrimaryColor"]
-        notEnableTextColor: mainWindow.hasColorError ? "#695981" : appColors["notEnableTextColor"]
-        focusColor: mainWindow.hasColorError ? "#FFA000" : appColors["focusColor"]
-        focusOnPrimaryColor: mainWindow.hasColorError ? "#E3C59A" : appColors["focusOnPrimaryColor"]
-        backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : appColors["backgroundColor"]
-        drawerBackgroundColor: mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
-        borderButtonColor: mainWindow.hasColorError ? "#1C0F01" : appColors["borderButtonColor"]
-        borderButtonFocusColor: mainWindow.hasColorError ? "#FFA000" : appColors["borderButtonFocusColor"]
-        notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : appColors["notEnabledBorderButtonColor"]
-        borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonHoveredColor"]
-        borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : appColors["borderButtonPressedColor"]
+        primaryColor: mainWindow.hasColorError ? "#FF9800" : settings_manager.appColors["primaryColor"]
+        primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : settings_manager.appColors["primaryPressedColor"]
+        primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : settings_manager.appColors["primaryHoveredColor"]
+        notEnablePrimaryColor: mainWindow.hasColorError ? "#F0B762" : settings_manager.appColors["notEnablePrimaryColor"]
+        textColor: mainWindow.hasColorError ? "#0C011C" : settings_manager.appColors["textColor"]
+        textOnPrimaryColor: mainWindow.hasColorError ? "#1C1001" : settings_manager.appColors["textOnPrimaryColor"]
+        notEnableTextColor: mainWindow.hasColorError ? "#695981" : settings_manager.appColors["notEnableTextColor"]
+        focusColor: mainWindow.hasColorError ? "#FFA000" : settings_manager.appColors["focusColor"]
+        focusOnPrimaryColor: mainWindow.hasColorError ? "#E3C59A" : settings_manager.appColors["focusOnPrimaryColor"]
+        backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : settings_manager.appColors["backgroundColor"]
+        drawerBackgroundColor: mainWindow.hasColorError ? "#FAF6F2" : settings_manager.appColors["drawerBackgroundColor"]
+        borderButtonColor: mainWindow.hasColorError ? "#1C0F01" : settings_manager.appColors["borderButtonColor"]
+        borderButtonFocusColor: mainWindow.hasColorError ? "#FFA000" : settings_manager.appColors["borderButtonFocusColor"]
+        notEnabledBorderButtonColor: mainWindow.hasColorError ? "#75614B" : settings_manager.appColors["notEnabledBorderButtonColor"]
+        borderButtonHoveredColor: mainWindow.hasColorError ? "#78562C" : settings_manager.appColors["borderButtonHoveredColor"]
+        borderButtonPressedColor: mainWindow.hasColorError ? "#78562C" : settings_manager.appColors["borderButtonPressedColor"]
     }
 
     Connections {
@@ -141,13 +126,26 @@ ApplicationWindow {
             console.log("loadDb")
             loginRegisterScreen.visible = false
             loadDbScreen.visible = true
-            mainWindow.color = mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
+            mainWindow.color = mainWindow.hasColorError ? "#FAF6F2" : settings_manager.appColors["drawerBackgroundColor"]
             mainWindow.title = title
             mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
         }
         function onUpdateLoadDbProgress(progress, mes) {
             loadDbScreen.text = mes;
             loadDbScreen.value = progress;
+        }
+    }
+    Connections {
+        target: settings_manager
+        function errorChanged(settings_manager) {
+            if (settings_manager.hasError) {
+                errorDialog.text = settings_manager.errorMessage
+                errorDialog.title = settings_manager.errorHeadline
+                errorDialog.open()
+                mainWindow.hasColorError = true
+            } else {
+                mainWindow.hasColorError = false
+            }
         }
     }
 }

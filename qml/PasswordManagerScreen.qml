@@ -952,6 +952,7 @@ Rectangle {
 
             }
             ColumnLayout {
+                spacing: 20
                 SizePicker {
                     id: iterations
                     from: 3
@@ -960,7 +961,6 @@ Rectangle {
                     text: qsTr("Encrypting iterations")
                     Layout.fillWidth: true
                     Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
-                    width: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     value: login_register_manager.iterations
                     textColor: passwordManagerScreen.textColor
                     backgroundColor: passwordManagerScreen.backgroundColor
@@ -970,6 +970,33 @@ Rectangle {
                     }
 
                 }
+                CustomComboBox{
+                    id: themeSelect
+                    model: appValidThemes
+                    radius: passwordManagerScreen.cornerRadius
+                    implicitHeight: 30
+                    Layout.fillWidth: true
+                    backgroundColor: passwordManagerScreen.backgroundColor
+                    textColor: passwordManagerScreen.textColor
+                    primaryColor: passwordManagerScreen.primaryColor
+                    textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                    drawerBackgroundColor: passwordManagerScreen.drawerBackgroundColor
+
+                    Component.onCompleted: {
+                        var defaultText = appCurrentColorMode;
+                        for (var i = 0; i < model.length; ++i) {
+                            if (model[i] === defaultText) {
+                                themeSelect.currentIndex = i;
+                                break;
+                            }
+                        }
+                    }
+
+                    onCurrentIndexChanged: {
+                        settings_manager.ChangeCurrentColorMode(model[themeSelect.currentIndex])
+                    }
+                }
+
                 Switch {
                     text: qsTr("Nastavení 1")
                 }

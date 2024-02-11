@@ -16,8 +16,34 @@ namespace rain_text::settings {
 SettingLoader::SettingLoader(QObject *parent) : QObject(parent) {
   LoadSettings();
 }
-void SettingLoader::ReloadSettings() {}
-void SettingLoader::writeSettings(QString &name, QString &value) {}
+void SettingLoader::ReloadSettings() {
+  QJsonObject uiSettings = json_data_["ui"].toObject();
+  current_color_mode_ = uiSettings["colorMode"].toString();
+  color_modes_ = uiSettings["colors"].toObject();
+  colors_ = color_modes_[current_color_mode_].toObject();
+  emit dataChanged();
+}
+
+void SettingLoader::ChangeCurrentColorMode(const QString &mode) {
+  QJsonObject uiSettings = json_data_["ui"].toObject();
+  uiSettings["colorMode"] = mode;
+  current_color_mode_ = mode;
+  json_data_["ui"] = uiSettings;
+
+  ReloadSettings();
+
+  QJsonDocument doc(json_data_);
+  QByteArray json_bytes = doc.toJson();
+
+  QFile file("settings.json");
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    qWarning() << "Nelze otevřít soubor pro zápis.";
+    return;
+  }
+
+  file.write(json_bytes);
+  file.close();
+}
 
 bool SettingLoader::hasError() const { return has_error_; }
 
@@ -30,7 +56,8 @@ QString SettingLoader::GetCurrentColorMode() const {
 }
 int SettingLoader::GetIterations() const { return iterations_; }
 QJsonObject SettingLoader::GetColorModes() const { return color_modes_; }
-QJsonObject SettingLoader::GetColors() const { return colors_; }
+QJsonObject SettingLoader::appColors() const { return colors_; }
+QStringList SettingLoader::GetValidThemes() const { return valid_themes_; }
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
@@ -70,34 +97,13 @@ void SettingLoader::LoadJsonFile() {
 void SettingLoader::LoadSettings() {
   LoadJsonFile();
   iterations_ = json_data_["encryptIterations"].toInt();
-  QStringList expected_colors = {"primaryColor",
-                                 "primaryPressedColor",
-                                 "primaryHoveredColor",
-                                 "notEnablePrimaryColor",
-                                 "textColor",
-                                 "textColorOnPrimary",
-                                 "notEnableTextColor",
-                                 "focusColor",
-                                 "textOnPrimaryColor",
-                                 "focusOnPrimaryColor",
-                                 "backgroundColor",
-                                 "drawerBackgroundColor",
-                                 "borderButtonColor",
-                                 "borderButtonFocusColor",
-                                 "notEnabledBorderButtonColor",
-                                 "borderButtonHoveredColor",
-                                 "borderButtonPressedColor",
-                                 "registerLoginSwapButtonBorderColor",
-                                 "registerLoginSwapButtonFillColor",
-                                 "registerLoginSwapButtonFillHoveredColor",
-                                 "registerLoginSwapButtonFillPressedColor",
-                                 "loadProgressBarBackground",
-                                 "loginRegisterBackgroundColor"};
+
 
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();
   color_modes_ = uiSettings["colors"].toObject();
   colors_ = color_modes_[current_color_mode_].toObject();
+  qDebug() << current_color_mode_;
 
   QStringList validThemes;
   for (const QString& themeName : color_modes_.keys()) {
@@ -105,7 +111,7 @@ void SettingLoader::LoadSettings() {
       QJsonObject themeColorsObj = color_modes_[themeName].toObject();
       auto themeColorsKeys = themeColorsObj.keys();
       bool isValid = true;
-      for (QString& required_color_key : expected_colors) {
+      for (QString& required_color_key : expected_colors_) {
         if (!themeColorsKeys.contains(required_color_key)) {
           isValid = false;
           qDebug() << themeName << "is missing color key:" << required_color_key;
@@ -120,6 +126,8 @@ void SettingLoader::LoadSettings() {
     }
   }
 
+  std::reverse(validThemes.begin(), validThemes.end());
+  valid_themes_ = validThemes;
 
   ValidateColors(colors_);
 }

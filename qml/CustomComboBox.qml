@@ -11,7 +11,6 @@ ComboBox {
 
     property real radius: 12
     property color backgroundColor: "#ECDFD4"
-    property color checkedColor: "#Fa7700"
     property color textColor: "#0C011C"
     property color primaryColor: "#FF9800"
     property color textColorOnPrimyry: "#150133"

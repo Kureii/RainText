@@ -15,22 +15,23 @@ class SettingLoader : public QObject {
   Q_PROPERTY(bool hasError READ hasError NOTIFY errorChanged)
   Q_PROPERTY(QString errorHeadline READ errorHeadline NOTIFY errorChanged)
   Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorChanged)
+  Q_PROPERTY(QJsonObject appColors READ appColors NOTIFY dataChanged)
 
  public:
   explicit SettingLoader(QObject *parent = nullptr);
 
   Q_INVOKABLE void ReloadSettings();
-
-  Q_INVOKABLE void writeSettings(QString &name, QString &value);
+  Q_INVOKABLE void ChangeCurrentColorMode(const QString &mode);
 
   [[nodiscard]] bool hasError() const;
   [[nodiscard]] QString errorMessage() const;
   [[nodiscard]] QString errorHeadline() const;
 
-  [[nodiscard]] QString GetCurrentColorMode() const;
-  [[nodiscard]] QJsonObject GetColorModes() const;
-  [[nodiscard]] QJsonObject GetColors() const;
-  [[nodiscard]] int GetIterations() const;
+  Q_INVOKABLE [[nodiscard]] QString GetCurrentColorMode() const;
+  Q_INVOKABLE [[nodiscard]] QJsonObject GetColorModes() const;
+  Q_INVOKABLE [[nodiscard]] QJsonObject appColors() const;
+  Q_INVOKABLE [[nodiscard]] int GetIterations() const;
+  Q_INVOKABLE [[nodiscard]] QStringList GetValidThemes() const;
  private:
   bool has_error_ = false;
   QString error_message_;
@@ -40,6 +41,30 @@ class SettingLoader : public QObject {
   QJsonObject color_modes_;
   QJsonObject colors_;
   int iterations_;
+  QStringList valid_themes_;
+  QStringList expected_colors_ = {"primaryColor",
+                                 "primaryPressedColor",
+                                 "primaryHoveredColor",
+                                 "notEnablePrimaryColor",
+                                 "textColor",
+                                 "textColorOnPrimary",
+                                 "notEnableTextColor",
+                                 "focusColor",
+                                 "textOnPrimaryColor",
+                                 "focusOnPrimaryColor",
+                                 "backgroundColor",
+                                 "drawerBackgroundColor",
+                                 "borderButtonColor",
+                                 "borderButtonFocusColor",
+                                 "notEnabledBorderButtonColor",
+                                 "borderButtonHoveredColor",
+                                 "borderButtonPressedColor",
+                                 "registerLoginSwapButtonBorderColor",
+                                 "registerLoginSwapButtonFillColor",
+                                 "registerLoginSwapButtonFillHoveredColor",
+                                 "registerLoginSwapButtonFillPressedColor",
+                                 "loadProgressBarBackground",
+                                 "loginRegisterBackgroundColor"};
 
   void LoadJsonFile();
   void LoadSettings();
@@ -49,6 +74,7 @@ class SettingLoader : public QObject {
  signals:
   void errorChanged();
   void errorMessage(QString &headline, QString &msg);
+  void dataChanged();
 };
 
 }  // namespace rain_text::settings
