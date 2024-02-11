@@ -32,6 +32,8 @@ class SettingLoader : public QObject {
   Q_INVOKABLE [[nodiscard]] QJsonObject appColors() const;
   Q_INVOKABLE [[nodiscard]] int GetIterations() const;
   Q_INVOKABLE [[nodiscard]] QStringList GetValidThemes() const;
+
+  Q_INVOKABLE [[nodiscard]] QStringList GetLangModel() const;
  private:
   bool has_error_ = false;
   QString error_message_;
@@ -70,6 +72,7 @@ class SettingLoader : public QObject {
   void LoadSettings();
   bool IsColorValid(const QString &colorString);
   void ValidateColors(const QJsonObject &colorModes);
+  QStringList GetLanguageFiles() const;
 
  signals:
   void errorChanged();

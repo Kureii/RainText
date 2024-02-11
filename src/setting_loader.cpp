@@ -5,6 +5,7 @@
 //================================= Includes ===================================
 #include "RainText/setting_loader.hpp"
 
+#include <QDir>
 #include <QFile>
 #include <QJsonDocument>
 #include <QRegularExpression>
@@ -58,6 +59,15 @@ int SettingLoader::GetIterations() const { return iterations_; }
 QJsonObject SettingLoader::GetColorModes() const { return color_modes_; }
 QJsonObject SettingLoader::appColors() const { return colors_; }
 QStringList SettingLoader::GetValidThemes() const { return valid_themes_; }
+
+QStringList SettingLoader::GetLangModel() const {
+  QStringList model;
+  auto languageFiles = GetLanguageFiles();
+  for (auto &file: languageFiles) {
+    model.push_front(file.split("-").first());
+  }
+  return model;
+}
 
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
@@ -151,6 +161,11 @@ void SettingLoader::ValidateColors(const QJsonObject &colors) {
       return;
     }
   }
+}
+
+QStringList SettingLoader::GetLanguageFiles() const{
+  QDir dir(":/locales");
+  return dir.entryList(QStringList() << "*.qm", QDir::Files);
 }
 
 //================================= End namespace ==============================

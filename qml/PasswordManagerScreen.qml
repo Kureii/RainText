@@ -998,7 +998,7 @@ Rectangle {
 
                 CustomComboBox{
                     id: languageSelect
-                    //model: appValidThemes
+                    model: settings_manager.GetLangModel()
                     radius: passwordManagerScreen.cornerRadius
                     implicitHeight: 30
                     Layout.fillWidth: true
