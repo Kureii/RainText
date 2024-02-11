@@ -19,6 +19,7 @@ Rectangle {
         anchors.centerIn: parent
         width: loginDbScreen.width / 3 * 2
         height: 30
+        color: parent.color
 
         Text {
             anchors.top: parent.top
@@ -26,6 +27,7 @@ Rectangle {
             verticalAlignment: Text.AlignTop
             anchors.horizontalCenter: parent.horizontalCenter
             text: loginDbScreen.text
+            color: loginDbScreen.textColor
         }
 
         Rectangle {

@@ -137,6 +137,7 @@ Rectangle {
             }
             Text {
                 id: headlineText
+                color: passwordManagerScreen.textColor
                 text: qsTr("Create record")
             }
             Rectangle {
@@ -238,6 +239,9 @@ Rectangle {
                             width: Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width)
                             CustomCheckBox {
                                 id: majusculeGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Upper latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -252,6 +256,9 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: minusculeGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Lower latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -275,6 +282,9 @@ Rectangle {
                             width: Math.max(numberGenPassChBox.width, specialGenPassChBox.width)
                             CustomCheckBox {
                                 id: numberGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Numbers")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -289,6 +299,9 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: specialGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Special chars")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -317,6 +330,9 @@ Rectangle {
                         from: 8
                         value: 12
                         stepSize: 1
+                        textColor: passwordManagerScreen.textColor
+                        backgroundColor: passwordManagerScreen.backgroundColor
+                        primaryHexColor: passwordManagerScreen.primaryColor
 
                         text: qsTr("Password length")
 
@@ -354,6 +370,14 @@ Rectangle {
                         id: buttonGenPass
                         width: formColumn.settingWidth - 60
                         height: 25
+                        primaryColor: passwordManagerScreen.primaryColor
+                        primaryPressedColor: passwordManagerScreen.primaryPressedColor
+                        primaryHoveredColor: passwordManagerScreen.primaryHoveredColor
+                        notEnablePrimaryColor: passwordManagerScreen.notEnablePrimaryColor
+                        textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                        notEnableTextColor: passwordManagerScreen.notEnableTextColor
+                        textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
+                        focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                         enabled: majusculeGenPassChBox.checked || minusculeGenPassChBox.checked || numberGenPassChBox.checked || specialGenPassChBox.checked
                         text: qsTr("Generate password")
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -398,6 +422,14 @@ Rectangle {
             FlatButton {
                 id: formConfirmButton
                 width: formColumn.formWidth
+                primaryColor: passwordManagerScreen.primaryColor
+                primaryPressedColor: passwordManagerScreen.primaryPressedColor
+                primaryHoveredColor: passwordManagerScreen.primaryHoveredColor
+                notEnablePrimaryColor: passwordManagerScreen.notEnablePrimaryColor
+                textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                notEnableTextColor: passwordManagerScreen.notEnableTextColor
+                textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
+                focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                 text: qsTr("Save record")
                 height: 40
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
@@ -483,6 +515,7 @@ Rectangle {
             }
             Text {
                 id: editHeadlineText
+                color: passwordManagerScreen.textColor
                 text: qsTr("Edit record")
             }
             Rectangle {
@@ -617,6 +650,9 @@ Rectangle {
                             width: Math.max(majusculeGenPassChBox.width, minusculeGenPassChBox.width)
                             CustomCheckBox {
                                 id: editMajusculeGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Upper latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -631,6 +667,9 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: editMinusculeGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Lower latters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -653,6 +692,9 @@ Rectangle {
                             width: Math.max(editNumberGenPassChBox.width, editSpecialGenPassChBox.width)
                             CustomCheckBox {
                                 id: editNumberGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Numbers")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -667,6 +709,9 @@ Rectangle {
                             }
                             CustomCheckBox {
                                 id: editSpecialGenPassChBox
+                                borderColor: passwordManagerScreen.textColor
+                                checkedColor: passwordManagerScreen.primaryColor
+                                backgroundColor: passwordManagerScreen.drawerBackgroundColor
                                 text: qsTr("Special chars")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
@@ -695,6 +740,9 @@ Rectangle {
                         from: 8
                         value: 12
                         stepSize: 1
+                        textColor: passwordManagerScreen.textColor
+                        backgroundColor: passwordManagerScreen.backgroundColor
+                        primaryHexColor: passwordManagerScreen.primaryColor
 
                         text: qsTr("Password length")
 
@@ -730,6 +778,14 @@ Rectangle {
 
                     FlatButton {
                         id: editButtonGenPass
+                        primaryColor: passwordManagerScreen.primaryColor
+                        primaryPressedColor: passwordManagerScreen.primaryPressedColor
+                        primaryHoveredColor: passwordManagerScreen.primaryHoveredColor
+                        notEnablePrimaryColor: passwordManagerScreen.notEnablePrimaryColor
+                        textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                        notEnableTextColor: passwordManagerScreen.notEnableTextColor
+                        textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
+                        focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                         width: editFormColumn.settingWidth - 60
                         height: 25
                         enabled: editMajusculeGenPassChBox.checked || editMinusculeGenPassChBox.checked || editNumberGenPassChBox.checked || editSpecialGenPassChBox.checked
@@ -778,6 +834,14 @@ Rectangle {
 
             FlatButton {
                 id: editFormConfirmButton
+                primaryColor: passwordManagerScreen.primaryColor
+                primaryPressedColor: passwordManagerScreen.primaryPressedColor
+                primaryHoveredColor: passwordManagerScreen.primaryHoveredColor
+                notEnablePrimaryColor: passwordManagerScreen.notEnablePrimaryColor
+                textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
+                notEnableTextColor: passwordManagerScreen.notEnableTextColor
+                textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
+                focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                 width: editFormColumn.formWidth
                 text: qsTr("Save changes")
                 height: 40
@@ -898,6 +962,9 @@ Rectangle {
                     Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     width: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     value: login_register_manager.iterations
+                    textColor: passwordManagerScreen.textColor
+                    backgroundColor: passwordManagerScreen.backgroundColor
+                    primaryHexColor: passwordManagerScreen.primaryColor
                     onValueChanged: {
                         login_register_manager.IterationsChanged(iterations.value);
                     }

@@ -11,13 +11,28 @@ Rectangle {
     width: 780
     height: 380
     radius: cornerRadius
-    color: "#021F3C"
+    color: backgroundLoginRegister.loginRegisterBackgroundColor
     state: "loginState"
 
     property bool canConfirmForm
     property int cornerRadius: 5
     property int sideMargin: 30
     property real passwordProgress: 0.001
+    property color loginRegisterBackgroundColor: "#021F3C"
+    property color registerLoginSwapButtonBorderColor: "#ECDFD4"
+    property color registerLoginSwapButtonFillColor: "#00ECDFD4"
+    property color registerLoginSwapButtonFillHoveredColor: "#11D1C7BE"
+    property color registerLoginSwapButtonFillPressedColor: "#33ECDED3"
+    property color backgroundColor: "#ECDFD4"
+    property color textColor: "#0C011C"
+    property color primaryColor: "#FF9800"
+    property color primaryPressedColor: "#8A5300"
+    property color primaryHoveredColor: "#b56c00"
+    property color notEnablePrimaryColor: "#F0B762"
+    property color textColorOnPrimyry: "#150133"
+    property color notEnableTextColor: "#453957"
+    property color textOnPrimaryColor: "#1C1001"
+    property color focusOnPrimaryColor: "#E3C59A"
 
     DropShadow {
         anchors.fill: backgroundFormLoginRegister
@@ -64,12 +79,12 @@ Rectangle {
                 height: 35
                 anchors.centerIn: parent
 
-                normalColor: "#ECDFD4"
-                normalBackgroundColor: "#00ECDFD4"
-                hoveredColor: "#D1C7BE"
-                hoveredBackgroundColor: "#11D1C7BE"
-                pressedColor: "#ECDED3"
-                pressedBackgroundColor: "#33ECDED3"
+                normalColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                normalBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillColor
+                hoveredColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                hoveredBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillHoveredColor
+                pressedColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                pressedBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillPressedColor
 
                 onClicked: backgroundFormLoginRegister.state = "registerState"
 
@@ -106,12 +121,12 @@ Rectangle {
                 height: 35
                 anchors.centerIn: parent
 
-                normalColor: "#ECDFD4"
-                normalBackgroundColor: "#00ECDFD4"
-                hoveredColor: "#D1C7BE"
-                hoveredBackgroundColor: "#11D1C7BE"
-                pressedColor: "#ECDED3"
-                pressedBackgroundColor: "#33ECDED3"
+                normalColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                normalBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillColor
+                hoveredColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                hoveredBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillHoveredColor
+                pressedColor: backgroundLoginRegister.registerLoginSwapButtonBorderColor
+                pressedBackgroundColor: backgroundLoginRegister.registerLoginSwapButtonFillPressedColor
 
                 onClicked: backgroundFormLoginRegister.state = "loginState"
 
@@ -137,7 +152,7 @@ Rectangle {
         anchors.centerIn: parent
         width: (backgroundLoginRegister.width - parent.sideMargin * 2) / 2
         height: backgroundLoginRegister.height * 1.2
-        color: "#ECDFD4"
+        color: backgroundLoginRegister.backgroundColor
         anchors.horizontalCenterOffset: width / 2
         radius: backgroundLoginRegister.cornerRadius
         clip: true
@@ -198,7 +213,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     bottomPadding: 8
-                    color: "#0C011C"
+                    color: backgroundLoginRegister.textColor
                     font.pointSize: 14
                 }
 
@@ -206,8 +221,11 @@ Rectangle {
                     id: formUsernameField
                     width: formColumn.formWidth
                     placeholderText: "Username"
-                    placeholderTextColor: "#0C011C"
-                    fillUnderlineColor: "#0C011C"
+                    textColor: backgroundLoginRegister.textColor
+                    placeholderTextColor: backgroundLoginRegister.textColor
+                    fillUnderlineColor: backgroundLoginRegister.textColor
+                    selectionTextColor: backgroundLoginRegister.textColor
+                    selectionBlockColor: backgroundLoginRegister.focusColor
                     color: "transparent"
                     onTextChanged: {
                         backgroundLoginRegister.canConfirmForm =
@@ -229,8 +247,11 @@ Rectangle {
                     width: formColumn.formWidth
                     placeholderText: "Password"
                     passwordMode: true
-                    placeholderTextColor: "#0C011C"
-                    fillUnderlineColor: "#0C011C"
+                    textColor: backgroundLoginRegister.textColor
+                    placeholderTextColor: backgroundLoginRegister.textColor
+                    fillUnderlineColor: backgroundLoginRegister.textColor
+                    selectionTextColor: backgroundLoginRegister.textColor
+                    selectionBlockColor: backgroundLoginRegister.focusColor
                     color: "transparent"
                     Connections {
                         target:formPasswordField
@@ -280,8 +301,11 @@ Rectangle {
                     height: 0
                     placeholderText: "Password again"
                     passwordMode: true
-                    placeholderTextColor: "#0C011C"
-                    fillUnderlineColor: "#0C011C"
+                    textColor: backgroundLoginRegister.textColor
+                    placeholderTextColor: backgroundLoginRegister.textColor
+                    fillUnderlineColor: backgroundLoginRegister.textColor
+                    selectionTextColor: backgroundLoginRegister.textColor
+                    selectionBlockColor: backgroundLoginRegister.focusColorr
                     color: "transparent"
                     onTextChanged: {
                         backgroundLoginRegister.canConfirmForm =
@@ -298,27 +322,19 @@ Rectangle {
                     color: "transparent"
                 }
 
-                Button {
+                FlatButton {
                     id: formConfirmButton
                     width: formColumn.formWidth
                     text: "Login"
                     height: 40
-                    background: Rectangle {
-                        id: buttonBackground
-                        color: formConfirmButton.enabled ? (formConfirmButton.hovered ? (formConfirmButton.clicked ? "#e58701" : "#ef8f00") : "#FF9800") : "#A19595"
-                        radius: backgroundLoginRegister.cornerRadius * 2
-                        border.width: formConfirmButton.pressed ? 2 : 0
-                        border.color: formConfirmButton.pressed ? "#734500" : "transparent"
-                    }
-
-                    contentItem: Text {
-                        text: formConfirmButton.text
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font: formConfirmButton.font
-                        color: formConfirmButton.enabled ? "#0C011C" : "#021F3C"
-                        anchors.centerIn: parent
-                    }
+                    primaryColor: backgroundLoginRegister.primaryColor
+                    primaryPressedColor: backgroundLoginRegister.primaryPressedColor
+                    primaryHoveredColor: backgroundLoginRegister.primaryHoveredColor
+                    notEnablePrimaryColor: backgroundLoginRegister.notEnablePrimaryColor
+                    textColorOnPrimyry: backgroundLoginRegister.textColorOnPrimyry
+                    notEnableTextColor: backgroundLoginRegister.notEnableTextColor
+                    textOnPrimaryColor: backgroundLoginRegister.textOnPrimaryColor
+                    focusOnPrimaryColor: backgroundLoginRegister.focusOnPrimaryColor
                     enabled: backgroundLoginRegister.canConfirmForm
                     onClicked: login_register_manager.ConfirmFormUser(formUsernameField.text, formPasswordField.text)
                 }

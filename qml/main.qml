@@ -74,6 +74,22 @@ ApplicationWindow {
     LoginRegisterScreen {
         id: loginRegisterScreen
         visible: true
+        loginRegisterBackgroundColor: mainWindow.hasColorError ? "#021F3C" : appColors["loginRegisterBackgroundColor"]
+        registerLoginSwapButtonBorderColor: mainWindow.hasColorError ? "#ECDFD4" : appColors["registerLoginSwapButtonBorderColor"]
+        registerLoginSwapButtonFillColor: mainWindow.hasColorError ? "#00ECDFD4" : appColors["registerLoginSwapButtonFillColor"]
+        registerLoginSwapButtonFillHoveredColor: mainWindow.hasColorError ? "#11D1C7BE" : appColors["registerLoginSwapButtonFillHoveredColor"]
+        registerLoginSwapButtonFillPressedColor: mainWindow.hasColorError ? "#33ECDED3" : appColors["registerLoginSwapButtonFillPressedColor"]
+        backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : appColors["backgroundColor"]
+        textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
+        primaryColor: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
+        primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : appColors["primaryHoveredColor"]
+        primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : appColors["primaryHoveredColor"]
+        notEnablePrimaryColor: mainWindow.hasColorError ? "#F0B762" : appColors["notEnablePrimaryColor"]
+        textColorOnPrimyry: mainWindow.hasColorError ? "#150133" : appColors["textColorOnPrimyry"]
+        notEnableTextColor: mainWindow.hasColorError ? "#453957" : appColors["notEnableTextColor"]
+        textOnPrimaryColor: mainWindow.hasColorError ? "#1C1001" : appColors["textOnPrimaryColor"]
+        focusOnPrimaryColor: mainWindow.hasColorError ? "#E3C59A" : appColors["focusOnPrimaryColor"]
+
     }
 
     LoadDbScreen {
@@ -83,6 +99,7 @@ ApplicationWindow {
         textColor: mainWindow.hasColorError ? "#0C011C" : appColors["textColor"]
         progressBarBackground: mainWindow.hasColorError ? "#c3b9af" : appColors["loadProgressBarBackground"]
         progressBarForeground: mainWindow.hasColorError ? "#FF9800" : appColors["primaryColor"]
+        color: mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
         text: ""
         value: 0.5
 
@@ -124,7 +141,7 @@ ApplicationWindow {
             console.log("loadDb")
             loginRegisterScreen.visible = false
             loadDbScreen.visible = true
-            mainWindow.color = appColors["drawerBackgroundColor"]
+            mainWindow.color = mainWindow.hasColorError ? "#FAF6F2" : appColors["drawerBackgroundColor"]
             mainWindow.title = title
             mainWindow.flags = Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint;
         }
