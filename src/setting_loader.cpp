@@ -91,7 +91,8 @@ void SettingLoader::LoadSettings() {
                                  "registerLoginSwapButtonFillColor",
                                  "registerLoginSwapButtonFillHoveredColor",
                                  "registerLoginSwapButtonFillPressedColor",
-                                 "loadProgressBarBackground"};
+                                 "loadProgressBarBackground",
+                                 "loginRegisterBackgroundColor"};
 
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();
