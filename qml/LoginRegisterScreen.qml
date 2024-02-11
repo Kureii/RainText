@@ -73,7 +73,7 @@ Rectangle {
 
             BorderedButton {
                 id: backgroundRegisterButton
-                text: "Register"
+                text: qsTr("Register")
                 width: backgroundLoginRegister.width / 5
                 height: 35
                 anchors.centerIn: parent
@@ -92,7 +92,7 @@ Rectangle {
 
                     function onClicked() {
                         backgroundLoginRegister.state = "registerState"
-                        formConfirmButton.text = formHeadline.text = "Register"
+                        formConfirmButton.text = formHeadline.text = qsTr("Register")
                         login_register_manager.StateChange(backgroundLoginRegister.state)
                         backgroundLoginRegister.canConfirmForm =
                             login_register_manager.CheckFields(formUsernameField.text,
@@ -115,7 +115,7 @@ Rectangle {
 
             BorderedButton {
                 id: backgroundLoginButton
-                text: "Login"
+                text: qsTr("Login")
                 width: backgroundLoginRegister.width / 5
                 height: 35
                 anchors.centerIn: parent
@@ -134,7 +134,7 @@ Rectangle {
 
                     function onClicked() {
                         backgroundLoginRegister.state = "loginState"
-                        formConfirmButton.text = formHeadline.text = "Login"
+                        formConfirmButton.text = formHeadline.text = qsTr("Login")
                         login_register_manager.StateChange(backgroundLoginRegister.state)
                         backgroundLoginRegister.canConfirmForm =
                             login_register_manager.CheckFields(formUsernameField.text,
@@ -207,7 +207,7 @@ Rectangle {
 
                 Text {
                     id: formHeadline
-                    text: "Login"
+                    text: qsTr("Login")
                     width: formColumn.formWidth
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -219,7 +219,7 @@ Rectangle {
                 ModernTextField {
                     id: formUsernameField
                     width: formColumn.formWidth
-                    placeholderText: "Username"
+                    placeholderText: qsTr("Username")
                     textColor: backgroundLoginRegister.textColor
                     placeholderTextColor: backgroundLoginRegister.textColor
                     fillUnderlineColor: backgroundLoginRegister.textColor
@@ -244,7 +244,7 @@ Rectangle {
                 ModernTextField {
                     id: formPasswordField
                     width: formColumn.formWidth
-                    placeholderText: "Password"
+                    placeholderText: qsTr("Password")
                     passwordMode: true
                     textColor: backgroundLoginRegister.textColor
                     placeholderTextColor: backgroundLoginRegister.textColor
@@ -298,7 +298,7 @@ Rectangle {
                     id: formPasswordAgain
                     width: formColumn.formWidth
                     height: 0
-                    placeholderText: "Password again"
+                    placeholderText: qsTr("Password again")
                     passwordMode: true
                     textColor: backgroundLoginRegister.textColor
                     placeholderTextColor: backgroundLoginRegister.textColor
@@ -324,7 +324,7 @@ Rectangle {
                 FlatButton {
                     id: formConfirmButton
                     width: formColumn.formWidth
-                    text: "Login"
+                    text: qsTr("Login")
                     height: 40
                     primaryColor: backgroundLoginRegister.primaryColor
                     primaryPressedColor: backgroundLoginRegister.primaryPressedColor

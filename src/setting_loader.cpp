@@ -68,8 +68,8 @@ QStringList SettingLoader::GetValidThemes() const { return valid_themes_; }
 void SettingLoader::LoadJsonFile() {
   QFile file("settings.json");
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    error_headline_ = "Settings file";
-    error_message_ = "The settings file cannot be opened.";
+    error_headline_ = QObject::tr("Settings file");
+    error_message_ = QObject::tr("The settings file cannot be opened.");
     has_error_ = true;
     qWarning() << "------------------------\n"
                << error_headline_ << "\n"
@@ -82,8 +82,8 @@ void SettingLoader::LoadJsonFile() {
 
   QJsonDocument json_document = QJsonDocument::fromJson(json_string.toUtf8());
   if (json_document.isNull()) {
-    error_headline_ = "Settings file";
-    error_message_ = "The settings file contains an unexpected structure.";
+    error_headline_ = QObject::tr("Settings file");
+    error_message_ = QObject::tr("The settings file contains an unexpected structure.");
     has_error_ = true;
     qWarning() << "------------------------\n"
                << error_headline_ << "\n"
@@ -142,8 +142,8 @@ void SettingLoader::ValidateColors(const QJsonObject &colors) {
   foreach (const QString &key, colors.keys()) {
     QString colorString = colors[key].toString();
     if (!IsColorValid(colorString)) {
-      error_headline_ = "Settings file";
-      error_message_ = QString("Invalid colour %1: %2").arg(key, colorString);
+      error_headline_ = QObject::tr("Settings file");
+      error_message_ = QString(QObject::tr("Invalid colour")+" %1: %2").arg(key, colorString);
       has_error_ = true;
       qWarning() << "------------------------\n"
                  << error_headline_ << "\n"

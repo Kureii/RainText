@@ -82,6 +82,11 @@ void LoginRegisterManager::ConfirmFormUser(const QString &username,
       path_ = path;
 
       emit loadDb(username);
+
+      QString mes = QObject::tr("Generating key");
+      float progress = 0.01f;
+      emit updateLoadDbProgress(progress, mes);
+
       auto dbUser = std::make_unique<UserDb>(path);
       auto future =
           QtConcurrent::run([this, registration = std::move(registration)]() {
@@ -164,7 +169,7 @@ int LoginRegisterManager::iterations() const {
 }
 //================================= Public slots ===============================
 void LoginRegisterManager::onAsyncOperationFinished() {
-  QString msg = QString("Done");
+  QString msg = QString(QObject::tr("Done"));
   float progress = 1.0f;
   emit updateLoadDbProgress(progress, msg);
   startEnrollmentThread();
@@ -242,7 +247,7 @@ void LoginRegisterManager::startEnrollmentThread() {
 
 QFuture<void> LoginRegisterManager::getKey(
     QString path, std::unique_ptr<register_login::Login> login) {
-  QString mes = "Generate key";
+  QString mes = QObject::tr("Generating key");
   float progress = 0.01f;
   emit updateLoadDbProgress(progress, mes);
 
@@ -300,7 +305,7 @@ QFuture<RecordItem> LoginRegisterManager::asyncDecrypt(
           QMutexLocker locker(&progressMutex_);
           progress += 1.0f / totalRecords;
         }
-        emit updateLoadDbProgress(progress, item.headlineText + " decrypted");
+        emit updateLoadDbProgress(progress, item.headlineText + " "+QObject::tr("decrypted"));
         return item;
       });
 }

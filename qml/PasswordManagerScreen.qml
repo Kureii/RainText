@@ -242,7 +242,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Upper latters")
+                                text: qsTr("Upper letters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -259,7 +259,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Lower latters")
+                                text: qsTr("Lower letters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -444,7 +444,6 @@ Rectangle {
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Enter) {
-                        console.log("adding record")
                         login_register_manager.recordListModel.addRecordItem(formHeadlineField.text,formUsernameField.text,formPasswordField.text, iterations.value)
 
                         bottomDrawer.close();
@@ -653,7 +652,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Upper latters")
+                                text: qsTr("Upper letters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -670,7 +669,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Lower latters")
+                                text: qsTr("Lower letters")
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -995,14 +994,6 @@ Rectangle {
                     onCurrentIndexChanged: {
                         settings_manager.ChangeCurrentColorMode(model[themeSelect.currentIndex])
                     }
-                }
-
-                Switch {
-                    text: qsTr("Nastavení 1")
-                }
-
-                Switch {
-                    text: qsTr("Nastavení 2")
                 }
             }
             Rectangle {
