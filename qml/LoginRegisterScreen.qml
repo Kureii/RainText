@@ -32,6 +32,7 @@ Rectangle {
     property color notEnableTextColor: "#453957"
     property color textOnPrimaryColor: "#1C1001"
     property color focusOnPrimaryColor: "#E3C59A"
+    property color focusColor: "#FFA000"
 
     DropShadow {
         anchors.fill: backgroundFormLoginRegister
@@ -304,7 +305,7 @@ Rectangle {
                     placeholderTextColor: backgroundLoginRegister.textColor
                     fillUnderlineColor: backgroundLoginRegister.textColor
                     selectionTextColor: backgroundLoginRegister.textColor
-                    selectionBlockColor: backgroundLoginRegister.focusColorr
+                    selectionBlockColor: backgroundLoginRegister.focusColor
                     color: "transparent"
                     onTextChanged: {
                         backgroundLoginRegister.canConfirmForm =

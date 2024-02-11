@@ -67,6 +67,7 @@ ApplicationWindow {
         registerLoginSwapButtonFillPressedColor: mainWindow.hasColorError ? "#33ECDED3" : settings_manager.appColors["registerLoginSwapButtonFillPressedColor"]
         backgroundColor: mainWindow.hasColorError ? "#ECDFD4" : settings_manager.appColors["backgroundColor"]
         textColor: mainWindow.hasColorError ? "#0C011C" : settings_manager.appColors["textColor"]
+        focusColor: mainWindow.hasColorError ? "#FFA000" : settings_manager.appColors["focusColor"]
         primaryColor: mainWindow.hasColorError ? "#FF9800" : settings_manager.appColors["primaryColor"]
         primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : settings_manager.appColors["primaryHoveredColor"]
         primaryHoveredColor: mainWindow.hasColorError ? "#b56c00" : settings_manager.appColors["primaryHoveredColor"]
