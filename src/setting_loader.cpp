@@ -70,17 +70,62 @@ void SettingLoader::LoadJsonFile() {
 void SettingLoader::LoadSettings() {
   LoadJsonFile();
   iterations_ = json_data_["encryptIterations"].toInt();
+  QStringList expected_colors = {"primaryColor",
+                                 "primaryPressedColor",
+                                 "primaryHoveredColor",
+                                 "notEnablePrimaryColor",
+                                 "textColor",
+                                 "textColorOnPrimary",
+                                 "notEnableTextColor",
+                                 "focusColor",
+                                 "textOnPrimaryColor",
+                                 "focusOnPrimaryColor",
+                                 "backgroundColor",
+                                 "drawerBackgroundColor",
+                                 "borderButtonColor",
+                                 "borderButtonFocusColor",
+                                 "notEnabledBorderButtonColor",
+                                 "borderButtonHoveredColor",
+                                 "borderButtonPressedColor",
+                                 "registerLoginSwapButtonBorderColor",
+                                 "registerLoginSwapButtonFillColor",
+                                 "registerLoginSwapButtonFillHoveredColor",
+                                 "registerLoginSwapButtonFillPressedColor",
+                                 "loadProgressBarBackground"};
 
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();
   color_modes_ = uiSettings["colors"].toObject();
   colors_ = color_modes_[current_color_mode_].toObject();
 
+  QStringList validThemes;
+  for (const QString& themeName : color_modes_.keys()) {
+    if (themeName.contains("dark") || themeName.contains("light")) {
+      QJsonObject themeColorsObj = color_modes_[themeName].toObject();
+      auto themeColorsKeys = themeColorsObj.keys();
+      bool isValid = true;
+      for (QString& required_color_key : expected_colors) {
+        if (!themeColorsKeys.contains(required_color_key)) {
+          isValid = false;
+          qDebug() << themeName << "is missing color key:" << required_color_key;
+          break;
+        }
+      }
+      if (isValid) {
+        validThemes.append(themeName);
+      }
+    } else {
+      qDebug() << themeName << "does not contain 'dark' or 'light'.";
+    }
+  }
+
+
   ValidateColors(colors_);
 }
 
 bool SettingLoader::IsColorValid(const QString &colorString) {
-  QRegularExpression regex("^#(?:[0-9a-fA-F]{3}){1,2}$|^#(?:[0-9a-fA-F]{4}){1,2}$");
+  QRegularExpression regex(
+      "^#(?:[0-9a-fA-F]{3}){1,2}$|^#(?:[0-9a-fA-F]{4}){1,2}$");
   return regex.match(colorString).hasMatch();
 }
 
