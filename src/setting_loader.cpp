@@ -143,7 +143,7 @@ void SettingLoader::ValidateColors(const QJsonObject &colors) {
     QString colorString = colors[key].toString();
     if (!IsColorValid(colorString)) {
       error_headline_ = QObject::tr("Settings file");
-      error_message_ = QString(QObject::tr("Invalid colour")+" %1: %2").arg(key, colorString);
+      error_message_ = QString(QObject::tr("Invalid color")+" %1: %2").arg(key, colorString);
       has_error_ = true;
       qWarning() << "------------------------\n"
                  << error_headline_ << "\n"
