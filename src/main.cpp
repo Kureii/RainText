@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
   rain_text::settings::SettingLoader settings_manager;
   login_register_manager.SetIterations(settings_manager.GetIterations());
 
-  settings_manager.LoadLang();
+  settings_manager.LoadLang(settings_manager.GetCurrentLangName());
 
   engine.rootContext()->setContextProperty("login_register_manager", &login_register_manager);
   engine.rootContext()->setContextProperty("generate_password", &generate_password);

@@ -74,10 +74,21 @@ QStringList SettingLoader::GetLangModel() const {
   return model;
 }
 
-void SettingLoader::LoadLang() {
-  if (translator_.load(":/locales/czech-cz_cs.qm")) {
-    qApp->installTranslator(&translator_);
+void SettingLoader::LoadLang(const QString &language) {
+  auto languageFiles = GetLanguageFiles();
+  qDebug() << language;
+  for (auto &file: languageFiles) {
+    qDebug() << file;
+    if(file.contains(language)) {
+      QString path = ":/locales/" + file;
+      qDebug() << path;
+      if (translator_.load(path)) {
+        qApp->installTranslator(&translator_);
+        return;
+      }
+    }
   }
+
 }
 QString SettingLoader::GetCurrentLangName() const {
   auto languageFiles = GetLanguageFiles();
@@ -88,7 +99,6 @@ QString SettingLoader::GetCurrentLangName() const {
       return file.split("-").first();
     }
   }
-
   return "english";
 }
 
