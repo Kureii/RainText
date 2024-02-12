@@ -1008,15 +1008,15 @@ Rectangle {
                     textColorOnPrimyry: passwordManagerScreen.textColorOnPrimyry
                     drawerBackgroundColor: passwordManagerScreen.drawerBackgroundColor
 
-                    // Component.onCompleted: {
-                    //     var defaultText = appCurrentColorMode;
-                    //     for (var i = 0; i < model.length; ++i) {
-                    //         if (model[i] === defaultText) {
-                    //             languageSelect.currentIndex = i;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    Component.onCompleted: {
+                        var defaultText = settings_manager.GetCurrentLangName();
+                        for (var i = 0; i < model.length; ++i) {
+                            if (model[i] === defaultText) {
+                                languageSelect.currentIndex = i;
+                                break;
+                            }
+                        }
+                    }
 
                     // onCurrentIndexChanged: {
                     //     settings_manager.ChangeCurrentColorMode(model[languageSelect.currentIndex])

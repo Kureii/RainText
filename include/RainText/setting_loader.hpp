@@ -38,6 +38,7 @@ class SettingLoader : public QObject {
 
   Q_INVOKABLE [[nodiscard]] QStringList GetLangModel() const;
   Q_INVOKABLE void LoadLang();
+  Q_INVOKABLE [[nodiscard]] QString GetCurrentLangName() const;
  private:
   bool has_error_ = false;
   QTranslator translator_;

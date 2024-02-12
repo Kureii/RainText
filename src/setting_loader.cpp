@@ -75,9 +75,21 @@ QStringList SettingLoader::GetLangModel() const {
 }
 
 void SettingLoader::LoadLang() {
-  if(translator_.load(":/locales/czech-cz_cs.qm")) {
+  if (translator_.load(":/locales/czech-cz_cs.qm")) {
     qApp->installTranslator(&translator_);
   }
+}
+QString SettingLoader::GetCurrentLangName() const {
+  auto languageFiles = GetLanguageFiles();
+  QJsonObject uiSettings = json_data_["ui"].toObject();
+  auto lang = uiSettings["language"].toString();
+  for (auto &file: languageFiles) {
+    if (file.contains(lang)) {
+      return file.split("-").first();
+    }
+  }
+
+  return "english";
 }
 
 
