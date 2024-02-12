@@ -901,11 +901,11 @@ Rectangle {
                 }
 
                 function onRequestMoveUp(index) {
-                    login_register_manager.recordListModel.moveRecordItem(index, index - 1, 1, iterations.value)
+                    login_register_manager.recordListModel.moveRecordItem(index, index - 1, iterations.value)
                 }
 
                 function onRequestMoveDown(index) {
-                    login_register_manager.recordListModel.moveRecordItem(index, index + 1, 1, iterations.value)
+                    login_register_manager.recordListModel.moveRecordItem(index, index + 1, iterations.value)
                 }
 
                 function onRequestEdit(index, headline, username, password) {
