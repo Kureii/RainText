@@ -120,7 +120,6 @@ void SettingLoader::LoadSettings() {
   LoadJsonFile();
   iterations_ = json_data_["encryptIterations"].toInt();
 
-
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();
   color_modes_ = uiSettings["colors"].toObject();

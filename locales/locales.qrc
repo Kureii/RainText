@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/locales">
         <file>czech-cz_cs.qm</file>
+        <file>english-en_us.qm</file>
     </qresource>
 </RCC>
