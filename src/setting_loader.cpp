@@ -9,14 +9,19 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QRegularExpression>
+#include <QCoreApplication>
 
 //================================= Namespace ==================================
 namespace rain_text::settings {
 
 //================================= Public method ==============================
-SettingLoader::SettingLoader(QObject *parent) : QObject(parent) {
+SettingLoader::SettingLoader(QObject *parent) : QObject(parent), translator_(new QTranslator) {
   LoadSettings();
 }
+
+SettingLoader::~SettingLoader() {
+}
+
 void SettingLoader::ReloadSettings() {
   QJsonObject uiSettings = json_data_["ui"].toObject();
   current_color_mode_ = uiSettings["colorMode"].toString();
@@ -69,6 +74,13 @@ QStringList SettingLoader::GetLangModel() const {
   return model;
 }
 
+void SettingLoader::LoadLang() {
+  if(translator_.load(":/locales/czech-cz_cs.qm")) {
+    qApp->installTranslator(&translator_);
+  }
+}
+
+
 //================================= Testing method =============================
 #ifdef ENABLE_TESTS
 
@@ -113,7 +125,6 @@ void SettingLoader::LoadSettings() {
   current_color_mode_ = uiSettings["colorMode"].toString();
   color_modes_ = uiSettings["colors"].toObject();
   colors_ = color_modes_[current_color_mode_].toObject();
-  qDebug() << current_color_mode_;
 
   QStringList validThemes;
   for (const QString& themeName : color_modes_.keys()) {

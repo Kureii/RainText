@@ -8,6 +8,8 @@
 #include <QColor>
 #include <QJsonObject>
 #include <QObject>
+#include <QTranslator>
+
 namespace rain_text::settings {
 
 class SettingLoader : public QObject {
@@ -19,6 +21,7 @@ class SettingLoader : public QObject {
 
  public:
   explicit SettingLoader(QObject *parent = nullptr);
+  ~SettingLoader();
 
   Q_INVOKABLE void ReloadSettings();
   Q_INVOKABLE void ChangeCurrentColorMode(const QString &mode);
@@ -34,8 +37,10 @@ class SettingLoader : public QObject {
   Q_INVOKABLE [[nodiscard]] QStringList GetValidThemes() const;
 
   Q_INVOKABLE [[nodiscard]] QStringList GetLangModel() const;
+  Q_INVOKABLE void LoadLang();
  private:
   bool has_error_ = false;
+  QTranslator translator_;
   QString error_message_;
   QString error_headline_;
   QJsonObject json_data_;
