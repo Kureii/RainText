@@ -39,6 +39,7 @@ class SettingLoader : public QObject {
   Q_INVOKABLE [[nodiscard]] QStringList GetLangModel() const;
   Q_INVOKABLE void LoadLang(const QString &language);
   Q_INVOKABLE [[nodiscard]] QString GetCurrentLangName() const;
+  Q_INVOKABLE void ChangeLang(const QString &language);
  private:
   bool has_error_ = false;
   QTranslator translator_;
@@ -84,6 +85,7 @@ class SettingLoader : public QObject {
   void errorChanged();
   void errorMessage(QString &headline, QString &msg);
   void dataChanged();
+  void languageChanged();
 };
 
 }  // namespace rain_text::settings

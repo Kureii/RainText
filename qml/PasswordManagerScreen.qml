@@ -25,6 +25,7 @@ Rectangle {
     property color notEnabledBorderButtonColor: "#75614B"
     property color borderButtonHoveredColor: "#78562C"
     property color borderButtonPressedColor: "#9b703b"
+    property bool firstLoadOfLang: true
 
     color: passwordManagerScreen.backgroundColor
 
@@ -66,7 +67,7 @@ Rectangle {
         image: "qrc:/images/add.svg"
         spacing: 5
         radius: 5
-        text: qsTr("Add record")
+        text: qsTr("Add record", "", mainWindow.languageVersion)
     }
 
     IconButton {
@@ -86,7 +87,7 @@ Rectangle {
         image: "qrc:/images/setting.svg"
         spacing: 5
         radius: 5
-        text: qsTr("Settings")
+        text: qsTr("Settings", "", mainWindow.languageVersion)
     }
 
     Drawer {
@@ -138,7 +139,7 @@ Rectangle {
             Text {
                 id: headlineText
                 color: passwordManagerScreen.textColor
-                text: qsTr("Create record")
+                text: qsTr("Create record", "", mainWindow.languageVersion)
             }
             Rectangle {
                 id: headllineSeparator
@@ -154,7 +155,7 @@ Rectangle {
                     ModernTextField {
                         id: formHeadlineField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: qsTr("Headline")
+                        placeholderText: qsTr("Headline", "", mainWindow.languageVersion)
                         textColor: passwordManagerScreen.textColor
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
@@ -176,7 +177,7 @@ Rectangle {
                     ModernTextField {
                         id: formUsernameField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: qsTr("Username")
+                        placeholderText: qsTr("Username", "", mainWindow.languageVersion)
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
                         textColor: passwordManagerScreen.textColor
@@ -199,7 +200,7 @@ Rectangle {
                     ModernTextField {
                         id: formPasswordField
                         width: formColumn.formWidth - formColumn.settingWidth
-                        placeholderText: qsTr("Password")
+                        placeholderText: qsTr("Password", "", mainWindow.languageVersion)
                         passwordMode: true
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
@@ -242,7 +243,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Upper letters")
+                                text: qsTr("Upper letters", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -259,7 +260,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Lower letters")
+                                text: qsTr("Lower letters", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -285,7 +286,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Numbers")
+                                text: qsTr("Numbers", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -302,7 +303,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Special chars")
+                                text: qsTr("Special chars", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -334,7 +335,7 @@ Rectangle {
                         backgroundColor: passwordManagerScreen.backgroundColor
                         primaryHexColor: passwordManagerScreen.primaryColor
 
-                        text: qsTr("Password length")
+                        text: qsTr("Password length", "", mainWindow.languageVersion)
 
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -379,7 +380,7 @@ Rectangle {
                         textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
                         focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                         enabled: majusculeGenPassChBox.checked || minusculeGenPassChBox.checked || numberGenPassChBox.checked || specialGenPassChBox.checked
-                        text: qsTr("Generate password")
+                        text: qsTr("Generate password", "", mainWindow.languageVersion)
                         anchors.horizontalCenter: parent.horizontalCenter
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -430,7 +431,7 @@ Rectangle {
                 notEnableTextColor: passwordManagerScreen.notEnableTextColor
                 textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
                 focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
-                text: qsTr("Save record")
+                text: qsTr("Save record", "", mainWindow.languageVersion)
                 height: 40
                 enabled: formHeadlineField.text !== "" && formUsernameField.text !== "" && formPasswordField.text !== ""
 
@@ -515,7 +516,7 @@ Rectangle {
             Text {
                 id: editHeadlineText
                 color: passwordManagerScreen.textColor
-                text: qsTr("Edit record")
+                text: qsTr("Edit record", "", mainWindow.languageVersion)
             }
             Rectangle {
                 id: editHeadllineSeparator
@@ -531,7 +532,7 @@ Rectangle {
                     ModernTextField {
                         id: editFormHeadlineField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: qsTr("Headline")
+                        placeholderText: qsTr("Headline", "", mainWindow.languageVersion)
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
                         textColor: passwordManagerScreen.textColor
@@ -553,7 +554,7 @@ Rectangle {
                     ModernTextField {
                         id: editFormUsernameField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: qsTr("Username")
+                        placeholderText: qsTr("Username", "", mainWindow.languageVersion)
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
                         textColor: passwordManagerScreen.textColor
@@ -582,7 +583,7 @@ Rectangle {
 
                     Text {
                         id: editOldPasswordHeadline
-                        text: qsTr("Old password")
+                        text: qsTr("Old password", "", mainWindow.languageVersion)
                         font.pointSize: 8
                         color: passwordManagerScreen.notEnableTextColor
                     }
@@ -609,7 +610,7 @@ Rectangle {
                     ModernTextField {
                         id: editFormPasswordField
                         width: editFormColumn.formWidth - editFormColumn.settingWidth
-                        placeholderText: qsTr("Password")
+                        placeholderText: qsTr("Password", "", mainWindow.languageVersion)
                         passwordMode: true
                         placeholderTextColor: passwordManagerScreen.textColor
                         fillUnderlineColor: passwordManagerScreen.textColor
@@ -652,7 +653,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Upper letters")
+                                text: qsTr("Upper letters", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -669,7 +670,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Lower letters")
+                                text: qsTr("Lower letters", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -694,7 +695,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Numbers")
+                                text: qsTr("Numbers", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -711,7 +712,7 @@ Rectangle {
                                 borderColor: passwordManagerScreen.textColor
                                 checkedColor: passwordManagerScreen.primaryColor
                                 backgroundColor: passwordManagerScreen.drawerBackgroundColor
-                                text: qsTr("Special chars")
+                                text: qsTr("Special chars", "", mainWindow.languageVersion)
                                 Keys.onPressed: (event) => {
                                     if (event.key === Qt.Key_Tab) {
                                         event.accepted = true;
@@ -743,7 +744,7 @@ Rectangle {
                         backgroundColor: passwordManagerScreen.backgroundColor
                         primaryHexColor: passwordManagerScreen.primaryColor
 
-                        text: qsTr("Password length")
+                        text: qsTr("Password length", "", mainWindow.languageVersion)
 
                         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Tab) {
@@ -788,7 +789,7 @@ Rectangle {
                         width: editFormColumn.settingWidth - 60
                         height: 25
                         enabled: editMajusculeGenPassChBox.checked || editMinusculeGenPassChBox.checked || editNumberGenPassChBox.checked || editSpecialGenPassChBox.checked
-                        text: qsTr("Generate password")
+                        text: qsTr("Generate password", "", mainWindow.languageVersion)
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         Keys.onPressed: (event) => {
@@ -842,7 +843,7 @@ Rectangle {
                 textOnPrimaryColor: passwordManagerScreen.textOnPrimaryColor
                 focusOnPrimaryColor: passwordManagerScreen.focusOnPrimaryColor
                 width: editFormColumn.formWidth
-                text: qsTr("Save changes")
+                text: qsTr("Save changes", "", mainWindow.languageVersion)
                 height: 40
                 enabled: editFormHeadlineField.text !== "" && editFormUsernameField.text !== "" && editFormPasswordField.text !== ""
 
@@ -957,7 +958,7 @@ Rectangle {
                     from: 3
                     to: 30
                     stepSize: 3
-                    text: qsTr("Encrypting iterations")
+                    text: qsTr("Encrypting iterations", "", mainWindow.languageVersion)
                     Layout.fillWidth: true
                     Layout.preferredWidth: rightDrawer.width - settingsLeftSpace.width - settingsRightSpace.width
                     value: login_register_manager.iterations
@@ -1018,9 +1019,13 @@ Rectangle {
                         }
                     }
 
-                    // onCurrentIndexChanged: {
-                    //     settings_manager.ChangeCurrentColorMode(model[languageSelect.currentIndex])
-                    // }
+                    onCurrentIndexChanged: {
+                        if (passwordManagerScreen.firstLoadOfLang) {
+                            passwordManagerScreen.firstLoadOfLang = false
+                        } else {
+                            settings_manager.ChangeLang(model[languageSelect.currentIndex])
+                        }
+                    }
                 }
             }
             Rectangle {

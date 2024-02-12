@@ -16,6 +16,7 @@ ApplicationWindow {
     minimumHeight: 500
     minimumWidth: 800
     property bool hasColorError: false
+    property int languageVersion: 0
     //flags: Qt.Window | Qt.FramelessWindowHint
 
     Component.onCompleted: {
@@ -147,6 +148,9 @@ ApplicationWindow {
             } else {
                 mainWindow.hasColorError = false
             }
+        }
+        function onLanguageChanged() {
+            mainWindow.languageVersion++;
         }
     }
 }

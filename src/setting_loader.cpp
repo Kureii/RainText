@@ -76,14 +76,12 @@ QStringList SettingLoader::GetLangModel() const {
 
 void SettingLoader::LoadLang(const QString &language) {
   auto languageFiles = GetLanguageFiles();
-  qDebug() << language;
   for (auto &file: languageFiles) {
-    qDebug() << file;
     if(file.contains(language)) {
       QString path = ":/locales/" + file;
-      qDebug() << path;
       if (translator_.load(path)) {
         qApp->installTranslator(&translator_);
+        emit languageChanged();
         return;
       }
     }
@@ -100,6 +98,39 @@ QString SettingLoader::GetCurrentLangName() const {
     }
   }
   return "english";
+}
+
+void SettingLoader::ChangeLang(const QString &language) {
+  LoadLang(language);
+
+  auto languageFiles = GetLanguageFiles();
+  for (auto &file: languageFiles) {
+    if (file.contains(language)) {
+      auto code = file.split("-").last();
+      code = code.split(".").first();
+
+      QJsonObject uiSettings = json_data_["ui"].toObject();
+      auto lang = uiSettings["language"].toString();
+
+      qDebug() << code;
+      uiSettings["language"] = code;
+
+      json_data_["ui"] = uiSettings;
+
+      QJsonDocument doc(json_data_);
+      QByteArray json_bytes = doc.toJson();
+
+      QFile settings("settings.json");
+      if (!settings.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Nelze otevřít soubor pro zápis.";
+        return;
+      }
+
+      settings.write(json_bytes);
+      settings.close();
+      return;
+    }
+  }
 }
 
 
