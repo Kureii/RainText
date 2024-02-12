@@ -17,7 +17,7 @@ ApplicationWindow {
     minimumWidth: 800
     property bool hasColorError: false
     property int languageVersion: 0
-    //flags: Qt.Window | Qt.FramelessWindowHint
+    flags: Qt.Window | Qt.FramelessWindowHint
 
     Component.onCompleted: {
         if (settings_manager.hasError) {
@@ -60,7 +60,7 @@ ApplicationWindow {
     }*/
     LoginRegisterScreen {
         id: loginRegisterScreen
-        visible: false
+        visible: true
         loginRegisterBackgroundColor: mainWindow.hasColorError ? "#021F3C" : settings_manager.appColors["loginRegisterBackgroundColor"]
         registerLoginSwapButtonBorderColor: mainWindow.hasColorError ? "#ECDFD4" : settings_manager.appColors["registerLoginSwapButtonBorderColor"]
         registerLoginSwapButtonFillColor: mainWindow.hasColorError ? "#00ECDFD4" : settings_manager.appColors["registerLoginSwapButtonFillColor"]
@@ -101,7 +101,7 @@ ApplicationWindow {
 
     PasswordManagerScreen {
         id: passwordManagerScreen
-        visible: true
+        visible: false
         anchors.fill: parent
         primaryColor: mainWindow.hasColorError ? "#FF9800" : settings_manager.appColors["primaryColor"]
         primaryPressedColor: mainWindow.hasColorError ? "#8A5300" : settings_manager.appColors["primaryPressedColor"]
