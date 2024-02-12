@@ -7,9 +7,20 @@ CheckBox {
     id: customCheckBox
     text: "Check box text"
 
+
     property color borderColor: "#0C011C"
     property color checkedColor: "#FF9800"
     property color backgroundColor: "#ECDFD4"
+
+    contentItem: Text {
+        text: customCheckBox.text
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.leftMargin: 30
+        anchors.topMargin:8
+        color: customCheckBox.borderColor
+        font.pointSize: 10
+    }
 
     indicator: Rectangle {
         id: checkBoxChecker
